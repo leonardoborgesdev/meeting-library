@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chris Lamm — Meeting Library</title>
+<style>
+  :root {
+    --bg: #0f1117; --surface: #1a1d27; --card: #22263a;
+    --accent: #6c63ff; --accent2: #ff6584; --text: #e2e8f0;
+    --muted: #64748b; --border: #2d3748;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; min-height: 100vh; }
+
+  header { background: linear-gradient(135deg, #1a1d27 0%, #0f1117 100%);
+    border-bottom: 1px solid var(--border); padding: 20px 32px;
+    display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 100; }
+  header .logo { font-size: 22px; font-weight: 700; background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  header .subtitle { color: var(--muted); font-size: 13px; }
+  header .badge { margin-left: auto; background: var(--accent); color: white;
+    padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px; }
+
+  .player-section { background: var(--surface); border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--border); margin-bottom: 32px; display: none; }
+  .player-section.active { display: block; }
+  .player-header { padding: 16px 20px; display: flex; align-items: center; gap: 12px;
+    background: var(--card); border-bottom: 1px solid var(--border); }
+  .player-title { font-weight: 600; font-size: 15px; flex: 1; }
+  .player-meta { color: var(--muted); font-size: 12px; }
+  .btn-close { background: none; border: 1px solid var(--border); color: var(--muted);
+    padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; }
+  .btn-close:hover { background: var(--border); color: var(--text); }
+  video { width: 100%; max-height: 540px; background: #000; display: block; }
+
+  .filters { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+  .filter-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted);
+    padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 13px; transition: all .2s; }
+  .filter-btn:hover, .filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; cursor: pointer; transition: all .2s; }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(108,99,255,.2); }
+  .card.playing { border-color: var(--accent2); box-shadow: 0 0 0 2px var(--accent2); }
+
+  .card-thumb { height: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .card-body { padding: 16px; }
+  .card-date { font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: .5px;
+    text-transform: uppercase; margin-bottom: 6px; }
+  .card-title { font-size: 14px; font-weight: 600; line-height: 1.4; margin-bottom: 8px; }
+  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .tag { background: var(--surface); border: 1px solid var(--border);
+    color: var(--muted); font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+  .tag.screen { background: rgba(108,99,255,.15); border-color: var(--accent); color: var(--accent); }
+  .tag.srt { background: rgba(72,199,142,.15); border-color: #48c78e; color: #48c78e; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between;
+    padding-top: 10px; border-top: 1px solid var(--border); }
+  .card-size { color: var(--muted); font-size: 12px; }
+  .btn-play { background: var(--accent); color: white; border: none;
+    padding: 6px 16px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600;
+    display: flex; align-items: center; gap: 6px; transition: all .2s; }
+  .btn-play:hover { background: #7c75ff; }
+  .btn-drive { background: var(--surface); color: var(--muted); border: 1px solid var(--border);
+    padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 11px;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+  .btn-drive:hover { border-color: var(--accent); color: var(--accent); }
+
+  .no-video { padding: 10px 16px; background: rgba(255,100,132,.1);
+    border-radius: 8px; color: var(--accent2); font-size: 12px; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .stat-num { font-size: 24px; font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">📹 Meeting Library</div>
+    <div class="subtitle">Chris Lamm × Automatrix IA</div>
+  </div>
+  <div class="badge" id="count-badge">Loading...</div>
+</header>
+
+<div class="container">
+
+  <!-- Player -->
+  <div class="player-section" id="player-section">
+    <div class="player-header">
+      <div>
+        <div class="player-title" id="player-title">—</div>
+        <div class="player-meta" id="player-meta">—</div>
+      </div>
+      <button class="btn-close" onclick="closePlayer()">✕ Close</button>
+    </div>
+    <video id="main-video" controls preload="metadata">
+      Your browser does not support video playback.
+    </video>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="s-total">—</div><div class="stat-label">Total Meetings</div></div>
+    <div class="stat"><div class="stat-num" id="s-playable">—</div><div class="stat-label">Playable Now</div></div>
+    <div class="stat"><div class="stat-num" id="s-screen">—</div><div class="stat-label">Screen Demos</div></div>
+    <div class="stat"><div class="stat-num" id="s-srt">—</div><div class="stat-label">Transcribed</div></div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <button class="filter-btn active" onclick="filter('all', this)">All</button>
+    <button class="filter-btn" onclick="filter('playable', this)">▶ Playable</button>
+    <button class="filter-btn" onclick="filter('screen', this)">🖥 Screen Demo</button>
+    <button class="filter-btn" onclick="filter('srt', this)">📝 Transcribed</button>
+    <button class="filter-btn" onclick="filter('client', this)">Chris Present</button>
+  </div>
+
+  <!-- Grid -->
+  <div class="grid" id="grid"></div>
+
+</div>
+
+<script>
+const MEETINGS = [
+  { date: "2026-02-28", title: "Call 1 — Discovery & Scoping", people: "Lucas, Chris", size: "275MB",
+    video: "videos/call01_2026-02-28.mp4", drive: "https://drive.google.com/file/d/1DLC__z7N8y2HH9fgkxqAgDhjVNjq6k_d/view",
+    notes: "https://docs.google.com/document/d/1eh1aRecdCOsAMuHsNa3F8mrRAkhcaN2e6kOtoLvkCnc/edit",
+    tags: ["client"], srt: true, screen: false },
+
+  { date: "2026-03-01", title: "Call 2 — Technical Scoping", people: "Lucas, Chris", size: "229MB",
+    video: "videos/call02_2026-03-01.mp4", drive: "https://drive.google.com/file/d/1LGxyfjdUK6YCPxN_l1j4rcukZAYuQTRQ/view",
+    notes: "https://docs.google.com/document/d/1v7HTU67P8qcKtahczY_yxrWp5EW1E5sCrJYB1wtE4UA/edit",
+    tags: ["client"], srt: true, screen: false },
+
+  { date: "2026-03-07", title: "Call 5 — Demo + Strategic Pivot", people: "Lucas, Chris", size: "270MB",
+    video: "videos/call05_2026-03-07.mp4", drive: "https://drive.google.com/file/d/154ON7bJ2VG8VET9aFCcZeW5H46RX3YKg/view",
+    notes: "https://docs.google.com/document/d/1rBdGgTpGKnLSA5kJXu31JJB3aU6MpOP0fzakjxLFulM/edit",
+    tags: ["client", "screen-demo"], srt: true, screen: true },
+
+  { date: "2026-03-08", title: "Call 6 — Setup + Cybersecurity", people: "Lucas, Chris", size: "472MB",
+    video: null, drive: "https://drive.google.com/file/d/1q91RVE0gRdVXeI7xpcyVnoVUKrnIEKtI/view",
+    tags: ["client"], srt: false, screen: false },
+
+  { date: "2026-03-11", title: "Call 7 — Strategy + Demo + VA Loan", people: "Lucas, Chris", size: "302MB",
+    video: "videos/call07_2026-03-11.mp4", drive: "https://drive.google.com/file/d/13AdJX0V8nKoIgHrezsLJuzaFlTKZDC78/view",
+    notes: "https://docs.google.com/document/d/1ZnjVAnYSEfBySymDis8xlOMdMAG7uPWCg9FDOlk1R5E/edit",
+    tags: ["client", "screen-demo"], srt: true, screen: true },
+
+  { date: "2026-03-15", title: "Working Session — Screen Capture", people: "Lucas, Chris", size: "302MB",
+    video: "videos/2026-03-15-working-session.mp4", drive: "https://drive.google.com/file/d/1JdAPllBMCYB9eXx80HbFOk2QlAgkfE9D/view",
+    tags: ["client", "screen-demo", "working-session"], srt: false, screen: true },
+
+  { date: "2026-03-20", title: "Call 11 — MortgageOne Deep Architecture (4h)", people: "Lucas, Chris", size: "2.1GB",
+    video: "videos/call11_mortgageone_2026-03-20.mp4", drive: "https://drive.google.com/file/d/1-hkpXOHLpSbEjNIICDab6iOr45xsoC1N/view",
+    notes: "https://docs.google.com/document/d/1AvTfk8bHpuglSsIQF_dV9bbvYcxRTlk2Jdv_RLQt2Rs/edit",
+    tags: ["client", "screen-demo"], srt: false, screen: true },
+
+  { date: "2026-03-21", title: "Call 12 — CloudTalk + Salesforce", people: "Lucas, Chris", size: "352MB",
+    video: "videos/call12_2026-03-21.mp4", drive: "https://drive.google.com/file/d/1uLSRqsn2B6B54b1Rj9iRs-QU737iP46x/view",
+    tags: ["client", "screen-demo"], srt: false, screen: true },
+
+  { date: "2026-04-16", title: "Lucas & Chris — Chatwoot / iMessage CRM", people: "Lucas, Chris", size: "460MB",
+    video: "videos/2026-04-16-lucas-chris-chatwoot.mp4", drive: "https://drive.google.com/file/d/1mlfeSJfiWHDGlp-kLFKTl7D45RHncVcK/view",
+    notes: "https://docs.google.com/document/d/1J40M8ORsqwZf2BxzHDLyz-2KDbQ1iutfY5NvVfwGIRA/edit",
+    tags: ["client", "screen-demo"], srt: false, screen: true },
+
+  { date: "2026-04-19", title: "Call — Sunday", people: "Lucas, Chris", size: "910MB",
+    video: "videos/2026-04-19-sunday-call.mp4", drive: "https://drive.google.com/file/d/1ESqybxaRtOBAJqzsdgAIHX2VUtqvlX_k/view",
+    notes: "https://docs.google.com/document/d/1hjUJnoFP-gQx6Ezx85P0qBU0XLpIHtxv-iN8FF1UEZM/edit",
+    tags: ["client"], srt: false, screen: false },
+
+  { date: "2026-04-22", title: "Weekly Sync — CRM / Comms", people: "Lucas, Chris", size: "346MB",
+    video: "videos/2026-04-22-weekly-sync-crm.mp4", drive: "https://drive.google.com/file/d/1UUn0OSbubesdKmrS418_z5pgkK6v1_tr/view",
+    notes: "https://docs.google.com/document/d/1c9CnJAsTlKR_4dEXMsIci7RBkackhkNmyhyT--od0sI/edit",
+    tags: ["client", "screen-demo", "weekly-sync"], srt: false, screen: true },
+
+  { date: "2026-04-28", title: "Working Session — Screen Capture", people: "Lucas, Chris", size: "220MB",
+    video: "videos/2026-04-28-working-session.mov", drive: "https://drive.google.com/file/d/1z9agar_Kt326yniZ-EYTifrtxdkBG_jr/view",
+    tags: ["client", "screen-demo", "working-session"], srt: false, screen: true },
+
+  { date: "2026-04-29", title: "Weekly Sync — App Demo (Proprietary)", people: "Lucas, Chris", size: "568MB",
+    video: "videos/2026-04-29-weekly-sync-app-demo.mp4", drive: "https://drive.google.com/file/d/1gH48B6nXRS7PK3LvoFXX8cEeRzH5MMLU/view",
+    notes: "https://docs.google.com/document/d/1r6pNHgXOYZpIA5M7C_QKg22EOhzXG-ZN5AFQuMOF-hY/edit",
+    tags: ["client", "screen-demo", "weekly-sync", "app-demo"], srt: false, screen: true },
+];
+
+let currentFilter = 'all';
+let currentCard = null;
+
+function filter(type, btn) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+}
+
+function getFiltered() {
+  return MEETINGS.filter(m => {
+    if (currentFilter === 'all') return true;
+    if (currentFilter === 'playable') return !!m.video;
+    if (currentFilter === 'screen') return m.screen;
+    if (currentFilter === 'srt') return m.srt;
+    if (currentFilter === 'client') return m.tags.includes('client');
+    return true;
+  });
+}
+
+function renderGrid() {
+  const list = getFiltered();
+  const grid = document.getElementById('grid');
+  grid.innerHTML = list.map((m, i) => {
+    const isPlaying = currentCard && currentCard.title === m.title;
+    return `<div class="card ${isPlaying ? 'playing' : ''}" id="card-${i}" onclick="playVideo(${MEETINGS.indexOf(m)})">
+      <div class="card-thumb"></div>
+      <div class="card-body">
+        <div class="card-date">${formatDate(m.date)}</div>
+        <div class="card-title">${m.title}</div>
+        <div class="card-tags">
+          ${m.screen ? '<span class="tag screen">🖥 Screen Demo</span>' : ''}
+          ${m.srt ? '<span class="tag srt">📝 Transcribed</span>' : ''}
+          ${m.tags.includes('app-demo') ? '<span class="tag screen">🚀 App Demo</span>' : ''}
+          ${m.tags.includes('working-session') ? '<span class="tag">⚙️ Working Session</span>' : ''}
+        </div>
+        <div class="card-footer">
+          <span class="card-size">👥 ${m.people.split(',')[1]?.trim() || m.people} · ${m.size}</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            ${m.drive ? `<a class="btn-drive" href="${m.drive}" target="_blank" onclick="event.stopPropagation()">Drive ↗</a>` : ''}
+            ${m.video ? `<button class="btn-play">▶ Play</button>` : '<span class="no-video">No local file</span>'}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function formatDate(d) {
+  const [y,m,day] = d.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[+m-1]} ${+day}, ${y}`;
+}
+
+function playVideo(idx) {
+  const m = MEETINGS[idx];
+  if (!m.video) {
+    if (m.drive) window.open(m.drive, '_blank');
+    return;
+  }
+  currentCard = m;
+  const section = document.getElementById('player-section');
+  const video = document.getElementById('main-video');
+  const title = document.getElementById('player-title');
+  const meta = document.getElementById('player-meta');
+
+  section.classList.add('active');
+  video.src = m.video;
+  title.textContent = m.title;
+  meta.textContent = `${formatDate(m.date)} · ${m.people} · ${m.size}`;
+  video.play();
+  section.scrollIntoView({ behavior: 'smooth' });
+  renderGrid();
+}
+
+function closePlayer() {
+  const video = document.getElementById('main-video');
+  video.pause();
+  video.src = '';
+  document.getElementById('player-section').classList.remove('active');
+  currentCard = null;
+  renderGrid();
+}
+
+// Stats
+const playable = MEETINGS.filter(m => m.video).length;
+const screens = MEETINGS.filter(m => m.screen).length;
+const srtCount = MEETINGS.filter(m => m.srt).length;
+document.getElementById('s-total').textContent = MEETINGS.length;
+document.getElementById('s-playable').textContent = playable;
+document.getElementById('s-screen').textContent = screens;
+document.getElementById('s-srt').textContent = srtCount;
+document.getElementById('count-badge').textContent = `${MEETINGS.length} meetings`;
+
+renderGrid();
+</script>
+</body>
+</html>
