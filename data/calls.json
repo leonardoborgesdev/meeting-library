@@ -1,0 +1,589 @@
+{
+  "generated": "2026-06-11",
+  "account": "lucas@automatrix-ia.com",
+  "people": [
+    "Leonardo",
+    "Nicolli"
+  ],
+  "calls": [
+    {
+      "id": "leo_aquisicao-leads-2",
+      "pessoa": "Leonardo",
+      "title": "Automatrix Interna — Agentes de Aquisição de Leads 2",
+      "date": "2026-06-08",
+      "projeto": "Automatrix Lead System",
+      "assunto": [
+        "scraper Facebook",
+        "geração de leads",
+        "LLM/Codex",
+        "SDR"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Leonardo (Brazika Brasil)",
+        "Henrique Augusto"
+      ],
+      "driveVideoId": "1y4zsvDdQ-ZafOJfI5f-wrzRLg4nygFlF",
+      "sizeMB": 429,
+      "durationApprox": "00:42:57",
+      "geminiOk": true,
+      "notes": "library/notes/leo_aquisicao-leads-2_2026-06-08.md",
+      "transcript": "library/transcripts/leo_aquisicao-leads-2.txt",
+      "video": "library/videos/leo_aquisicao-leads-2.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/leo_aquisicao-leads-2/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/leo_aquisicao-leads-2/frames"
+    },
+    {
+      "id": "leo_aquisicao-leads-3",
+      "pessoa": "Leonardo",
+      "title": "Automatrix Interna — Agentes de Aquisição de Leads 3",
+      "date": "2026-06-10",
+      "projeto": "Automatrix Lead System",
+      "assunto": [
+        "migração VPS/Ollama",
+        "CamoFox/Chrome CDP",
+        "RAG SDR",
+        "anti-duplicado"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Leonardo (Brazika Brasil)"
+      ],
+      "driveVideoId": "1wz3MY2j8VYtITE2eYLQB4TGqtJHZPUer",
+      "sizeMB": 567,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": "library/notes/leo_aquisicao-leads-3_2026-06-10.md",
+      "transcript": "library/transcripts/leo_aquisicao-leads-3.txt",
+      "video": "library/videos/leo_aquisicao-leads-3.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/leo_aquisicao-leads-3/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/leo_aquisicao-leads-3/frames"
+    },
+    {
+      "id": "leo_venda-saulo-sdr",
+      "pessoa": "Leonardo",
+      "title": "Reunião Saulo — SDR WhatsApp (GVG)",
+      "date": "2026-06-10",
+      "projeto": "SDR WhatsApp / GVG",
+      "assunto": [
+        "WhatsApp API oficial",
+        "RD Station",
+        "Spin Selling",
+        "venda/escopo"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "GVG Gerência (Saulo)"
+      ],
+      "driveVideoId": "1ccwmn-ScRjp0wC0B7KtT7j75Pb0wRDf4",
+      "sizeMB": 102,
+      "durationApprox": "00:24:01",
+      "geminiOk": true,
+      "notes": "library/notes/leo_venda-saulo-sdr_2026-06-10.md",
+      "transcript": "library/transcripts/leo_venda-saulo-sdr.txt",
+      "video": "library/videos/leo_venda-saulo-sdr.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/leo_venda-saulo-sdr/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/leo_venda-saulo-sdr/frames"
+    },
+    {
+      "id": "leo_junior-treinamento-wa-1",
+      "pessoa": "Leonardo",
+      "title": "Junior — Treinamento IA — WhatsApp 1",
+      "date": "2026-06-08",
+      "projeto": "SDR imobiliária (Plá / Salesforce+Kinbox)",
+      "assunto": [
+        "treinamento IA",
+        "WhatsApp",
+        "Salesforce/Kinbox"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Junior Vergamini",
+        "Camila"
+      ],
+      "driveVideoId": "1iY44QYvOkzHnc9x53Ay2XbnCyU8LuAkE",
+      "sizeMB": 427,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": "library/notes/leo_junior-treinamento-wa-1_2026-06-08.md",
+      "transcript": "library/transcripts/leo_junior-treinamento-wa-1.txt",
+      "video": "library/videos/leo_junior-treinamento-wa-1.mp4",
+      "status": "done",
+      "obs": "Call é com cliente Junior/Camila; colocada em Leonardo por instrução do Leo.",
+      "walkthrough": "library/walkthroughs/leo_junior-treinamento-wa-1/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/leo_junior-treinamento-wa-1/frames"
+    },
+    {
+      "id": "leo_junior-treinamento-wa-2",
+      "pessoa": "Leonardo",
+      "title": "Junior — Treinamento IA — WhatsApp 2",
+      "date": "2026-06-09",
+      "projeto": "SDR imobiliária (Plá / Salesforce+Kinbox)",
+      "assunto": [
+        "arquitetura agentes (sessão/canal)",
+        "Cron jobs",
+        "padronização contatos"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Camila",
+        "Luis Henrique Genda de Almeida"
+      ],
+      "driveVideoId": "1rVf-BVhO0_s0XhTv-doCdUPpbwmYs0dq",
+      "sizeMB": 134,
+      "durationApprox": "00:18:43",
+      "geminiOk": true,
+      "notes": "library/notes/leo_junior-treinamento-wa-2_2026-06-09.md",
+      "transcript": "library/transcripts/leo_junior-treinamento-wa-2.txt",
+      "video": "library/videos/leo_junior-treinamento-wa-2.mp4",
+      "status": "done",
+      "obs": "Call é com cliente Junior/Camila; colocada em Leonardo por instrução do Leo.",
+      "walkthrough": "library/walkthroughs/leo_junior-treinamento-wa-2/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/leo_junior-treinamento-wa-2/frames"
+    },
+    {
+      "id": "nicolli_01_treinamento-intro",
+      "pessoa": "Nicolli",
+      "title": "Meet — Treinamento — Intro",
+      "date": "2026-03-26",
+      "projeto": "Treinamento Automatrix",
+      "assunto": [
+        "gestão de projetos",
+        "Notion",
+        "Febracis",
+        "onboarding"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Nicolli Rezk"
+      ],
+      "driveVideoId": "1n8-ffvRvQ0y4HuFNA_pEqu0swGrhwvlH",
+      "sizeMB": null,
+      "durationApprox": "01:22:02",
+      "geminiOk": true,
+      "notes": "library/notes/nicolli_01_treinamento-intro_2026-03-26.md",
+      "transcript": "library/transcripts/nicolli_01_treinamento-intro.txt",
+      "video": "library/videos/nicolli_01_treinamento-intro.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/nicolli_01_treinamento-intro/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/nicolli_01_treinamento-intro/frames"
+    },
+    {
+      "id": "nicolli_02_treinamento-leads",
+      "pessoa": "Nicolli",
+      "title": "Meet — Treinamento — Leads",
+      "date": "2026-03-27",
+      "projeto": "Treinamento Automatrix",
+      "assunto": [
+        "geração de leads"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Nicolli Rezk"
+      ],
+      "driveVideoId": "13m7A2F_R_COjKZlMPlLg1VpThisnqrhQ",
+      "sizeMB": null,
+      "durationApprox": null,
+      "geminiOk": false,
+      "notes": "library/notes/nicolli_02_treinamento-leads_2026-03-27.md",
+      "transcript": "library/transcripts/nicolli_02_treinamento-leads.txt",
+      "video": "library/videos/nicolli_02_treinamento-leads.mp4",
+      "status": "done",
+      "prioridadeWhisper": true,
+      "walkthrough": "library/walkthroughs/nicolli_02_treinamento-leads/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/nicolli_02_treinamento-leads/frames"
+    },
+    {
+      "id": "nicolli_03_treinamento-atendimento",
+      "pessoa": "Nicolli",
+      "title": "Meet — Treinamento — Atendimento",
+      "date": "2026-04-02",
+      "projeto": "Treinamento Automatrix",
+      "assunto": [
+        "atendimento"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Nicolli Rezk"
+      ],
+      "driveVideoId": "1UTJ8n80ykKcNgVd1w-f0ahGOMizKviuS",
+      "sizeMB": null,
+      "durationApprox": "01:22:48",
+      "geminiOk": false,
+      "notes": "library/notes/nicolli_03_treinamento-atendimento_2026-04-02.md",
+      "transcript": "library/transcripts/nicolli_03_treinamento-atendimento.txt",
+      "video": "library/videos/nicolli_03_treinamento-atendimento.mp4",
+      "status": "done",
+      "prioridadeWhisper": true,
+      "walkthrough": "library/walkthroughs/nicolli_03_treinamento-atendimento/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/nicolli_03_treinamento-atendimento/frames"
+    },
+    {
+      "id": "nicolli_04_treinamento-atendimento",
+      "pessoa": "Nicolli",
+      "title": "Meet — Treinamento — Atendimento (longa ~7h33)",
+      "date": "2026-04-07",
+      "projeto": "Treinamento Automatrix",
+      "assunto": [
+        "atendimento",
+        "Cloud Code Windows",
+        "análise de posts/dataset"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Nicolli Rezk",
+        "Leonardo Borges"
+      ],
+      "driveVideoId": "1bDLk0v8m1BJIA31CJY2hy4uBT_HpienS",
+      "sizeMB": null,
+      "durationApprox": "07:33:30",
+      "geminiOk": false,
+      "notes": "library/notes/nicolli_04_treinamento-atendimento_2026-04-07.md",
+      "transcript": "library/transcripts/nicolli_04_treinamento-atendimento.txt",
+      "video": "library/videos/nicolli_04_treinamento-atendimento.mp4",
+      "status": "done",
+      "obs": "~7h33 — transcrição longa; considerar modelo small ou rodar à noite.",
+      "walkthrough": "library/walkthroughs/nicolli_04_treinamento-atendimento/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/nicolli_04_treinamento-atendimento/frames"
+    },
+    {
+      "id": "nicolli_05_lucas-nikolli",
+      "pessoa": "Nicolli",
+      "title": "Call — Lucas & Nikolli",
+      "date": "2026-04-24",
+      "projeto": "Treinamento Automatrix",
+      "assunto": [
+        "Notion AI",
+        "OpenCloud",
+        "Heart Beats",
+        "Notebook LM"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Nicolli Rezk"
+      ],
+      "driveVideoId": "13-t8f2biZgajv3VxpzQ-N5EzwPBytmph",
+      "sizeMB": null,
+      "durationApprox": "00:39:18",
+      "geminiOk": true,
+      "notes": "library/notes/nicolli_05_lucas-nikolli_2026-04-24.md",
+      "transcript": "library/transcripts/nicolli_05_lucas-nikolli.txt",
+      "video": "library/videos/nicolli_05_lucas-nikolli.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/nicolli_05_lucas-nikolli/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/nicolli_05_lucas-nikolli/frames"
+    },
+    {
+      "id": "jun_mauricio-junior-vistoria-1453",
+      "pessoa": "Mauricio",
+      "title": "Reunião — Mauricio / Junior — Vistoria",
+      "date": "2026-06-11",
+      "projeto": "Vistoria (Confere)",
+      "assunto": [
+        "vistoria",
+        "Confere"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Mauricio",
+        "Junior"
+      ],
+      "driveVideoId": "1sTZU_5q23MmCHs55wYWTqiB6AGladruP",
+      "sizeMB": 283,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": null,
+      "transcript": "library/transcripts/jun_mauricio-junior-vistoria-1453.txt",
+      "video": "library/videos/jun_mauricio-junior-vistoria-1453.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/jun_mauricio-junior-vistoria-1453/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/jun_mauricio-junior-vistoria-1453/frames"
+    },
+    {
+      "id": "jun_junior-vistoria-1225",
+      "pessoa": "Junior",
+      "title": "Reunião Junior — Vistoria",
+      "date": "2026-06-11",
+      "projeto": "Vistoria (Confere)",
+      "assunto": [
+        "vistoria"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Junior"
+      ],
+      "driveVideoId": "1TvRYw-VzicoLCs7hRBH8Zr_cI1X5DfCJ",
+      "sizeMB": 821,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": null,
+      "transcript": "library/transcripts/jun_junior-vistoria-1225.txt",
+      "video": "library/videos/jun_junior-vistoria-1225.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/jun_junior-vistoria-1225/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/jun_junior-vistoria-1225/frames"
+    },
+    {
+      "id": "jun_junior-mauricio-telemedicina",
+      "pessoa": "Mauricio",
+      "title": "Junior / Mauricio — Telemedicina",
+      "date": "2026-06-10",
+      "projeto": "Telemedicina (UBS)",
+      "assunto": [
+        "telemedicina",
+        "UBS"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Mauricio",
+        "Junior"
+      ],
+      "driveVideoId": "1789nxj4HuUFLFa3WFa3jDbki-4Tk4Xv2",
+      "sizeMB": 1584,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": null,
+      "transcript": "library/transcripts/jun_junior-mauricio-telemedicina.txt",
+      "video": "library/videos/jun_junior-mauricio-telemedicina.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/jun_junior-mauricio-telemedicina/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/jun_junior-mauricio-telemedicina/frames"
+    },
+    {
+      "id": "jun_hvn-aula-06",
+      "pessoa": "HVN",
+      "title": "HVN-Aula 06 — Edição com IA — Animação Avançada",
+      "date": "2026-06-09",
+      "projeto": "HVN — Edição com IA",
+      "assunto": [
+        "edição de vídeo",
+        "IA",
+        "animação"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "HVN"
+      ],
+      "driveVideoId": "1Q57o3qHGIa9E_fQ-RZfSS-LrHNDW6U5S",
+      "sizeMB": 545,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": null,
+      "transcript": "library/transcripts/jun_hvn-aula-06.txt",
+      "video": "library/videos/jun_hvn-aula-06.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/jun_hvn-aula-06/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/jun_hvn-aula-06/frames"
+    },
+    {
+      "id": "jun_hvn-aula-05",
+      "pessoa": "HVN",
+      "title": "HVN-Aula 05 — Edição com IA — Animação OpenMontage",
+      "date": "2026-06-08",
+      "projeto": "HVN — Edição com IA",
+      "assunto": [
+        "edição de vídeo",
+        "OpenMontage"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "HVN"
+      ],
+      "driveVideoId": "1e6xb878grxQSWG7AbNqYszpoPjz5tZV6",
+      "sizeMB": 744,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": null,
+      "transcript": "library/transcripts/jun_hvn-aula-05.txt",
+      "video": "library/videos/jun_hvn-aula-05.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/jun_hvn-aula-05/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/jun_hvn-aula-05/frames"
+    },
+    {
+      "id": "jun_hvn-aula-04",
+      "pessoa": "HVN",
+      "title": "HVN-Aula 04 — Edição com IA — Gestão de Arquivos",
+      "date": "2026-06-03",
+      "projeto": "HVN — Edição com IA",
+      "assunto": [
+        "edição de vídeo",
+        "gestão de arquivos"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "HVN"
+      ],
+      "driveVideoId": "1FZBnKg9uLAombBEiYHnEONI4HUGjN8Vv",
+      "sizeMB": 1279,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": null,
+      "transcript": "library/transcripts/jun_hvn-aula-04.txt",
+      "video": "library/videos/jun_hvn-aula-04.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/jun_hvn-aula-04/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/jun_hvn-aula-04/frames"
+    },
+    {
+      "id": "jun_hvn-aula-03",
+      "pessoa": "HVN",
+      "title": "HVN-Aula 03 — Edição com IA — Codex Mobile",
+      "date": "2026-06-01",
+      "projeto": "HVN — Edição com IA",
+      "assunto": [
+        "edição de vídeo",
+        "Codex Mobile"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "HVN"
+      ],
+      "driveVideoId": "1zWHOCQ9ZCLrsq_RuT0LonMXdRgCIyrY5",
+      "sizeMB": 119,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": null,
+      "transcript": "library/transcripts/jun_hvn-aula-03.txt",
+      "video": "library/videos/jun_hvn-aula-03.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/jun_hvn-aula-03/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/jun_hvn-aula-03/frames"
+    },
+    {
+      "id": "jun_junior-whatsapp-3",
+      "pessoa": "Junior",
+      "title": "Reunião — Junior — WhatsApp 3",
+      "date": "2026-06-08",
+      "projeto": "SDR imobiliária (Plá)",
+      "assunto": [
+        "WhatsApp",
+        "SDR"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Junior"
+      ],
+      "driveVideoId": "1tfn1rXhmatHXRfnsBcUb0SUm-x8X-Y7s",
+      "sizeMB": 1165,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": null,
+      "transcript": "library/transcripts/jun_junior-whatsapp-3.txt",
+      "video": "library/videos/jun_junior-whatsapp-3.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/jun_junior-whatsapp-3/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/jun_junior-whatsapp-3/frames"
+    },
+    {
+      "id": "jun_junior-whatsapp-2-0605",
+      "pessoa": "Junior",
+      "title": "Reunião — Junior — WhatsApp 2 (05/06)",
+      "date": "2026-06-05",
+      "projeto": "SDR imobiliária (Plá)",
+      "assunto": [
+        "WhatsApp",
+        "SDR"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Junior"
+      ],
+      "driveVideoId": "1pwQXqV2dRJua28ujpDh7UVL8Fxk3bCiW",
+      "sizeMB": 441,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": null,
+      "transcript": "library/transcripts/jun_junior-whatsapp-2-0605.txt",
+      "video": "library/videos/jun_junior-whatsapp-2-0605.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/jun_junior-whatsapp-2-0605/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/jun_junior-whatsapp-2-0605/frames"
+    },
+    {
+      "id": "audio_beira-mar-6",
+      "pessoa": "Lucas",
+      "title": "🎙 Áudio — Avenida Beira Mar 6 (planejamento dos projetos)",
+      "date": "2026-06-12",
+      "projeto": "Planejamento Automatrix",
+      "assunto": [
+        "planejamento",
+        "Júnior/Kinbox",
+        "Vistoria",
+        "Telemedicina",
+        "segurança",
+        "agentes",
+        "coluna vertebral"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Leo"
+      ],
+      "type": "audio",
+      "audio": "library/media/beira-mar-6.m4a",
+      "driveVideoId": null,
+      "sizeMB": 14,
+      "durationApprox": "27:44",
+      "geminiOk": true,
+      "notes": null,
+      "transcript": "library/transcripts/audio_beira-mar-6.txt",
+      "video": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "projetos_checklist",
+      "pessoa": "Automatrix",
+      "title": "📋 Projetos — Checklist (do áudio Beira Mar 6)",
+      "date": "2026-06-12",
+      "projeto": "Planejamento Automatrix",
+      "assunto": [
+        "checklist",
+        "roadmap",
+        "tarefas"
+      ],
+      "participantes": [
+        "Automatrix"
+      ],
+      "type": "checklist",
+      "driveVideoId": null,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": null,
+      "transcript": null,
+      "video": null,
+      "status": "plan",
+      "clkey": "projetos"
+    },
+    {
+      "id": "kinbox",
+      "pessoa": "Júnior",
+      "title": "📦 Kinbox — módulos + checklist",
+      "date": "2026-06-12",
+      "projeto": "SDR imobiliária (Plá / Salesforce+Kinbox)",
+      "assunto": [
+        "Kinbox",
+        "cenário",
+        "API oficial",
+        "MCP",
+        "anti-ban"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Camila JAV",
+        "Júnior"
+      ],
+      "type": "checklist",
+      "clkey": "kinbox",
+      "notes": "library/notes/KINBOX_modulos.md",
+      "driveVideoId": null,
+      "durationApprox": null,
+      "geminiOk": true,
+      "transcript": null,
+      "video": null,
+      "status": "plan"
+    }
+  ]
+}

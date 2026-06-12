@@ -1,0 +1,169 @@
+[12s] Speaker A: E aí, mano, beleza? E aí, mano, de boa? De boa, e você?
+[18s] Speaker B: Bom demais.
+[20s] Speaker A: Vou mostrar os meninos aqui rapidinho, você, o Google Flow que voltou, que a gente tá tentando criar animação aqui para o Caio. E aí a gente vai conectar no seu aí.
+[30s] Speaker B: Que massa, demorou. Google Flow, mano, eu não vi. Não, foi isso aí mesmo. Foi tipo um cara já usando esse GM também, o Homem Flash. Tem uns vídeos bem legais, mano. Mas não, que você fizer até agora, irmã, vocês—
+[62s] Speaker A: não, a gente fez uma animaçãozinha aqui, mas ela não ficou nem perto de perfeita. Muito bom isso aqui, velho. Tá vendo? Tipo assim, ela é uma ferramenta, é uma interface mais amiga. Nossa, isso aqui ficou muito da hora!
+[78s] Speaker C: Olha, velho!
+[80s] Speaker A: Nossa, tudo editável, caralho!
+[83s] Speaker B: Editável, mano! Você queria o bagulho com prompt, você pode modificar ele ainda depois manualmente.
+[91s] Speaker A: Google Flow, mano! Tava off por causa desse Omni. Essa tela eu nunca vi, bizarro!
+[104s] Speaker B: Que doideira, velho! Bizarro, mano, que da hora, velho! Porra, começa aqui, então, Google Flow, ele é gratuito, mas a cota de crédito dele é muito baixa, né? Tipo, tem muitos ferramentas que não dá para usar, né? Só pagando mesmo, Gemini, né?
+[125s] Speaker A: Eu acho que com assinatura de R$9,99 do Gemini dá para testar ali.
+[129s] Speaker C: Você tem aí?
+[130s] Speaker A: Você tem aí? O quê? Assinatura? Eu tenho assinatura e tem API também, tipo, eu uso um terminal só, o Gemini, mano, mas a versão gratuita também. Eu tinha pegado o prompt ali, ó. Mano, não roda em 3D, né? Ele tava dando uma definição de 3D aqui que eu acho que tá Zicando o negócio, mano. Eu falo assim que esse animação aqui não é 3D. Não, deixa eu dar aqui um pronto.
+[212s] Speaker D: Blank.
+[306s] Speaker A: Vou tentar dar esse prompt nele aqui para ver se ele gera a definição certa, que se eu der aquilo ali no V3, eu acho que ele vai assinar igual o outro lá. E você não viu o 3 que fez? O texto que tem que ler é qual? Putz, é a alma. E a limite, velho, pelo amor de Deus, acabei de botar R$100 nessa porra na conta certa e não fez nada. Aí ela tá me extorquindo, filha da puta! Tá vendo?
+[401s] Speaker E: Tá vendo?
+[402s] Speaker A: Desgramada! É porque eu tô com a API errada aqui, provavelmente. Que história é essa aí, ó?
+[461s] Speaker C: Foi o 100 contos naquele vídeo?
+[462s] Speaker A: Não, aquele vídeo é um dólar. Então, olá, eu tô assinando essa porra aqui.
+[505s] Speaker E: Ferramentas que utilizam mais para efeito visual, sound effect, coisas assim. Efeito visual, VO3, ou aquelas que a gente tá Tentando fazer do Ctrl+Alt+K, mas que eu peça, por exemplo, para o notebook me utilizar para buscar elementos e coisas assim.
+[532s] Speaker A: Pode pedir para ele buscar em banco mesmo, tipo banco de— você tem que falar para ele buscar tipo nos sites das ferramentas, então tipo no site do ChatGPT, no site do N8N, aí ele vai extrair os ícones.
+[547s] Speaker B: E consegue puxar algumas coisas do Pexels também, né?
+[551s] Speaker A: Pexels eu acho que o notebook, ele não sei se puxa, mano. Será que isso? Ah, tá, que eu pedi ele para codar um negócio. Mas pior que esse aqui também não funcionou, né? Ah, não, eu não dei o prompt. Deixa eu tentar ver se esse aqui funciona. Tira parte do 3D. A gente, que doideira! Instruções para a gente. Ó, quantos vídeos gerar, quantas imagens gerar, qual usar para imagem. Esse aqui é, esses dois aqui é bom, esse aqui é piorzinho.
+[612s] Speaker B: 2 é bom, né?
+[616s] Speaker A: Confirmar sempre, nunca. Omni Flash, esse modelo é novo, nunca usei. Vou fazer o primeiro vídeo com ele, vai ver se vai falhar. Acho que mexer um pouco no prompt. É, a gente poderia mexer no prompt. Pode é que ele não falou nada de 3D.
+[713s] Speaker C: Ah, tá.
+[715s] Speaker A: Ah, é o novo.
+[718s] Speaker C: Ah, tá bom. Ele fazer assim, vamos ver, não vai ficar igual porque ele, sei lá. O Beck, ele identificou tipo pinceladas e o fundo também, como se fosse uma fumaça e tal, não sei o quê. Vamos ver o que ele vai fazer com isso, que não é o que tá ali, né, o background pelo menos. Vamos ver, ele disse ter feito, que a gente tinha que trocar Para trocar o nome também, que tá com o nome Amor Eterno.
+[782s] Speaker A: Vamos ver. Vixe, já sei que ele vai vacaiar, mas ficou bom agora. Ficou bom, ficou bom.
+[788s] Speaker C: Comprado curto, vai, porra!
+[790s] Speaker A: Fala dele, vai!
+[804s] Speaker B: Ficou da hora, mano.
+[805s] Speaker A: Ficou bom, ficou bom, mano. Esse homem aí é ridículo, bagulho roubado, roubadíssimo. Ficou bom, mano.
+[820s] Speaker B: Ele seguiu mesmo o prompt que vocês mandaram? Era esse jeito que você queria que o vídeo gerasse?
+[824s] Speaker A: Ele fez bem a mais, tá ligado? Mas tipo, ele manteve o estilo que a gente não queria que ele tenha um 3D. Tipo, tá vendo esse negócio?
+[831s] Speaker B: "Sim, a gente queria um negócio assim." Essa fumaça atrás você queria também e tal?
+[835s] Speaker C: Ele que identificou um vídeo básico que a gente deu para ele de referência, ele identificou dessa forma, mas era um background tipo estático azul, tá ligado? Uns trem desenhado. Aí ele identificou como se fosse fumaça e tudo mais. Aí também entendeu como se fosse pinceladas invisíveis, né, escrevendo. Só que na referência no Google Studio aparece os negócios do Letrim, sabe, contornando, e ele identificou. Mas ele fez assim, tô no canto, no canto não sei o quê, no canto esquerdo aparece linhas, não sei o quê, não sei o que lá. Ele entendeu.
+[883s] Speaker F: Dá para fazer tudo agora, qualquer logo.
+[886s] Speaker B: É para animar qualquer logo, é.
+[888s] Speaker C: Mas tem uma logo pronta, você pede para animar de uma forma, ele, caralho, ele recriou.
+[898s] Speaker B: É, mano, o Google é foda mesmo, bicho, mano.
+[902s] Speaker A: Ficou bem cabuloso, eu achei assim, tipo, deu para ver a diferença. Disso para o Veo.
+[912s] Speaker B: Chegaram a mandar alguma coisa estática para ele, para ele examinar?
+[915s] Speaker A: Tipo, qual foi?
+[916s] Speaker B: Esses dois que tá aí na tela, esse ali é o começo, ele é o final. E o prompt foi básico também, foi só para ele gerar uma arte 3D se transformando no nome.
+[933s] Speaker A: É, foi tipo isso.
+[936s] Speaker B: Ficou massa, mano. É realmente esse fundinho ali que ele podia ter retirado, mas caralho, gastou muito crédito. Ele conta que saiu de crédito, quanto que valeu a pena gerar desse vídeo.
+[948s] Speaker A: Depois eu vou ver, mas deve ter sido uns 1,50, eu acho.
+[953s] Speaker B: 1,50 para 15 segundos de vídeo, certo?
+[960s] Speaker A: 1,50 para 10 segundos.
+[961s] Speaker B: Pra 10 segundos.
+[974s] Speaker A: Alma e Alma Silva, é isso? Alma de— ok, eu analfabeto, não posso escrever.
+[983s] Speaker C: Alma de Alma Silva.
+[989s] Speaker A: O lettering deve ser substituído por fundo também, pode ser mais plano como um papel, porém com sombra. Mano, a maior burrice de fazer animação com esses trem aí, ó, é não dar a imagem que tem que ser animada. Você tem que dar a imagem que tem que ser animada, entendeu? Tipo, a gente tem que ter criado a imagem do com lettering primeiro e depois pedir ele para fazer.
+[1064s] Speaker B: E não dá um começo e dá um final, você quer dizer?
+[1067s] Speaker A: Não, porque a gente deu a imagem do amor eterno para pegar o estilo e criar o vídeo. A gente tem que transformar ela no lettering que a gente quer para depois pedir vídeo. Sempre você tem que dar a imagem exata do que você quer.
+[1079s] Speaker C: Entendi. Então, tipo, ah, eu tenho essa, mas quero trocar. Então primeiro vou pedir para ele me dar uma imagem com só o lettering trocado, exatamente, para depois mandar para fazer um vídeo. Entendi.
+[1089s] Speaker A: Sempre, sempre, tipo assim, o que você quer mostrar no vídeo, você tem que dar exatamente aquilo para IA na imagem. Se você animar com um negócio de frame a frame, não tem erro. A gente tava vendo um vídeo mais cedo, depois eu vou te mandar aí. Não era para ele criar vídeo, filho da puta, mas já You have one coisa. Nossa, dá para personalizar tudo aqui, velho. Ou esse, esse flow vale dar uma explorada boa nele, viu?
+[1180s] Speaker B: Tem como mexer nele de boa sem gastar dinheiro só para início ou não?
+[1186s] Speaker A: Eu acho que tem que ter assinatura, pelo menos a de 100 conto. Mas vamos explorar ele bastante. Tem que pesquisar também, depois fala com o Léo para ver se não tem ferramenta de integração com ele, tipo Igual tem do notebook ali, hein, que não é oficial.
+[1210s] Speaker B: Sim.
+[1230s] Speaker A: I don't say, "Pompidou for the years ahead." Se eu consigo acessar isso aí também, né? Ainda vou ver. Tá grátis, gente, tá dando um mês grátis.
+[1273s] Speaker B: Tá dando?
+[1273s] Speaker C: É que eu assinei o Gemini de 100 conto, só que aí eu cancelei e fui para o GPT.
+[1284s] Speaker B: Mas aí o Gemini fica um mês grátis.
+[1289s] Speaker C: Só tá rodando ainda o plano Pro.
+[1291s] Speaker A: Vou testar isso daí. A boa parte ele entendeu, só não colocou letra, né? Ele botou em inglês, né? De onde que ele tirou esse inglês aí, pelo amor de Deus? Caralho, aí, top! Muito bem, parabéns!
+[1321s] Speaker E: É isso mesmo?
+[1368s] Speaker C: É para quem isso?
+[1379s] Speaker B: Para alguma pessoa já mesmo tá fazendo?
+[1382s] Speaker A: É do meu trampo.
+[1387s] Speaker B: Eles pediram para você, tipo, animar uma logo, foi?
+[1390s] Speaker C: Eles me deram uma referência daí de um vídeo e tal. Você tem intro e tem final. Aí eu vou copiar exatamente igual, só que mudar as palavras, tá ligado?
+[1401s] Speaker B: Ah, que da hora!
+[1402s] Speaker C: Vou ver se ela consegue fazer, copiar igualzinho.
+[1404s] Speaker A: Pelo jeito sim, com paciência.
+[1436s] Speaker D: The full—
+[1458s] Speaker A: is assim, gente. Aí, aí. Inteligente, às vezes meio burra, para, tipo, é porque ela não sabe de fato o que ela tá fazendo. Ela tá, tipo, tentando adivinhar, entendeu? Ela só é muito boa em adivinhar. E, tipo, a gente tá usando essa aqui pelo começo. Se tivesse usando já um tempinho Já daria e tal. Eu quero dar outro prompt aqui para ela, para seguir frame. Eu achei que dava para, como é que fala, eu achei que dava para ainda tá com a porra do Como você está andando para mim? Ele é o mais recente, não é? O 2, acho que é. Já vou dar ali, eu lá no GPT, para a gente sair dessa enconha. Agora eu vou pedir para ele o seguinte. Ele tá fazendo dois. Acho que tá, ele tava aprimorando aquele outro de antes ali para poder baixar. Mas já pode preparar, né, para conectar aí via SSH para ver. Pergunta aí no seu códex dele, no que for, se dá para conectar.
+[1719s] Speaker F: Uma mulher respondeu, uma que mandou o vídeo. Eu vou te mandar o que ela respondeu aí.
+[1724s] Speaker B: Você fez um vídeo para mandar?
+[1725s] Speaker F: O vídeo que o Lucas fez, eu mandei para ela, que já fez já. Daí a cliente mandou umas 4, 5 mensagens lá. Oi, já tem se interessado, capaz.
+[1737s] Speaker A: Acho que eu sei qual que é que você tá falando.
+[1741s] Speaker F: É uma que tem uma foto de uma mulher.
+[1747s] Speaker A: Eu acho que vou configurar alguma coisa para poder traduzir tudo, as mensagens, e botar numa interface, já que ele tá conversando com todo mundo.
+[1757s] Speaker F: Sim, é bom. Vou ver se aí meu ele tá quase finalizando, já vou te mandar. Já não tá usando nem Codex nem Gemini, tá usando outras IA, outra LLM. É, tá, tu tá aquele fallback, eu te mandei o fallback aí, tá usando 5 apps diferentes, tudo local, sem custo algum.
+[1802s] Speaker B: Manda tudo, tipo frame a frame assim, tá ligado?
+[1813s] Speaker F: Literalmente desenhando a mastigadinha para ele.
+[1818s] Speaker B: Ele vai mesmo.
+[1858s] Speaker A: Mano, mas eu acho que com isso aqui já dá, já dá para dar ali. Vamos lá, no, como é que é o nome? Flow Video Generation. Eu vou tentar com 3.1 Lite primeiro e depois eu tento com Omni de novo. 3.1 Lite é muito churuca. Acho que eu vou dar aqui também. Ele criou alguma coisa. Ah, não, aqui ele parou.
+[1949s] Speaker D: Boca pintado.
+[1975s] Speaker C: Por um pincel invisível.
+[1978s] Speaker A: Pintado por um pincel invisível, né?
+[1980s] Speaker C: Eu tinha usado essa forma também, senão às vezes pode parecer um pincel.
+[2042s] Speaker A: Já vi ali que ele vem, que é coisa ali, ele escreveu o máximo. Very, very proud. Hello, Tom. Okay, parabéns, Michael Jackson. In Korean, no comment. Isso eu trabalho para gerar grátis. Se você for pagar para gerar com API, você bota no cloud lá e foda-se. Uai, você bota crédito na API, o cloud vai pensar nesses prompts, ele já faz tudo assim, já foda-se. Fazer no meu OpenMontage lá. Agora, eu acho que dá para fazer isso aí com OpenMontage. É porque eu fiquei com dó assim, por enfileirar e tal, mas faz lá no dele também. Mas no OpenMontage a gente teria que fazer o quê? Encontrar o lettering, tipo, encontrar esse lettering, ou a gente vai baixar ele, ou encontrar ele no Tumblr, ou no Artboard, encontrar ele E dá ele, né, para o próprio Montage, dá as imagens de exemplos lá. Legal. E tentar entender se ele tem esse efeito ou se a gente precisa instalar ou configurar esse efeito.
+[2199s] Speaker C: Sim, e deu aqui, ficou legal.
+[2203s] Speaker B: Muito louco, mano.
+[2207s] Speaker C: Para finalizar, só manda ele trocar essa A cor, ele botou de novo douradão.
+[2214s] Speaker D: Mas ficou massa.
+[2229s] Speaker A: Isso aqui veio com o VO 3.1, uma barata. VO 3.1.
+[2262s] Speaker B: Aquele silêncio também é doido, né, mano?
+[2265s] Speaker A: Esse silêncio lá, já pego, já envio para a Maíra ver se ela, o que que ela acha.
+[2273s] Speaker C: Se ela não gostar, ela vai usar do mesmo jeito também.
+[2277s] Speaker A: Outra baíra do caralho.
+[2282s] Speaker C: Como que chama isso daí?
+[2299s] Speaker A: Não dá essa saga, eu vou conectar com o Mdesk.
+[2306s] Speaker B: Ah, eu não puxo aqui, mano. Pera aí, tava vendo aí o vídeo aí, fiquei entretido.
+[2315s] Speaker D: SSH.
+[2324s] Speaker C: Eu falei, essa manteiga tem que pegar um suportezinho, você enche metade de água e deixa para fora, ela mantém durinha assim, tá ligado?
+[2416s] Speaker A: When you're ready, you say hello, viu? Man, this is— you can put it down. I'll liberate you.
+[2472s] Speaker F: Absurdo, mano!
+[2472s] Speaker A: Essa ferramenta aqui tá muito absurda. Tipo, já tinha outras ferramentas assim igual o Higgs Field e tal, mas agora o Google dentro da assinatura, pô, é muito foda.
+[2485s] Speaker B: Sim, mano, caralho! Hoje ele inventou aqui, ó, pode passar agora o passo a passo exato para poder conectar por senha, conectar por chave, liberar acesso pela internet. Não só na rede local. Qual é a senha?
+[2499s] Speaker A: Muito louco mesmo, mano.
+[2506s] Speaker B: Caralho, o Google foi longe agora, os cara, hein. Nesse que a gente tá vendo agora, devia ter feito muito mais coisa já. Toda semana exposta uma coisa nova.
+[2557s] Speaker A: Eu acho que o Google é o que mais compensa mesmo para fazer esse tipo de vídeo assim, né, mano? No momento também eu acho, não de todas as IA assim, que o Google entrega muita coisa, apesar do ChatGPT ter o Codex e tal, mas o Google entrega muita coisa.
+[2571s] Speaker B: Foi o que você falou, mano, chegou o momento de a gente ter os três, não tem jeito.
+[2578s] Speaker A: Agora o Cláudio lançou o novo modelo hoje, você viu, Fable?
+[2582s] Speaker B: Não, que ele tem de novo? Vou instalar aqui o OpenSSH Server ainda, deixa o servidor automático.
+[2703s] Speaker A: Ah, ela tá fazendo.
+[2806s] Speaker B: Sperando che— non è proprio da aspettare, ancora. Aspettare di terminare, quando voltare al prompt c'è Rodin. Instalando ainda, tem que esperar, pode demorar um pouquinho.
+[2894s] Speaker A: Está instalando o quê?
+[2899s] Speaker B: É o Rune, tá instalando ainda, tá instalando o SSH.
+[2908s] Speaker A: Como assim, instala no SSH? SSH é uma conexão do computador para o outro, não?
+[2916s] Speaker B: Sim, ainda não subiu o SSH. Eu falei, o arquivo que você não existe, segunda janela não conclui instalação. Deixa eu ver por que que tá vindo. Ele falou, tem que instalar o OpenSSH Server.
+[2933s] Speaker D: You see, it's not yet.
+[2944s] Speaker A: Man, I'm with some images, bozo, here for Yara. Essa imagenzinha, são o que está fazendo, tipo fazendo tipo um guia de estudo sobre tudo, tá ligado? Ela fica resumindo tudo, as paradas, anotando e tal. Organizando tudo, os arquivos, as cal e tal. Ela vai passar a organizar tudo. Ela tem um open cloud, tipo, que ela usa o open cloud, tipo, do computador dela. Ela usou open cloud lá que fica lá rodando lá no meu PC.
+[3003s] Speaker B: Ah, dá assim, conectando no seu, rodar uma opinião de gente. Como é que é?
+[3010s] Speaker A: Desculpa. Isso que é massa de fazer, tipo, rodar um Open Call para um monte de gente igual você tem um PCzão aí.
+[3018s] Speaker B: Sim, mano, se ele aguentar, né, tipo os créditos.
+[3023s] Speaker A: Mas tem crédito infinito, pô.
+[3027s] Speaker B: Como assim crédito infinito?
+[3030s] Speaker A: Vamos lá, crédito infinito, você bota aí a local aí, bora mergulhar no Gemini, GPT, vai renovando.
+[3040s] Speaker B: Então, mas ele vai gastar de algum lugar, não vai?
+[3043s] Speaker A: Não, sempre tem um jeito de gastar nada ou quase nada.
+[3047s] Speaker G: Fundamental, viu? Nem toda integração é criada da mesma forma. Conectar ferramentas que já têm integrações nativas é bem mais simples. Agora, usar uma API que devolve dados brutos que precisam ser tratados—
+[3059s] Speaker A: que pariu, velho! Isso aqui tá ficando— não, você que tava aqui de antes. Que eu boto aí a parte, gerar vídeo sem saber, tipo, gera um vídeo de apresentação sobre isso que a gente fez, depois a gente veja. Sabe aquele projeto de ar? Não, vídeo gasta, pô. Mas tipo, esses créditos que gastam, eles são mensais, tá ligado? Semanal e tal. Não vai cobrar mais, não. It's that nature there. Olha, velho, igualzinho! Como você fez? No Flow aí, com o Omni? Ele fez lá da conta dele, ele assinou o Gemini uns dias atrás.
+[3160s] Speaker B: Por um mês grátis assim, tipo, depois cancelar. Tá rodando aqui, igual o GPT lá, que ele me dá essa opção, né? Massa, mano. Agora significa que SSH local está funcionando. Eu posso fazer um teste real de outra pessoa na máquina.
+[3186s] Speaker A: Pronto, deu certo, mano.
+[3188s] Speaker B: Aqui falou, deixa eu ver, ó: se quiser, eu posso agora te passar o comando para descobrir primeiro o IP certo desse PC e testar a conexão de outra máquina. Agora que eu pego o IP dessa máquina aqui para te passar, é isso.
+[3202s] Speaker A: Escreva o prompt que ele precisa dar para conseguir conectar aqui. Mas eu vou conectar aí rapidão, tem 9 horas.
+[3215s] Speaker D: Oi.
+[3223s] Speaker A: Eu vou conectar rapidão e deixar configurando. 19 horas, eu queria descer ali para comer.
+[3232s] Speaker B: Demorou, vou deixar aqui. Já já terminando aqui, deixa eu ver. De quero que vocês não passa pano.
+[3246s] Speaker E: Verdadeira proficiência não é saber programar cada ferramenta, mas saber qual pilar usar em qual momento. Ela criou um ecossistema aqui da apresentação do cérebro, corpo e memória. Olha, ela fez o mapa mental do ecossistema de entendimento.
+[3321s] Speaker B: Não tem meu IP aqui, mano. Aí foi dar, tem ele aqui já, só isso precisa. Será agora?
+[3327s] Speaker A: Eu acho que é isso aí, manda aí para mim. Assim não tem não no PC, mas deve ter algum senha para conectar SSH, não?
+[3338s] Speaker B: Vou perguntar para ele se tem alguma senha aqui, mas eu acho que não, mas vou perguntar para ele aqui. I should not have repeated.
+[3382s] Speaker A: Cadê?
+[3383s] Speaker B: Mandei, te mandei no WhatsApp.
+[3391s] Speaker A: Por isso, não tem como eu me conectar no seu computador só com isso, não, velho. Impossível. Fala com sua Yasin, escreva o prompt que ele precisa escrever para IA dele para ela se conectar aqui.
+[3448s] Speaker E: Oh, Clint.
+[3629s] Speaker B: Pedir para ele fazer um assim então para mim.
+[3643s] Speaker A: Oi, amanhã eu vou acordar tão cedo que eu já vou dormir tão cedo.
+[3679s] Speaker B: É porque eu nunca conectei nessa máquina aqui ainda por SSH. E como o Windows foi novo desde o zero que instalou, né, talvez precisava de alguns repositórios, não sei, as conexões aí para ficar redondo.
+[3696s] Speaker A: Mas de boa, só da gente conseguir instalar, colocar o SSH, tipo conectar SSH, já dá para, já dá para ir fazendo muita coisa.
+[3706s] Speaker B: A minha máquina tem que ficar sempre ligada se você por acaso precisar acessar alguma coisa assim, né?
+[3711s] Speaker A: É, se ela não tiver ligada não dá para acessar ela não.
+[3731s] Speaker B: Você acha que a gente vai acabar tendo que usar mesmo então o Google Omni lá para poder fazer os vídeos que você quer mais elaborado? Ou a gente pode ficar mais minimalista usando mesmo só a ferramenta que você criou lá?
+[3745s] Speaker A: Aí eu tô fazendo, eu tô fazendo um negócio para fazer vídeo com aquele trem lá sem gastar com Omni, para fazer um cena ou outro com Omni e tal, mas ali mesmo só para testar mesmo, né?
+[3755s] Speaker B: Estava testando.
+[3757s] Speaker A: Dá para usar algumas cenas, dá para alugar.
+[3767s] Speaker B: Não, mano, só se der para fazer os vídeos que você fez, aquele lá que você mandou com o Codex, aqui já daquele jeito que você fez minimalista mesmo ali, mas tá muito bem feito, já tá top já.
+[3820s] Speaker A: Tipo, com SSH dá para eu botar o meu cloud para poder configurar o seu Codex. Ah, não tem que estar na mesma rede? Pera aí que eu vou te mandar.
+[3843s] Speaker B: É só pegar o wi-fi daqui, né?
+[3850s] Speaker A: Esse OpenSSH aí deveria ser para isso. Call this a no-sell codex.
+[3933s] Speaker B: Falta um caminho de rede até o PC. O IPI é privado, então só funciona na mesma rede local, fora dela não há acesso direto. Para se chegar a funcionar de outra rede, você precisa precisa de uma dessas opções: TailScale, que é o VPN, port forwarding no roteador, e túnel reverso. Além disso, precisa estar tudo isso aqui, SSDH rodando, port 22 liberado no firewall do Windows, usuário com senha definida e rede permitir acesso de fora. O ponto principal é este: o IP local não serve fora da rede. Para outra rede você precisa de TailScale VPN, ou IP público mais port firewall. Se quiser, eu posso te dizer o caminho mais fácil para o seu caso, que quase sempre é o tail scale.
+[3977s] Speaker A: Pode configurar o tail scale aí que amanhã a gente faz, beleza? É essencial mesmo. Aí amanhã, tipo, amanhã eu deixo amanhã, eu então hoje mais tarde eu deixo ela aí, bota ela para ir configurando a sua aí.
+[4001s] Speaker B: Demorou então, mano.
+[4003s] Speaker A: Então fechou, velho. Nice, valeu, falou!

@@ -1,293 +1,352 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chris Lamm — Meeting Library</title>
+<title>Meeting Library — Automatrix</title>
 <style>
-  :root {
-    --bg: #0f1117; --surface: #1a1d27; --card: #22263a;
-    --accent: #6c63ff; --accent2: #ff6584; --text: #e2e8f0;
-    --muted: #64748b; --border: #2d3748;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; min-height: 100vh; }
-
-  header { background: linear-gradient(135deg, #1a1d27 0%, #0f1117 100%);
-    border-bottom: 1px solid var(--border); padding: 20px 32px;
-    display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 100; }
-  header .logo { font-size: 22px; font-weight: 700; background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  header .subtitle { color: var(--muted); font-size: 13px; }
-  header .badge { margin-left: auto; background: var(--accent); color: white;
-    padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-
-  .container { max-width: 1200px; margin: 0 auto; padding: 32px; }
-
-  .player-section { background: var(--surface); border-radius: 16px; overflow: hidden;
-    border: 1px solid var(--border); margin-bottom: 32px; display: none; }
-  .player-section.active { display: block; }
-  .player-header { padding: 16px 20px; display: flex; align-items: center; gap: 12px;
-    background: var(--card); border-bottom: 1px solid var(--border); }
-  .player-title { font-weight: 600; font-size: 15px; flex: 1; }
-  .player-meta { color: var(--muted); font-size: 12px; }
-  .btn-close { background: none; border: 1px solid var(--border); color: var(--muted);
-    padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; }
-  .btn-close:hover { background: var(--border); color: var(--text); }
-  video { width: 100%; max-height: 540px; background: #000; display: block; }
-
-  .filters { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
-  .filter-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted);
-    padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 13px; transition: all .2s; }
-  .filter-btn:hover, .filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
-
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
-
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    overflow: hidden; cursor: pointer; transition: all .2s; }
-  .card:hover { border-color: var(--accent); transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(108,99,255,.2); }
-  .card.playing { border-color: var(--accent2); box-shadow: 0 0 0 2px var(--accent2); }
-
-  .card-thumb { height: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
-  .card-body { padding: 16px; }
-  .card-date { font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: .5px;
-    text-transform: uppercase; margin-bottom: 6px; }
-  .card-title { font-size: 14px; font-weight: 600; line-height: 1.4; margin-bottom: 8px; }
-  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
-  .tag { background: var(--surface); border: 1px solid var(--border);
-    color: var(--muted); font-size: 11px; padding: 2px 8px; border-radius: 4px; }
-  .tag.screen { background: rgba(108,99,255,.15); border-color: var(--accent); color: var(--accent); }
-  .tag.srt { background: rgba(72,199,142,.15); border-color: #48c78e; color: #48c78e; }
-  .card-footer { display: flex; align-items: center; justify-content: space-between;
-    padding-top: 10px; border-top: 1px solid var(--border); }
-  .card-size { color: var(--muted); font-size: 12px; }
-  .btn-play { background: var(--accent); color: white; border: none;
-    padding: 6px 16px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600;
-    display: flex; align-items: center; gap: 6px; transition: all .2s; }
-  .btn-play:hover { background: #7c75ff; }
-  .btn-drive { background: var(--surface); color: var(--muted); border: 1px solid var(--border);
-    padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 11px;
-    text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
-  .btn-drive:hover { border-color: var(--accent); color: var(--accent); }
-
-  .no-video { padding: 10px 16px; background: rgba(255,100,132,.1);
-    border-radius: 8px; color: var(--accent2); font-size: 12px; }
-
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
-  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
-  .stat-num { font-size: 24px; font-weight: 700; color: var(--accent); }
-  .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  :root{--bg:#0f1117;--surface:#1a1d27;--card:#22263a;--accent:#6c63ff;--accent2:#ff6584;
+        --text:#e2e8f0;--muted:#64748b;--border:#2d3748;--ok:#48c78e;--warn:#ffb454;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;min-height:100vh}
+  header{background:linear-gradient(135deg,#1a1d27,#0f1117);border-bottom:1px solid var(--border);
+    padding:20px 32px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50}
+  .logo{font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .subtitle{color:var(--muted);font-size:13px}
+  .badge{margin-left:auto;background:var(--accent);color:#fff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600}
+  .container{max-width:1200px;margin:0 auto;padding:32px}
+  .insights{background:linear-gradient(135deg,var(--surface),var(--card));border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:24px}
+  .ins-top{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+  .ins{background:rgba(15,17,23,.5);border:1px solid var(--border);border-radius:12px;padding:16px}
+  .ins .n{font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .ins .l{font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+  .ins .sub{font-size:11px;color:var(--muted);margin-top:6px}
+  .themes-h{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+  .themes{display:flex;gap:8px;flex-wrap:wrap}
+  .theme{background:rgba(108,99,255,.12);border:1px solid var(--border);color:var(--text);font-size:12px;padding:5px 11px;border-radius:20px;cursor:pointer;display:flex;gap:6px;align-items:center}
+  .theme:hover{border-color:var(--accent)}
+  .theme .c{background:var(--accent);color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 7px}
+  .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:22px}
+  .field{display:flex;flex-direction:column;gap:4px}
+  .field label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding-left:4px}
+  select,#search{background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 14px;border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer;min-width:170px;appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2364748b' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:32px}
+  #search{cursor:text;background-image:none;min-width:240px;margin-left:auto}
+  select:focus,#search:focus{outline:none;border-color:var(--accent)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:.2s;cursor:pointer}
+  .card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 32px rgba(108,99,255,.2)}
+  .card-thumb{height:4px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .card-body{padding:16px}
+  .card-date{font-size:11px;color:var(--accent);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
+  .card-title{font-size:14px;font-weight:600;line-height:1.4;margin-bottom:8px}
+  .who{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-bottom:8px;background:rgba(108,99,255,.18);color:#9d97ff}
+  .card-meta{font-size:12px;color:var(--muted);margin-bottom:10px}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+  .tag{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:11px;padding:2px 8px;border-radius:4px}
+  .pills{display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:10px;font-size:11px}
+  .pill{padding:3px 9px;border-radius:6px;border:1px solid var(--border);color:var(--muted)}
+  .pill.ok{border-color:var(--ok);color:var(--ok)}.pill.warn{border-color:var(--warn);color:var(--warn)}.pill.run{border-color:var(--accent);color:var(--accent)}
+  .overlay{position:fixed;inset:0;background:rgba(5,7,12,.82);z-index:200;display:none;backdrop-filter:blur(3px)}
+  .overlay.active{display:block}
+  .modal{position:absolute;inset:24px;max-width:1100px;margin:0 auto;background:var(--bg);border:1px solid var(--border);border-radius:16px;display:flex;flex-direction:column;overflow:hidden}
+  .m-head{padding:16px 22px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;gap:14px;align-items:flex-start}
+  .m-title{font-size:17px;font-weight:700}.m-sub{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.6}
+  .m-close{margin-left:auto;background:none;border:1px solid var(--border);color:var(--muted);padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px}
+  .m-body{display:grid;grid-template-columns:340px 1fr;flex:1;overflow:hidden}
+  .m-left{border-right:1px solid var(--border);overflow-y:auto;padding:16px}.m-right{overflow-y:auto;padding:18px 22px}
+  .m-video,.m-iframe{width:100%;background:#000;border-radius:10px;margin-bottom:12px}
+  .m-video{max-height:300px}.m-iframe{height:300px;border:0}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .btn{font-size:12px;padding:8px 14px;border-radius:9px;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  .btn:hover{border-color:var(--accent)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn[disabled]{opacity:.55;cursor:default}
+  .idx-h{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:6px 0 8px}
+  .idx a{display:block;font-size:12px;color:var(--text);text-decoration:none;padding:5px 8px;border-radius:6px;border-left:2px solid transparent}
+  .idx a:hover{background:var(--card);border-left-color:var(--accent)}.idx a b{color:var(--accent);font-variant-numeric:tabular-nums;margin-right:6px}
+  .tabs{display:flex;gap:8px;margin-bottom:14px;position:sticky;top:0;background:var(--bg);padding-bottom:8px;z-index:2}
+  .tab{padding:6px 14px;border-radius:20px;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:13px}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .seg{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid rgba(45,55,72,.4);scroll-margin-top:54px}
+  .seg .t{flex:none;font-size:11px;color:var(--accent);cursor:pointer;font-variant-numeric:tabular-nums;padding-top:2px}
+  .seg .sp{flex:none;font-size:11px;font-weight:700;width:74px}.seg .tx{font-size:13.5px;line-height:1.55}
+  .spk0{color:#9d97ff}.spk1{color:#ff6584}.spk2{color:#48c78e}.spk3{color:#ffb454}.spk4{color:#56b6ff}
+  .notes-md{font-size:14px;line-height:1.7}.notes-md h1{font-size:18px;margin:6px 0 10px}.notes-md h2{font-size:15px;margin:16px 0 8px;color:var(--accent)}
+  .notes-md h3{font-size:13px;margin:12px 0 6px;color:var(--accent2)}.notes-md ul{margin:6px 0 6px 18px}.notes-md li{margin:3px 0}.notes-md a{color:var(--accent)}.notes-md strong{color:#fff}
+  .info{margin-bottom:14px;font-size:12px}
+  .info .row{margin-bottom:9px}
+  .info .k{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+  .info .v{word-break:break-all;color:var(--text)}.info .v a{color:var(--accent)}
+  .info input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:7px;font-size:12px;font-family:inherit}
+  .info input:focus{outline:none;border-color:var(--accent)}
+  .info .save{font-size:11px;color:var(--accent);cursor:pointer;display:inline-block;margin-top:4px}
+  .wt img{width:100%;border-radius:8px;margin:8px 0;border:1px solid var(--border)}
+  .wt h1{font-size:17px;margin:4px 0 8px}
+  .wt h3{font-size:13px;color:var(--accent);margin:16px 0 6px;border-top:1px solid var(--border);padding-top:12px}
+  .wt .bq{color:var(--muted);font-size:12px;line-height:1.7}
+  .wt p{font-size:13.5px;line-height:1.55;margin:4px 0}
+  .wt code{background:var(--card);padding:1px 5px;border-radius:4px;color:var(--accent2);font-variant-numeric:tabular-nums}
+  .chk-grp{margin-bottom:14px}
+  .chk-grp h3{font-size:13px;color:var(--accent);margin:16px 0 8px;border-top:1px solid var(--border);padding-top:12px}
+  .chk-item{display:flex;gap:9px;align-items:flex-start;padding:5px 0;font-size:13px;cursor:pointer;line-height:1.45}
+  .chk-item input{margin-top:2px;accent-color:var(--accent);width:15px;height:15px;flex:none;cursor:pointer}
+  .chk-item.done span{color:var(--muted);text-decoration:line-through}
+  .muted{color:var(--muted);font-size:13px}
+  @media(max-width:760px){.ins-top{grid-template-columns:repeat(2,1fr)}.m-body{grid-template-columns:1fr}.m-left{border-right:none;border-bottom:1px solid var(--border)}#search{margin-left:0}}
 </style>
 </head>
 <body>
-
 <header>
-  <div>
-    <div class="logo">📹 Meeting Library</div>
-    <div class="subtitle">Chris Lamm × Automatrix IA</div>
-  </div>
-  <div class="badge" id="count-badge">Loading...</div>
+  <div><div class="logo">📹 Meeting Library</div><div class="subtitle">Automatrix · catálogo de calls · preview direto · transcrição sob demanda</div></div>
+  <div class="badge" id="count-badge">…</div>
 </header>
-
 <div class="container">
-
-  <!-- Player -->
-  <div class="player-section" id="player-section">
-    <div class="player-header">
-      <div>
-        <div class="player-title" id="player-title">—</div>
-        <div class="player-meta" id="player-meta">—</div>
-      </div>
-      <button class="btn-close" onclick="closePlayer()">✕ Close</button>
+  <div class="insights">
+    <div class="ins-top">
+      <div class="ins"><div class="n" id="i-calls">—</div><div class="l">Calls no mês/total</div><div class="sub" id="i-people">—</div></div>
+      <div class="ins"><div class="n" id="i-gb">—</div><div class="l">Vídeo no Drive</div><div class="sub" id="i-hours">—</div></div>
+      <div class="ins"><div class="n" id="i-tr">—</div><div class="l">Transcritas</div><div class="sub" id="i-trpct">—</div></div>
+      <div class="ins"><div class="n" id="i-proj">—</div><div class="l">Projetos</div><div class="sub" id="i-projtop">—</div></div>
     </div>
-    <video id="main-video" controls preload="metadata">
-      Your browser does not support video playback.
-    </video>
+    <div class="themes-h">Temas recorrentes (clique pra filtrar)</div>
+    <div class="themes" id="themes"></div>
   </div>
-
-  <!-- Stats -->
-  <div class="stats">
-    <div class="stat"><div class="stat-num" id="s-total">—</div><div class="stat-label">Total Meetings</div></div>
-    <div class="stat"><div class="stat-num" id="s-playable">—</div><div class="stat-label">Playable Now</div></div>
-    <div class="stat"><div class="stat-num" id="s-screen">—</div><div class="stat-label">Screen Demos</div></div>
-    <div class="stat"><div class="stat-num" id="s-srt">—</div><div class="stat-label">Transcribed</div></div>
+  <div class="controls">
+    <div class="field"><label>Pessoa</label><select id="f-pessoa" onchange="F.pessoa=this.value;render()"><option value="all">Todas</option></select></div>
+    <div class="field"><label>Projeto</label><select id="f-proj" onchange="F.projeto=this.value;render()"><option value="all">Todos</option></select></div>
+    <div class="field"><label>Tipo</label><select id="f-tipo" onchange="F.tipo=this.value;render()"><option value="all">Todos</option><option value="video">Calls (vídeo)</option><option value="audio">Áudios</option><option value="checklist">Checklists / Docs</option></select></div>
+    <div class="field"><label>Status</label><select id="f-st" onchange="F.st=this.value;render()"><option value="all">Todos</option><option value="tr">Transcritas</option><option value="pend">Sem transcrição</option></select></div>
+    <div class="field" style="flex:1;min-width:240px"><label>Busca</label><input id="search" placeholder="🔎 assunto, projeto, pessoa…" oninput="render()"></div>
   </div>
-
-  <!-- Filters -->
-  <div class="filters">
-    <button class="filter-btn active" onclick="filter('all', this)">All</button>
-    <button class="filter-btn" onclick="filter('playable', this)">▶ Playable</button>
-    <button class="filter-btn" onclick="filter('screen', this)">🖥 Screen Demo</button>
-    <button class="filter-btn" onclick="filter('srt', this)">📝 Transcribed</button>
-    <button class="filter-btn" onclick="filter('client', this)">Chris Present</button>
-  </div>
-
-  <!-- Grid -->
   <div class="grid" id="grid"></div>
+</div>
 
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeDetail()">
+  <div class="modal">
+    <div class="m-head"><div><div class="m-title" id="m-title">—</div><div class="m-sub" id="m-sub"></div></div><button class="m-close" onclick="closeDetail()">✕ Fechar</button></div>
+    <div class="m-body">
+      <div class="m-left">
+        <div id="m-videowrap"></div>
+        <div class="actions" id="m-actions"></div>
+        <div id="m-info"></div>
+        <div class="idx-h">Índice</div><div class="idx" id="m-index"></div>
+      </div>
+      <div class="m-right">
+        <div class="tabs"><div class="tab active" id="tab-tr" onclick="showTab('tr')">🗣 Transcrição</div><div class="tab" id="tab-nt" onclick="showTab('nt')">📝 Notas</div></div>
+        <div id="pane-tr"></div><div id="pane-nt" style="display:none"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-const MEETINGS = [
-  { date: "2026-02-28", title: "Call 1 — Discovery & Scoping", people: "Lucas, Chris", size: "275MB",
-    video: "videos/call01_2026-02-28.mp4", drive: "https://drive.google.com/file/d/1DLC__z7N8y2HH9fgkxqAgDhjVNjq6k_d/view",
-    notes: "https://docs.google.com/document/d/1eh1aRecdCOsAMuHsNa3F8mrRAkhcaN2e6kOtoLvkCnc/edit",
-    tags: ["client"], srt: true, screen: false },
-
-  { date: "2026-03-01", title: "Call 2 — Technical Scoping", people: "Lucas, Chris", size: "229MB",
-    video: "videos/call02_2026-03-01.mp4", drive: "https://drive.google.com/file/d/1LGxyfjdUK6YCPxN_l1j4rcukZAYuQTRQ/view",
-    notes: "https://docs.google.com/document/d/1v7HTU67P8qcKtahczY_yxrWp5EW1E5sCrJYB1wtE4UA/edit",
-    tags: ["client"], srt: true, screen: false },
-
-  { date: "2026-03-07", title: "Call 5 — Demo + Strategic Pivot", people: "Lucas, Chris", size: "270MB",
-    video: "videos/call05_2026-03-07.mp4", drive: "https://drive.google.com/file/d/154ON7bJ2VG8VET9aFCcZeW5H46RX3YKg/view",
-    notes: "https://docs.google.com/document/d/1rBdGgTpGKnLSA5kJXu31JJB3aU6MpOP0fzakjxLFulM/edit",
-    tags: ["client", "screen-demo"], srt: true, screen: true },
-
-  { date: "2026-03-08", title: "Call 6 — Setup + Cybersecurity", people: "Lucas, Chris", size: "472MB",
-    video: null, drive: "https://drive.google.com/file/d/1q91RVE0gRdVXeI7xpcyVnoVUKrnIEKtI/view",
-    tags: ["client"], srt: false, screen: false },
-
-  { date: "2026-03-11", title: "Call 7 — Strategy + Demo + VA Loan", people: "Lucas, Chris", size: "302MB",
-    video: "videos/call07_2026-03-11.mp4", drive: "https://drive.google.com/file/d/13AdJX0V8nKoIgHrezsLJuzaFlTKZDC78/view",
-    notes: "https://docs.google.com/document/d/1ZnjVAnYSEfBySymDis8xlOMdMAG7uPWCg9FDOlk1R5E/edit",
-    tags: ["client", "screen-demo"], srt: true, screen: true },
-
-  { date: "2026-03-15", title: "Working Session — Screen Capture", people: "Lucas, Chris", size: "302MB",
-    video: "videos/2026-03-15-working-session.mp4", drive: "https://drive.google.com/file/d/1JdAPllBMCYB9eXx80HbFOk2QlAgkfE9D/view",
-    tags: ["client", "screen-demo", "working-session"], srt: false, screen: true },
-
-  { date: "2026-03-20", title: "Call 11 — MortgageOne Deep Architecture (4h)", people: "Lucas, Chris", size: "2.1GB",
-    video: "videos/call11_mortgageone_2026-03-20.mp4", drive: "https://drive.google.com/file/d/1-hkpXOHLpSbEjNIICDab6iOr45xsoC1N/view",
-    notes: "https://docs.google.com/document/d/1AvTfk8bHpuglSsIQF_dV9bbvYcxRTlk2Jdv_RLQt2Rs/edit",
-    tags: ["client", "screen-demo"], srt: false, screen: true },
-
-  { date: "2026-03-21", title: "Call 12 — CloudTalk + Salesforce", people: "Lucas, Chris", size: "352MB",
-    video: "videos/call12_2026-03-21.mp4", drive: "https://drive.google.com/file/d/1uLSRqsn2B6B54b1Rj9iRs-QU737iP46x/view",
-    tags: ["client", "screen-demo"], srt: false, screen: true },
-
-  { date: "2026-04-16", title: "Lucas & Chris — Chatwoot / iMessage CRM", people: "Lucas, Chris", size: "460MB",
-    video: "videos/2026-04-16-lucas-chris-chatwoot.mp4", drive: "https://drive.google.com/file/d/1mlfeSJfiWHDGlp-kLFKTl7D45RHncVcK/view",
-    notes: "https://docs.google.com/document/d/1J40M8ORsqwZf2BxzHDLyz-2KDbQ1iutfY5NvVfwGIRA/edit",
-    tags: ["client", "screen-demo"], srt: false, screen: true },
-
-  { date: "2026-04-19", title: "Call — Sunday", people: "Lucas, Chris", size: "910MB",
-    video: "videos/2026-04-19-sunday-call.mp4", drive: "https://drive.google.com/file/d/1ESqybxaRtOBAJqzsdgAIHX2VUtqvlX_k/view",
-    notes: "https://docs.google.com/document/d/1hjUJnoFP-gQx6Ezx85P0qBU0XLpIHtxv-iN8FF1UEZM/edit",
-    tags: ["client"], srt: false, screen: false },
-
-  { date: "2026-04-22", title: "Weekly Sync — CRM / Comms", people: "Lucas, Chris", size: "346MB",
-    video: "videos/2026-04-22-weekly-sync-crm.mp4", drive: "https://drive.google.com/file/d/1UUn0OSbubesdKmrS418_z5pgkK6v1_tr/view",
-    notes: "https://docs.google.com/document/d/1c9CnJAsTlKR_4dEXMsIci7RBkackhkNmyhyT--od0sI/edit",
-    tags: ["client", "screen-demo", "weekly-sync"], srt: false, screen: true },
-
-  { date: "2026-04-28", title: "Working Session — Screen Capture", people: "Lucas, Chris", size: "220MB",
-    video: "videos/2026-04-28-working-session.mov", drive: "https://drive.google.com/file/d/1z9agar_Kt326yniZ-EYTifrtxdkBG_jr/view",
-    tags: ["client", "screen-demo", "working-session"], srt: false, screen: true },
-
-  { date: "2026-04-29", title: "Weekly Sync — App Demo (Proprietary)", people: "Lucas, Chris", size: "568MB",
-    video: "videos/2026-04-29-weekly-sync-app-demo.mp4", drive: "https://drive.google.com/file/d/1gH48B6nXRS7PK3LvoFXX8cEeRzH5MMLU/view",
-    notes: "https://docs.google.com/document/d/1r6pNHgXOYZpIA5M7C_QKg22EOhzXG-ZN5AFQuMOF-hY/edit",
-    tags: ["client", "screen-demo", "weekly-sync", "app-demo"], srt: false, screen: true },
-];
-
-let currentFilter = 'all';
-let currentCard = null;
-
-function filter(type, btn) {
-  currentFilter = type;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderGrid();
+let CALLS=[], RUNNING={}, META={}, SB={}, CL={}, CLS={}, F={pessoa:'all',projeto:'all',st:'all',tipo:'all'}, openId=null;
+const $=id=>document.getElementById(id);
+function fmtDate(d){const[y,m,day]=d.split('-');const M=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];return `${+day} ${M[+m-1]} ${y}`;}
+function mmss(s){s=Math.floor(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function durSec(d){if(!d)return 0;const p=d.split(':').map(Number);return p.length===3?p[0]*3600+p[1]*60+p[2]:p[0]*60+p[1];}
+function matches(c){
+  if(F.pessoa!=='all'){const inP=(c.participantes||[]).join(' ').toLowerCase().includes(F.pessoa.toLowerCase());if(c.pessoa!==F.pessoa&&!inP)return false;}
+  if(F.projeto!=='all'&&c.projeto!==F.projeto)return false;
+  if(F.tipo!=='all'&&(c.type||'video')!==F.tipo)return false;
+  if(F.st==='tr'&&!c.transcript)return false;
+  if(F.st==='pend'&&c.transcript)return false;
+  const q=($('search').value||'').toLowerCase().trim();
+  if(q){const hay=[c.title,c.projeto,c.pessoa,(c.assunto||[]).join(' '),(c.participantes||[]).join(' ')].join(' ').toLowerCase();if(!hay.includes(q))return false;}
+  return true;
 }
-
-function getFiltered() {
-  return MEETINGS.filter(m => {
-    if (currentFilter === 'all') return true;
-    if (currentFilter === 'playable') return !!m.video;
-    if (currentFilter === 'screen') return m.screen;
-    if (currentFilter === 'srt') return m.srt;
-    if (currentFilter === 'client') return m.tags.includes('client');
-    return true;
-  });
+function render(){
+  const list=CALLS.filter(matches).sort((a,b)=>a.date<b.date?1:-1);
+  $('grid').innerHTML=list.map(c=>{
+    const run=RUNNING[c.id];
+    return `<div class="card" onclick='openDetail(${JSON.stringify(c.id)})'><div class="card-thumb"></div><div class="card-body">
+      <span class="who">${c.pessoa}</span>
+      <div class="card-date">${fmtDate(c.date)}${c.durationApprox?(' · '+c.durationApprox):''}${c.sizeMB?(' · '+c.sizeMB+'MB'):''}</div>
+      <div class="card-title">${c.title}</div>
+      <div class="card-meta">📁 ${c.projeto}<br>👥 ${(c.participantes||[]).join(', ')}</div>
+      <div class="tags">${(c.assunto||[]).map(a=>`<span class="tag">${a}</span>`).join('')}</div>
+      <div class="pills">
+        ${c.type==='checklist'?'<span class="pill" style="border-color:var(--accent2);color:var(--accent2)">📋 checklist</span>':
+          c.type==='audio'?'<span class="pill ok">🎙 áudio</span>':'<span class="pill ok">▶ preview</span>'}
+        ${c.type==='checklist'?'':
+          (run==='transcribe'?'<span class="pill run">⏳ transcrevendo…</span>':run==='download'?'<span class="pill run">⏳ baixando…</span>':
+           c.transcript?'<span class="pill ok">🗣 transcrita</span>':'<span class="pill warn">transcrever sob demanda</span>')}
+        ${c.video?'<span class="pill ok">⬇ baixado</span>':''}
+      </div></div></div>`;
+  }).join('')||'<p class="muted">Nada encontrado.</p>';
+  $('count-badge').textContent=list.length+' calls';
 }
+function setTheme(t){$('search').value=t;render();window.scrollTo({top:0,behavior:'smooth'});}
 
-function renderGrid() {
-  const list = getFiltered();
-  const grid = document.getElementById('grid');
-  grid.innerHTML = list.map((m, i) => {
-    const isPlaying = currentCard && currentCard.title === m.title;
-    return `<div class="card ${isPlaying ? 'playing' : ''}" id="card-${i}" onclick="playVideo(${MEETINGS.indexOf(m)})">
-      <div class="card-thumb"></div>
-      <div class="card-body">
-        <div class="card-date">${formatDate(m.date)}</div>
-        <div class="card-title">${m.title}</div>
-        <div class="card-tags">
-          ${m.screen ? '<span class="tag screen">🖥 Screen Demo</span>' : ''}
-          ${m.srt ? '<span class="tag srt">📝 Transcribed</span>' : ''}
-          ${m.tags.includes('app-demo') ? '<span class="tag screen">🚀 App Demo</span>' : ''}
-          ${m.tags.includes('working-session') ? '<span class="tag">⚙️ Working Session</span>' : ''}
-        </div>
-        <div class="card-footer">
-          <span class="card-size">👥 ${m.people.split(',')[1]?.trim() || m.people} · ${m.size}</span>
-          <div style="display:flex;gap:8px;align-items:center">
-            ${m.drive ? `<a class="btn-drive" href="${m.drive}" target="_blank" onclick="event.stopPropagation()">Drive ↗</a>` : ''}
-            ${m.video ? `<button class="btn-play">▶ Play</button>` : '<span class="no-video">No local file</span>'}
-          </div>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+let curVideo=null;
+function showTab(t){$('tab-tr').classList.toggle('active',t==='tr');$('tab-nt').classList.toggle('active',t==='nt');$('pane-tr').style.display=t==='tr'?'':'none';$('pane-nt').style.display=t==='nt'?'':'none';}
+function seek(sec){if(curVideo&&curVideo.tagName==='VIDEO'){curVideo.currentTime=sec;curVideo.play();}}
+function parseTranscript(txt){const re=/^\[(\d+)s\]\s*Speaker\s*([A-Z]):\s*(.*)$/;const out=[];txt.split('\n').forEach(l=>{const m=l.match(re);if(m)out.push({t:+m[1],sp:m[2],tx:m[3]});});return out;}
+function spkClass(sp){return 'spk'+(sp.charCodeAt(0)-65)%5;}
+function mdToHtml(md){return md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/^### (.*)$/gm,'<h3>$1</h3>').replace(/^## (.*)$/gm,'<h2>$1</h2>').replace(/^# (.*)$/gm,'<h1>$1</h1>')
+  .replace(/^\s*[-*] (.*)$/gm,'<li>$1</li>').replace(/(<li>.*<\/li>\n?)+/g,m=>'<ul>'+m+'</ul>')
+  .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')
+  .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/\n{2,}/g,'<br><br>');}
+// markdown do walkthrough (com imagens/frames + blockquote)
+function wtToHtml(md,base){return md
+  .replace(/&amp;lt;video[\s\S]*?\/video&amp;gt;/g,'')           // remove tag de vídeo (player já separado)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/^&gt; (.*)$/gm,'<div class="bq">$1</div>')
+  .replace(/^### (.*)$/gm,'<h3>$1</h3>').replace(/^## (.*)$/gm,'<h2>$1</h2>').replace(/^# (.*)$/gm,'<h1>$1</h1>')
+  .replace(/^---$/gm,'')
+  .replace(/!\[([^\]]*)\]\(frames\/([^)]+)\)/g,`<img alt="$1" src="${base}/$2" loading="lazy">`)
+  .replace(/\*\*`([^`]+)`\*\*/g,'<code>$1</code>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+  .replace(/\*([^*]+)\*/g,'<em>$1</em>')
+  .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>')
+  .replace(/\n{2,}/g,'<br>');}
+
+async function api(path){try{const r=await fetch(path,{method:'POST'});return await r.json();}catch(e){return{ok:false,msg:'servidor offline (rode scripts/server.py)'};}}
+async function doTranscribe(id){const r=await api('/api/transcribe?id='+id);if(!r.ok){alert(r.msg||'falhou');return;}RUNNING[id]='transcribe';render();if(openId===id)renderActions(CALLS.find(c=>c.id===id));}
+async function doDownload(id){const r=await api('/api/download?id='+id);if(!r.ok){alert(r.msg||'falhou');return;}RUNNING[id]='download';render();if(openId===id)renderActions(CALLS.find(c=>c.id===id));}
+
+function renderActions(c){
+  const run=RUNNING[c.id];
+  if(c.type==='checklist'){return;}
+  if(c.type==='audio'){$('m-actions').innerHTML='<span class="btn" disabled>🎙 áudio · transcrito ✓</span>';return;}
+  $('m-actions').innerHTML=`
+    ${c.driveVideoId?`<a class="btn" href="https://drive.google.com/file/d/${c.driveVideoId}/view" target="_blank">Drive ↗</a>`:''}
+    ${c.transcript?`<span class="btn" disabled>🗣 transcrita ✓</span>`:
+       run==='transcribe'?`<span class="btn" disabled>⏳ transcrevendo…</span>`:
+       `<button class="btn primary" onclick="doTranscribe('${c.id}')">🗣 Transcrever</button>`}
+    ${c.video?`<span class="btn" disabled>⬇ baixado ✓</span>`:
+       run==='download'?`<span class="btn" disabled>⏳ baixando…</span>`:
+       `<button class="btn" onclick="doDownload('${c.id}')">⬇ Baixar (opcional)</button>`}`;
 }
-
-function formatDate(d) {
-  const [y,m,day] = d.split('-');
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return `${months[+m-1]} ${+day}, ${y}`;
+async function openDetail(id){
+  const c=CALLS.find(x=>x.id===id);if(!c)return;openId=id;
+  if(c.type==='checklist') return openChecklist(c);
+  $('tab-tr').style.display='';$('tab-nt').style.display='';
+  $('tab-tr').textContent='🗣 Transcrição';$('tab-nt').textContent='📝 Notas';
+  $('m-title').textContent=c.title;
+  $('m-sub').innerHTML=`<span class="who">${c.pessoa}</span> &nbsp;${fmtDate(c.date)}${c.durationApprox?(' · '+c.durationApprox):''} · 📁 ${c.projeto}<br>👥 ${(c.participantes||[]).join(' · ')}`;
+  // mídia: áudio -> <audio>; vídeo baixado -> player local; senão -> preview do Drive
+  if(c.type==='audio'){$('m-videowrap').innerHTML=`<audio controls style="width:100%" src="${c.audio}"></audio>`;curVideo=$('m-videowrap').firstChild;}
+  else if(c.video){$('m-videowrap').innerHTML=`<video class="m-video" controls preload="metadata" src="${c.video}"></video>`;curVideo=$('m-videowrap').firstChild;}
+  else{$('m-videowrap').innerHTML=`<iframe class="m-iframe" src="https://drive.google.com/file/d/${c.driveVideoId}/preview" allow="autoplay"></iframe>`;curVideo=null;}
+  renderActions(c);
+  renderInfo(c);
+  await renderWalkthrough(c);
+  // notas
+  $('pane-nt').innerHTML='<p class="muted">carregando…</p>';
+  if(c.notes){try{const r=await fetch(c.notes+'?_='+Date.now());$('pane-nt').innerHTML='<div class="notes-md">'+mdToHtml(await r.text())+'</div>';}catch(e){$('pane-nt').innerHTML='<p class="muted">Sem notas.</p>';}}
+  else $('pane-nt').innerHTML='<p class="muted">Sem notas ingeridas para esta call.</p>';
+  showTab('tr');$('overlay').classList.add('active');
 }
-
-function playVideo(idx) {
-  const m = MEETINGS[idx];
-  if (!m.video) {
-    if (m.drive) window.open(m.drive, '_blank');
-    return;
+function renderInfo(c){
+  const m=META[c.id]||{};
+  const drive=`https://drive.google.com/file/d/${c.driveVideoId}/view`;
+  $('m-info').innerHTML=`<div class="info">
+    <div class="row"><div class="k">📁 Drive (caminho)</div><div class="v"><a href="${drive}" target="_blank">${drive}</a></div></div>
+    <div class="row"><div class="k">💻 Local</div><div class="v">${c.video?('~/Desktop/meeting-library/'+c.video):'<span class="muted">não baixado</span>'}</div></div>
+    <div class="row"><div class="k">🔗 Notion (cole o link)</div>
+      <input id="in-notion" placeholder="https://notion.so/…" value="${m.notion||''}">
+      <span class="save" onclick="saveMeta('${c.id}','notion')">salvar</span></div>
+    <div class="row"><div class="k">🐙 GitHub (cole o link)</div>
+      <input id="in-github" placeholder="https://github.com/…" value="${m.github||''}">
+      <span class="save" onclick="saveMeta('${c.id}','github')">salvar</span></div>
+  </div>`;
+}
+async function saveMeta(id,field){
+  const val=$('in-'+field).value.trim();
+  try{const r=await fetch('/api/meta?id='+id,{method:'POST',body:JSON.stringify({[field]:val})});const d=await r.json();
+    if(d.ok){META[id]=d.meta;const s=event.target;s.textContent='✓ salvo';setTimeout(()=>s.textContent='salvar',1500);}}catch(e){alert('servidor offline');}
+}
+async function renderWalkthrough(c){
+  $('m-index').innerHTML='';
+  const sb=SB[c.id];
+  const wtUrl = sb ? sb.walkthrough : c.walkthrough;
+  const framesBase = sb ? sb.frames : 'library/walkthroughs/'+c.id+'/frames';
+  if(wtUrl){
+    try{
+      const md=await (await fetch(wtUrl+'?_='+Date.now())).text();
+      $('pane-tr').innerHTML='<div class="wt">'+(sb?'<p class="muted" style="margin-bottom:8px">📦 frames servidos do Supabase</p>':'')+wtToHtml(md,framesBase)+'</div>';
+      // índice: pega os <h3> (timestamps) e linka pro scroll
+      const hs=[...$('pane-tr').querySelectorAll('h3')];
+      $('m-index').innerHTML=hs.map((h,i)=>{h.id='wt'+i;return `<a onclick="document.getElementById('wt${i}').scrollIntoView({behavior:'smooth'})"><b>${(h.textContent.match(/[\d:]+/)||[''])[0]}</b></a>`;}).join('');
+      return;
+    }catch(e){}
   }
-  currentCard = m;
-  const section = document.getElementById('player-section');
-  const video = document.getElementById('main-video');
-  const title = document.getElementById('player-title');
-  const meta = document.getElementById('player-meta');
-
-  section.classList.add('active');
-  video.src = m.video;
-  title.textContent = m.title;
-  meta.textContent = `${formatDate(m.date)} · ${m.people} · ${m.size}`;
-  video.play();
-  section.scrollIntoView({ behavior: 'smooth' });
-  renderGrid();
+  if(c.transcript){
+    const spk=c.transcript.replace('.txt','.speakers.txt');
+    try{
+      const segs=parseTranscript(await (await fetch(spk+'?_='+Date.now())).text());
+      $('pane-tr').innerHTML='<p class="muted" style="margin-bottom:8px">⏳ frames sendo gerados…</p>'+segs.map(s=>`<div class="seg"><span class="t" onclick="seek(${s.t})">${mmss(s.t)}</span><span class="sp ${spkClass(s.sp)}">${s.sp}</span><span class="tx">${s.tx}</span></div>`).join('');
+      return;
+    }catch(e){}
+  }
+  const run=RUNNING[c.id]==='transcribe';
+  $('pane-tr').innerHTML=`<p class="muted" style="margin-bottom:12px">Ainda não transcrita.</p>${run?'<p class="muted">⏳ transcrevendo…</p>':`<button class="btn primary" onclick="doTranscribe('${c.id}')">🗣 Transcrever (AssemblyAI pt-BR)</button>`}`;
 }
-
-function closePlayer() {
-  const video = document.getElementById('main-video');
-  video.pause();
-  video.src = '';
-  document.getElementById('player-section').classList.remove('active');
-  currentCard = null;
-  renderGrid();
+function openChecklist(c){
+  openId=c.id;curVideo=null;
+  const key=c.clkey||'projetos';
+  const cl=(CLS[key])||CL||{};
+  const groups=cl.groups||[];
+  let total=0,done=0;groups.forEach(g=>g.tasks.forEach(t=>{total++;if(t.done)done++;}));
+  $('m-title').textContent=c.title;
+  $('m-sub').innerHTML=`✅ ${done}/${total} concluídas · fonte: ${cl.source||'—'}`;
+  $('m-videowrap').innerHTML='';$('m-actions').innerHTML='';$('m-info').innerHTML='';
+  $('m-index').innerHTML=groups.map((g,i)=>`<a onclick="document.getElementById('grp${i}').scrollIntoView({behavior:'smooth'})"><b>${g.tasks.filter(t=>t.done).length}/${g.tasks.length}</b>${g.project.replace(/^[^A-Za-zÀ-ú]*\d*\.?\s*/,'').slice(0,30)}</a>`).join('');
+  $('tab-tr').style.display='';$('tab-tr').textContent='✅ Checklist';
+  $('pane-tr').style.display='';
+  $('pane-tr').innerHTML='<div class="chk">'+groups.map((g,i)=>`<div id="grp${i}" class="chk-grp"><h3>${g.project}</h3>`+
+    g.tasks.map(t=>`<label class="chk-item ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleCheck('${t.id}',this,'${key}')"><span>${t.text}</span></label>`).join('')+`</div>`).join('')+'</div>';
+  if(c.notes){
+    $('tab-nt').style.display='';$('tab-nt').textContent='📦 Módulos';
+    $('pane-nt').innerHTML='<p class="muted">carregando…</p>';
+    fetch(c.notes+'?_='+Date.now()).then(r=>r.text()).then(t=>{$('pane-nt').innerHTML='<div class="notes-md">'+mdToHtml(t)+'</div>';}).catch(()=>{$('pane-nt').innerHTML='<p class="muted">Sem notas.</p>';});
+  } else { $('tab-nt').style.display='none'; }
+  showTab('tr');
+  $('overlay').classList.add('active');
 }
+async function toggleCheck(id,el,key){
+  key=key||'projetos';
+  el.closest('.chk-item').classList.toggle('done',el.checked);
+  const cl=CLS[key]; if(cl) cl.groups.forEach(g=>g.tasks.forEach(t=>{if(t.id===id)t.done=el.checked;}));
+  let total=0,done=0;((cl||{}).groups||[]).forEach(g=>g.tasks.forEach(t=>{total++;if(t.done)done++;}));
+  $('m-sub').innerHTML=`✅ ${done}/${total} concluídas · fonte: ${(cl||{}).source||'—'}`;
+  try{await fetch('/api/check?item='+id+'&cl='+key,{method:'POST'});}catch(e){}
+}
+function closeDetail(){if(curVideo&&curVideo.pause)curVideo.pause();openId=null;$('overlay').classList.remove('active');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDetail();});
 
-// Stats
-const playable = MEETINGS.filter(m => m.video).length;
-const screens = MEETINGS.filter(m => m.screen).length;
-const srtCount = MEETINGS.filter(m => m.srt).length;
-document.getElementById('s-total').textContent = MEETINGS.length;
-document.getElementById('s-playable').textContent = playable;
-document.getElementById('s-screen').textContent = screens;
-document.getElementById('s-srt').textContent = srtCount;
-document.getElementById('count-badge').textContent = `${MEETINGS.length} meetings`;
-
-renderGrid();
+function buildInsights(){
+  const tot=CALLS.length, gb=CALLS.reduce((a,c)=>a+(c.sizeMB||0),0)/1024;
+  const tr=CALLS.filter(c=>c.transcript).length;
+  const projs=[...new Set(CALLS.map(c=>c.projeto))];
+  const pc={};CALLS.forEach(c=>pc[c.projeto]=(pc[c.projeto]||0)+1);const tp=Object.entries(pc).sort((a,b)=>b[1]-a[1])[0];
+  const jun=CALLS.filter(c=>c.date>='2026-06-01').length;
+  $('i-calls').textContent=jun+'/'+tot;
+  $('i-people').textContent='junho / total';
+  $('i-gb').textContent=gb.toFixed(1)+' GB';
+  $('i-hours').textContent='soma dos vídeos';
+  $('i-tr').textContent=tr+'/'+tot;$('i-trpct').textContent=Math.round(tr/tot*100)+'% · resto sob demanda';
+  $('i-proj').textContent=projs.length;$('i-projtop').textContent=tp?`maior: ${tp[0]} (${tp[1]})`:'';
+  const freq={};CALLS.forEach(c=>(c.assunto||[]).forEach(a=>freq[a]=(freq[a]||0)+1));
+  $('themes').innerHTML=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,16).map(([t,n])=>`<span class="theme" onclick="setTheme('${t.replace(/'/g,'')}')">${t}<span class="c">${n}</span></span>`).join('');
+  const people=[...new Set(CALLS.map(c=>c.pessoa))].sort();
+  $('f-pessoa').insertAdjacentHTML('beforeend',people.map(p=>`<option>${p}</option>`).join('')+'<option>Lucas</option>');
+  $('f-proj').insertAdjacentHTML('beforeend',projs.map(p=>`<option>${p}</option>`).join(''));
+}
+async function refresh(){
+  try{
+    const d=await (await fetch('/api/status')).json();
+    CALLS=d.calls;RUNNING=d.running||{};META=d.meta||{};SB=d.supabase||{};CL=d.checklist||{};CLS=d.checklists||{};render();
+    if(openId){const c=CALLS.find(x=>x.id===openId);if(c){renderActions(c);
+      const t=$('pane-tr').textContent;
+      if((c.walkthrough||c.transcript)&&/(transcrevendo|frames sendo gerados|Ainda não transcrita)/.test(t)) renderWalkthrough(c);
+    }}
+  }catch(e){}
+}
+fetch('/api/status').then(r=>r.json()).then(d=>{CALLS=d.calls;RUNNING=d.running||{};META=d.meta||{};SB=d.supabase||{};CL=d.checklist||{};CLS=d.checklists||{};buildInsights();render();setInterval(refresh,5000);})
+  .catch(e=>{$('grid').innerHTML='<p style="color:var(--accent2)">Rode o servidor: <code>ASSEMBLYAI_API_KEY=… python3 scripts/server.py</code></p>';});
 </script>
 </body>
 </html>
