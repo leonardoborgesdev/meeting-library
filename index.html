@@ -89,6 +89,11 @@ main{max-width:1600px;margin:0 auto;padding:30px 24px 64px}
 .card.pad{padding:16px}
 aside .card{margin-bottom:16px}
 .side-h{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);margin-bottom:10px}
+.side-h.collap{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;margin-bottom:0}
+.side-h.collap:hover{color:var(--text-muted)}
+.side-h .chev{transition:transform .15s;font-size:9px}
+.side-h.open{margin-bottom:10px}
+.side-h.open .chev{transform:rotate(90deg)}
 .metric{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:3px 0}
 .metric .v{font-weight:600;font-variant-numeric:tabular-nums}
 .metric .v.big{font-size:18px;background:linear-gradient(135deg,var(--accent),oklch(60% 0.180 25));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -109,7 +114,12 @@ input::placeholder{color:var(--text-dim)}
 .theme{background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:11.5px;padding:4px 10px;border-radius:9999px;
   cursor:pointer;display:inline-flex;gap:6px;align-items:center;transition:border-color .15s,background-color .15s}
 .theme:hover{border-color:var(--accent);background:var(--accent-soft)}
+.theme.on{background:var(--accent);border-color:transparent;color:#fff}
+.theme.on .c{background:oklch(100% 0 0 / 0.25)}
 .theme .c{background:var(--accent);color:#fff;font-size:10px;font-weight:700;border-radius:9px;padding:0 6px}
+.kind{display:inline-flex;font-size:9.5px;font-weight:600;padding:1px 7px;border-radius:5px;margin-left:6px;vertical-align:middle}
+.kind.cliente{background:oklch(95% 0.05 25);color:oklch(55% 0.18 25)}
+.kind.equipe{background:oklch(95% 0.04 250);color:var(--text-muted)}
 
 /* Section card */
 .section{padding:20px}
@@ -365,19 +375,11 @@ input::placeholder{color:var(--text-dim)}
     <!-- ───────────── Sidebar ───────────── -->
     <aside>
       <div class="card pad">
-        <div class="side-h">Métricas</div>
-        <div class="metric"><span class="muted">Calls (junho / total)</span><span class="v big" id="i-calls">—</span></div>
-        <div class="metric"><span class="muted">Vídeo no Drive</span><span class="v" id="i-gb">—</span></div>
-        <div class="metric"><span class="muted">Transcritas</span><span class="v" id="i-tr">—</span></div>
-        <div class="metric"><span class="muted">Projetos</span><span class="v" id="i-proj">—</span></div>
-        <div class="muted dim" id="i-trpct" style="font-size:11px;margin-top:8px"></div>
-        <span id="i-people" style="display:none"></span><span id="i-hours" style="display:none"></span><span id="i-projtop" style="display:none"></span>
-      </div>
-
-      <div class="card pad">
         <div class="side-h">Filtros</div>
         <div class="field"><label>Pessoa</label><select id="f-pessoa" onchange="F.pessoa=this.value;render()"><option value="all">Todas</option></select></div>
         <div class="field"><label>Projeto</label><select id="f-proj" onchange="F.projeto=this.value;render()"><option value="all">Todos</option></select></div>
+        <div class="field"><label>Reunião</label><select id="f-kind" onchange="F.kind=this.value;render()">
+          <option value="all">Todas</option><option value="cliente">🤝 Com cliente</option><option value="equipe">👥 Com equipe</option></select></div>
         <div class="field"><label>Período (de / até)</label>
           <div style="display:flex;gap:6px">
             <input type="date" id="f-de" onchange="F.de=this.value;syncCal();render()" style="flex:1">
@@ -387,8 +389,13 @@ input::placeholder{color:var(--text-dim)}
       </div>
 
       <div class="card pad">
-        <div class="side-h">Temas recorrentes</div>
-        <div class="themes" id="themes"></div>
+        <div class="side-h collap" onclick="toggleSec('themes-box',this)"><span>Temas recorrentes</span><span class="chev">▸</span></div>
+        <div class="themes sec" id="themes-box" style="display:none"><div class="themes" id="themes"></div></div>
+      </div>
+
+      <div class="card pad">
+        <div class="side-h collap" onclick="toggleSec('tools-box',this)"><span>Ferramentas usadas</span><span class="chev">▸</span></div>
+        <div class="themes sec" id="tools-box" style="display:none"><div class="themes" id="tools-list"></div></div>
       </div>
     </aside>
 
@@ -410,13 +417,12 @@ input::placeholder{color:var(--text-dim)}
           <button class="chip"    data-tipo="video"     onclick="setTipo('video',this)">▶ Calls</button>
           <button class="chip"    data-tipo="audio"     onclick="setTipo('audio',this)">🎙 Áudios</button>
           <button class="chip"    data-tipo="checklist" onclick="setTipo('checklist',this)">📋 Checklists</button>
-          <button class="chip"    data-tipo="notion"    onclick="setTipo('notion',this)">📝 Notion</button>
           <span class="tb-sep"></span>
           <label class="tb-ctl" id="ctl-group">Agrupar por
             <select id="sel-group" onchange="GROUPBY=this.value;renderViews()">
               <option value="projeto">Projeto</option><option value="pessoa">Pessoa</option>
               <option value="tipo">Tipo</option><option value="status">Status</option>
-              <option value="mes">Mês</option><option value="ferramenta">Ferramenta</option>
+              <option value="mes">Mês</option><option value="ferramenta">Ferramenta</option><option value="kind">Cliente/Equipe</option>
             </select></label>
           <label class="tb-ctl" id="ctl-sort">Ordenar
             <select id="sel-sort" onchange="setSort(this.value)">
@@ -481,7 +487,8 @@ input::placeholder{color:var(--text-dim)}
 </div>
 
 <script>
-let CALLS=[], RUNNING={}, META={}, SB={}, CL={}, CLS={}, F={pessoa:'all',projeto:'all',st:'all',tipo:'all',de:'',ate:''}, openId=null, HEALTH=null;
+let CALLS=[], RUNNING={}, META={}, SB={}, CL={}, CLS={}, F={pessoa:'all',projeto:'all',st:'all',tipo:'all',de:'',ate:'',kind:'all',ferramenta:''}, openId=null, HEALTH=null;
+function callKind(c){return /onboarding|interno|planejamento|lead system|treinamento|^automatrix$/i.test((c.projeto||'').trim())?'equipe':'cliente';}
 const $=id=>document.getElementById(id);
 function fmtDate(d){const[y,m,day]=d.split('-');const M=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];return `${+day} ${M[+m-1]} ${y}`;}
 function mmss(s){s=Math.floor(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
@@ -490,6 +497,8 @@ function matches(c){
   if(F.pessoa!=='all'){const inP=(c.participantes||[]).join(' ').toLowerCase().includes(F.pessoa.toLowerCase());if(c.pessoa!==F.pessoa&&!inP)return false;}
   if(F.projeto!=='all'&&c.projeto!==F.projeto)return false;
   if(F.tipo!=='all'&&(c.type||'video')!==F.tipo)return false;
+  if(F.kind!=='all'&&callKind(c)!==F.kind)return false;
+  if(F.ferramenta&&!toolsOf(c).includes(F.ferramenta))return false;
   if(F.de&&c.date<F.de)return false;
   if(F.ate&&c.date>F.ate)return false;
   if(F.st==='tr'&&!c.transcript)return false;
@@ -508,15 +517,17 @@ function statusPill(c,run){
 }
 /* ───────── classificações (Notion-style) ───────── */
 let VIEW='galeria', GROUPBY='projeto', SORT={key:'date',dir:-1}, CALCUR=null;
+// só ferramentas/apps/APIs/CLIs de verdade (não temas/projetos)
 const TOOLS_MAP={
-  'AssemblyAI':/assembly|transcri[çc]/i,'Google Drive':/\bdrive\b|gravaç/i,'Supabase':/supabase/i,
-  'Meta Ads':/meta ads|an[uú]ncio|campanha|\bads\b|criativo/i,'WhatsApp':/whatsapp|baileys|\bwa\b/i,
-  'Instagram':/instagram|reels?|stories|\big\b/i,'Efí Pay':/\befi\b|pix|pagament|checkout/i,
-  'Envio.com':/envio|frete|log[ií]stic|correios|etiqueta/i,'Gemini':/gemini/i,
-  'Playwright':/playwright|browser|scraper|clonad/i,'Kinbox':/kinbox/i,'Salesforce':/salesforce/i,
-  'n8n':/n8n|webhook/i,'Fly.io':/\bfly\b/i,'Agentes IA':/openclaw|open cloud|agente|\bllama\b/i,
-  'HeyGen':/heygen|avatar/i,'CapCut':/capcut|ediç[ãa]o/i,'Vistoria/Confere':/vistoria|confere/i,
-  'Telemedicina':/telemedic/i,'YouTube/Shorts':/youtube|shorts/i,'Anti-clonagem':/clon|anti-?hotlink|segurança/i
+  'AssemblyAI':/assembly/i,'Google Drive':/google drive|\bdrive\b/i,'Supabase':/supabase/i,
+  'Meta Ads':/meta ads|gerenciador de an[uú]ncio|ads manager/i,'WhatsApp API':/whatsapp|baileys|wa cloud|cloud api/i,
+  'Instagram API':/instagram\b/i,'Efí Pay':/\befi\b/i,'Envio.com':/envio\.?com|envioecom|envio econ/i,
+  'Gemini':/gemini/i,'OpenAI':/openai|gpt-?[45]|chatgpt/i,'Playwright':/playwright/i,'Kinbox':/kinbox/i,
+  'Salesforce':/salesforce/i,'n8n':/n8n/i,'Fly.io':/fly\.io/i,'OpenClaw':/openclaw|open ?cloud/i,
+  'Ollama':/ollama|\bllama\b/i,'HeyGen':/heygen/i,'CapCut':/capcut/i,'YouTube':/youtube/i,
+  'Cloudflare':/cloudflare/i,'RD Station':/rd ?station/i,'Notion':/\bnotion\b/i,'Codex':/codex/i,
+  'Google Calendar':/google calendar/i,'Power BI':/power bi|looker/i,'Whisper':/whisper/i,
+  'RecrutaCIS':/recrutacis|\brcis\b/i,'Chatwoot':/chatwoot/i
 };
 function toolsOf(c){const hay=[c.title,c.projeto,(c.assunto||[]).join(' '),(c.participantes||[]).join(' ')].join(' ');
   return Object.keys(TOOLS_MAP).filter(k=>TOOLS_MAP[k].test(hay));}
@@ -544,6 +555,7 @@ function groupKeys(c){
   if(GROUPBY==='status')return [statusTxt(c,RUNNING[c.id])];
   if(GROUPBY==='mes'){const[y,m]=c.date.split('-');return [`${monPt(+m-1)} ${y}`];}
   if(GROUPBY==='ferramenta'){const t=toolsOf(c);return t.length?t:['(sem ferramenta)'];}
+  if(GROUPBY==='kind')return [callKind(c)==='cliente'?'🤝 Com cliente':'👥 Com equipe'];
   return ['—'];
 }
 
@@ -574,7 +586,7 @@ function cardHTML(c){const run=RUNNING[c.id],ty=c.type||'video';
   return `<div class="ccard" onclick='openDetail(${JSON.stringify(c.id)})'>
     <div class="accent ${ty}"></div>
     <div class="b">
-      <span class="who">${c.pessoa}</span>
+      <span class="who">${c.pessoa}</span><span class="kind ${callKind(c)}">${callKind(c)==='cliente'?'🤝 cliente':'👥 equipe'}</span>
       <div class="date" style="display:inline-block">${fmtDate(c.date)}${c.durationApprox?(' · '+c.durationApprox):''}${c.sizeMB?(' · '+c.sizeMB+'MB'):''}</div>
       <div class="title">${c.title}</div>
       <div class="meta">📁 ${c.projeto}<br>👥 ${(c.participantes||[]).join(', ')}</div>
@@ -659,10 +671,14 @@ function setTipo(v,el){F.tipo=v;[...document.querySelectorAll('#toolbar .chip[da
 function setSt(v,el){F.st=(F.st===v?'all':v);[...document.querySelectorAll('#toolbar .chip[data-st]')].forEach(t=>t.classList.toggle('on',t.dataset.st===F.st));render();}
 function setSort(v){const M={date:{key:'date',dir:-1},date_asc:{key:'date',dir:1},title:{key:'title',dir:1},pessoa:{key:'pessoa',dir:1},projeto:{key:'projeto',dir:1},dur:{key:'dur',dir:-1}};SORT=M[v]||M.date;renderViews();}
 function syncCal(){if(F.de){const[y,m]=F.de.split('-');CALCUR={y:+y,m:+m-1};}}
-function clearFilters(){F={pessoa:'all',projeto:'all',st:'all',tipo:'all',de:'',ate:''};$('f-pessoa').value='all';$('f-proj').value='all';$('search').value='';$('f-de').value='';$('f-ate').value='';
+function clearFilters(){F={pessoa:'all',projeto:'all',st:'all',tipo:'all',de:'',ate:'',kind:'all',ferramenta:''};$('f-pessoa').value='all';$('f-proj').value='all';$('search').value='';$('f-de').value='';$('f-ate').value='';$('f-kind').value='all';
+  [...document.querySelectorAll('#tools-list .theme')].forEach(el=>el.classList.remove('on'));
   [...document.querySelectorAll('#toolbar .chip[data-st]')].forEach(t=>t.classList.remove('on'));
   [...document.querySelectorAll('#toolbar .chip[data-tipo]')].forEach(t=>t.classList.toggle('on',t.dataset.tipo==='all'));render();}
 function setTheme(t){$('search').value=t;render();window.scrollTo({top:0,behavior:'smooth'});}
+function setTool(t){F.ferramenta=(F.ferramenta===t?'':t);
+  [...document.querySelectorAll('#tools-list .theme')].forEach(el=>el.classList.toggle('on',el.dataset.tool===F.ferramenta));
+  render();window.scrollTo({top:0,behavior:'smooth'});}
 
 async function loadHealth(){
   try{
@@ -859,7 +875,7 @@ function renderActions(c){
 async function openDetail(id){
   const c=CALLS.find(x=>x.id===id);if(!c)return;openId=id;
   if(c.type==='checklist') return openChecklist(c);
-  if(c.type==='notion') return openNotion(c);
+  if(c.type==='notion'||(c.type==='audio'&&!c.audio&&c.notion)) return openNotion(c);
   $('tab-tr').style.display='';$('tab-nt').style.display='';
   $('tab-tr').textContent='🗣 Transcrição';$('tab-nt').textContent='📝 Notas';
   $('m-title').textContent=c.title;
@@ -973,18 +989,13 @@ async function toggleCheck(id,el,key){
 function closeDetail(){if(curVideo&&curVideo.pause)curVideo.pause();openId=null;$('overlay').classList.remove('active');}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDetail();closeHealth();closeMetrics();}});
 
+function toggleSec(id,el){const b=$(id);const open=b.style.display==='none';b.style.display=open?'':'none';el.classList.toggle('open',open);}
 function buildInsights(){
-  const tot=CALLS.length, gb=CALLS.reduce((a,c)=>a+(c.sizeMB||0),0)/1024;
-  const tr=CALLS.filter(c=>c.transcript).length;
   const projs=[...new Set(CALLS.map(c=>c.projeto))];
-  const pc={};CALLS.forEach(c=>pc[c.projeto]=(pc[c.projeto]||0)+1);const tp=Object.entries(pc).sort((a,b)=>b[1]-a[1])[0];
-  const jun=CALLS.filter(c=>c.date>='2026-06-01').length;
-  $('i-calls').textContent=jun+'/'+tot;
-  $('i-gb').textContent=gb.toFixed(1)+' GB';
-  $('i-tr').textContent=tr+'/'+tot;$('i-trpct').textContent=Math.round(tr/tot*100)+'% transcritas · resto sob demanda'+(tp?` · maior projeto: ${tp[0]} (${tp[1]})`:'');
-  $('i-proj').textContent=projs.length;
   const freq={};CALLS.forEach(c=>(c.assunto||[]).forEach(a=>freq[a]=(freq[a]||0)+1));
   $('themes').innerHTML=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,16).map(([t,n])=>`<span class="theme" onclick="setTheme('${t.replace(/'/g,'')}')">${t}<span class="c">${n}</span></span>`).join('');
+  const tf={};CALLS.forEach(c=>toolsOf(c).forEach(t=>tf[t]=(tf[t]||0)+1));
+  $('tools-list').innerHTML=Object.entries(tf).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`<span class="theme" data-tool="${t}" onclick="setTool('${t.replace(/'/g,'')}')">🛠 ${t}<span class="c">${n}</span></span>`).join('')||'<span class="muted dim" style="font-size:11px">—</span>';
   const people=[...new Set(CALLS.map(c=>c.pessoa))].sort();
   $('f-pessoa').insertAdjacentHTML('beforeend',people.map(p=>`<option>${p}</option>`).join('')+'<option>Lucas</option>');
   $('f-proj').insertAdjacentHTML('beforeend',projs.map(p=>`<option>${p}</option>`).join(''));

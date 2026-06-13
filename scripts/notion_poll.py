@@ -57,58 +57,56 @@ def rich(b):
     rt = v.get("rich_text") if isinstance(v, dict) else None
     return "".join(x.get("plain_text","") for x in (rt or []))
 def page_text(pid):
+    """retorna (markdown, tem_audio). tem_audio=True só se a página tiver bloco de áudio (gravação do Notion)."""
     try: data = api("GET", f"/v1/blocks/{pid}/children?page_size=100")
-    except Exception: return ""
-    out = []
+    except Exception: return "", False
+    out = []; has_audio = False
     for b in data.get("results", []):
         t = b.get("type", ""); txt = rich(b)
-        if t.startswith("heading"): out.append("## " + txt)
+        if t == "audio": has_audio = True; out.append("🎙 *(áudio gravado no Notion)*")
+        elif t.startswith("heading"): out.append("## " + txt)
         elif t in ("bulleted_list_item","numbered_list_item","to_do"): out.append("- " + txt)
         elif t == "quote": out.append("> " + txt)
-        elif t == "audio": out.append("🎙 *(áudio gravado no Notion)*")
         elif txt: out.append(txt)
-    return "\n\n".join(out)
+    return "\n\n".join(out), has_audio
 
 def main():
     data = json.load(open("data/calls.json"))
     have = {c.get("notion") for c in data["calls"] if c.get("notion")}
     have_ids = {c["id"] for c in data["calls"]}
     added = []
-    # varredura recente ("") + buscas por termo (pega reuniões antigas em DBs por projeto)
-    QUERIES = ["", "Call", "Reunião", "Reuniao", "Meeting", "Recording", "Chris", "Onboarding", "Demo"]
-    searches = []
+    # SÓ áudios transcritos do Notion: busca por termos de áudio + páginas recentes,
+    # e importa APENAS se a página tiver um bloco de áudio (gravação real do Notion).
+    QUERIES = ["áudio", "audio", "gravação", "gravacao", "recording", "transcri", ""]
+    cap = int(os.environ.get("NOTION_MAX", "15"))
+    candidates = {}   # url -> page
     for query in QUERIES:
-        cursor = None
-        for _ in range(4 if query == "" else 2):
-            body = {"page_size": 100}
-            if query: body["query"] = query
-            else: body["sort"] = {"direction":"descending","timestamp":"last_edited_time"}
-            if cursor: body["start_cursor"] = cursor
-            try: res = api("POST", "/v1/search", body)
-            except Exception as e: log(f"erro search '{query}': {e}"); break
-            searches.append(res)
-            cursor = res.get("next_cursor")
-            if not res.get("has_more"): break
-    for res in searches:
+        body = {"page_size": 100}
+        if query: body["query"] = query
+        else: body["sort"] = {"direction":"descending","timestamp":"last_edited_time"}
+        try: res = api("POST", "/v1/search", body)
+        except Exception as e: log(f"erro search '{query}': {e}"); continue
         for p in res.get("results", []):
-            if p.get("object") != "page": continue
-            url = p.get("url")
-            if not url or url in have: continue
-            name = title_of(p).strip()
-            if not name or TASK_RE.search(name) or not MEET_RE.search(name): continue
-            date = date_of(p)
-            cid = "notion_" + date + "_" + slug(name)
-            if cid in have_ids: continue
-            pessoa, proj = derive(name)
-            md = f"# {name}\n\n> **Gravado/transcrito no Notion** · {date}\n\n" + page_text(p["id"].replace("-",""))
-            notes = f"library/notes/{cid}.md"
-            os.makedirs("library/notes", exist_ok=True); open(notes, "w").write(md)
-            data["calls"].append({"id":cid,"pessoa":pessoa,"title":name,"date":date,"projeto":proj,
-                "assunto":["Notion"],"participantes":["Lucas F. N. Alves"]+([pessoa] if pessoa!="Automatrix" else []),
-                "type":"notion","notion":url,"github":None,"driveVideoId":None,"sizeMB":None,
-                "durationApprox":None,"geminiOk":True,"notes":notes,"transcript":None,"video":None,"status":"transcribed"})
-            added.append((cid, url)); have.add(url); have_ids.add(cid)
-            time.sleep(0.35)   # respeita rate-limit do Notion
+            if p.get("object") == "page" and p.get("url") and p["url"] not in have:
+                candidates.setdefault(p["url"], p)
+    for url, p in candidates.items():
+        if len(added) >= cap: break
+        md, has_audio = page_text(p["id"].replace("-",""))
+        time.sleep(0.35)
+        if not has_audio: continue   # ← só páginas com áudio gravado
+        name = (title_of(p).strip() or "Áudio do Notion")
+        date = date_of(p)
+        cid = "naudio_" + date + "_" + slug(name)
+        if cid in have_ids: continue
+        pessoa, proj = derive(name)
+        body_md = f"# 🎙 {name}\n\n> **Áudio transcrito no Notion** · {date}\n\n" + md
+        notes = f"library/notes/{cid}.md"
+        os.makedirs("library/notes", exist_ok=True); open(notes, "w").write(body_md)
+        data["calls"].append({"id":cid,"pessoa":pessoa,"title":"🎙 "+name,"date":date,"projeto":proj,
+            "assunto":["áudio Notion"],"participantes":["Lucas F. N. Alves"]+([pessoa] if pessoa!="Automatrix" else []),
+            "type":"audio","audio":None,"notion":url,"github":None,"driveVideoId":None,"sizeMB":None,
+            "durationApprox":None,"geminiOk":True,"notes":notes,"transcript":None,"video":None,"status":"transcribed"})
+        added.append((cid, url)); have.add(url); have_ids.add(cid)
     if added:
         json.dump(data, open("data/calls.json","w"), ensure_ascii=False, indent=2)
         try: meta = json.load(open("data/meta.json"))
