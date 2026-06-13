@@ -1,0 +1,166 @@
+📖 Transcrição
+jun. 12, 2026
+Call Leo Brazika Presentation - Transcrição
+00:00:00
+
+Brazika Brasil: M falar então sai meu áudio aí para também aconteceu muito que eu falo. Me aperta M. Ah, que sim. Mostra aí base com começar pelo site de venda, eh, pela link da Bill, que é aquela que vai no Instagram, tá tudo integrado diretamente ao painel, também tem traqueamento embaixo, Tem todo traqueamento, todos os botões. Esse daqui de rede social não. Aí aqui vai pro site.
+
+
+00:00:55
+
+Brazika Brasil: O site é o principal que é o que o cliente vê. Aí dá para customizar do jeito que quiser. Agora pode ir lá no painel lá. Ó, o primeiro TR interessante que tem aquele feed de eventos ali, ó. É isso. Visualizou a página. Isso aqui acabei de entrar agora que eu deslii a página. Faz 20 segundos que eu tô aberto aqui, ó.
+
+
+00:01:24
+
+Brazika Brasil: Se eu clicar num produto, ele vai mudar ali também, ó. Entrar num produto. Mas isso aí não tem tanta relevância pro caso dessa cliente. No caso dela, eu acho que não tem vários produtos, além de o WhatsApp. Aí isso aí é só para mostrar assim tudo que a aplicação tem e o nível de rastreio que dá para ter. Agora quanto a WhatsApp, você tem o qu aí?
+
+
+00:01:49
+
+Brazika Brasil: Quanto a a do WhatsApp? Do WhatsApp? Não, do WhatsApp eu desativei. Só tô com a p do Instagram. Mas o que você tinha ali de Ah, o que eu tinha aqui do rast do Instagram que rastei de Instagram do WhatsApp. É, tinha um boot no WhatsApp que ele fazia tipo um pré-tendimento. Uhum. E no Instagram também, mesma coisa.
+
+
+00:02:09
+
+Brazika Brasil: E ele só captura aqui embaixo o lead, por exemplo, aqui é da cidade datap que ele capturou. Uhum. Tinha um menu aí a intenção capturava tipo que tava fazendo e armazenava toda a conversa da do lead pelo WhatsApp. O que tá ativo agora é o Instagram, DM do Instagram. E a pessoa comenta no post, ele responde o post, eh, responde a pessoa no post e manda uma DM para ela, um direct.
+
+
+00:02:39
+
+Brazika Brasil: colocar aqui. E aí as postagens no automático, campanha no automático, eu posso mandar aí comentar no posto? Comentei também já vi aqui. E tem a parte do Instagram também que é direto com o aplicativo da meta. Instagram tá integrado para poder fazer postagem de resgem de stories automático. 24 horas é todos os dias é postar automático. Não depende de ter nada local, tudo online.
+
+
+00:03:07
+
+Brazika Brasil: aqui já teve 25 postado conteúdos em geral de Ross e Stories e ainda tem 86 para postar e já tá agendado. Ele já posta com legenda, com hashtag. Pegar aqui no meu fil do Instagram. Esses vídeos todos aqui foi ele que postou automático até até aqui daqui para cima é tudo automático e os stories também. campanha também pelo painel. Como é que é o negócio da campanha?
+
+
+00:04:03
+
+Brazika Brasil: Direção a campanha não, eu consigo ver é mais as métricas do das campanhas que estão lá. ser pelo cloud mesmo. Isso é pelo cloud mesmo. Mas tava a função aqui, eu que desabilitei, que você conseguia ver as campanhas, os criativos, o gerenciador de anúncios integrado aqui, só que eu desabilitei essa função, mas por enquanto ele só captura aqui em cima aqui, que é os eventos.
+
+
+00:04:26
+
+Brazika Brasil: Eh, aí tá puxando aqui realmente, ó, essa parte do da meta, um resumo do dia geral. Eu gastei R$ 7, né? Esse aqui é geral mesmo que tá tendo lá. Aqui embaixo tem mais é da meta, mais análise origem da onde que tá vindo, ó. direto. É que eu entrei direto no site da meta é realmente das campanhas da Bill.
+
+
+00:04:54
+
+Brazika Brasil: É que a gente entrou também lá no começo. Ele já puxou aqui, mas tem é plataforma no geral, pedidos perguntar calma aí os detalhes e tal. Não vou interromper não, porque vai tá ativado esse bagulho da negócio do da campanha que desabilitei. Dava para ver todas as campanhas. Eu não consegui editar a campanha aqui. Você só visualiza. Você edita pelo cloud.
+
+
+00:05:27
+
+Brazika Brasil: É pelo cloud que ele tá integrado direto com o aplicativo da meta. Vou puxar aqui o relatório agora. WhatsApp também só habilitar. WhatsApp é só habilitar. Inclusive você tá habilitado. Aqui o WhatsApp quando eu tinha que desabilitei, ele é direto da meta, da meta. Aí ele tinha um menu, um um menu normal de início, um fato de dúvidas frequentes.
+
+
+00:06:33
+
+Brazika Brasil: Aí se a pessoa perguntasse a do rastreio, ele mandava o link do rastreio ou informações do código e não era tipo robotizado, é mais ou menos humanizado o atendimento, aquela coisa padrão. Eu vou ativar ele aqui. A gente consegue testar aqui. Pois a parte que você pula, você pula já pra parte que eu tô mostrando aqui já. Eu edito, a gente vai fazer a apresentação eh a partir de Mas tá funcionando aqui.
+
+
+00:07:55
+
+Brazika Brasil: Zap aqui já vou mandar aí. mandar oi para ver. não respondeu. WhatsApp tá ativo. Aí aqui dá para proporcionar os datos. Dá para fazer do jeito que quiser. Dá para entregar, integrar direto no site. Dependendo se for tipo produto, dá para mandar rastreio, informações de pedido, tirar dúvidas. Deixa eu ver aqui. Eh, meu pedido.
+
+
+00:09:48
+
+Brazika Brasil: Ele tá sem os stories, né? para não demonstrar a foto. É assim, tá salando, não tá puxando do site. É tá conseguindo puxar, mas é o storage eh sem da hora. Eu pedi um cupom, aí jogou direto para 1000. Aí a pessoa coloca o e-mail lá, ele já captura o e-mail e manda o cupom para ela.
+
+
+00:10:43
+
+Brazika Brasil: Dá para fazer? Fecha aqui já. Agora eu vou simular uma compra no site como se fosse um cliente mesmo para depois poder mostrar tudo no no painel de alimento que tem captura. Checkout normal. Essa parte dos Correios, ele realmente tá integrado aqui com a plataforma de envios, que é envio econ. Então esse valor aqui é realmente real, é a cotação real. E assim que a pessoa paga, eu já consigo gerar a etiqueta automaticamente lá do painel, sem precisar ir lá na plataforma do do NVCOM.
+
+
+00:11:57
+
+Brazika Brasil: Se eu botar o TP aqui, ele também consegue puxar automaticamente. E aqui tá integrado com o get de pagamentos que é EFI Bank. Eles têm um API, então dá para integrar com eles via Pix e cartão de crédito. Vou gerar um Pix fake aqui. Esse Pix realmente funciona, já cai direto lá na conta do banco. E agora eu vou mostrar as ações que ele fez aqui no painel.
+
+
+00:12:30
+
+Brazika Brasil: Pegou a notificação de checkout iniciado. Toda vez que tiver uma venda ou um checkout iniciado tem uma notificação pop. Ele capturou todas as informações aqui, iniciou o checkout, capturou os checkout, eh, contato de checkout, informação de pagamento e ele já caiu aqui impedido, só que tá aguardando o pagamento e ele conseguiu capturar a origem do tráfego que a gente veio desde lá do começo que foi pela build.
+
+
+00:13:07
+
+Brazika Brasil: puxou desde lá do começo. É, tem que dar uma instala no boot. que eu não trabalhei muito nele, no script dele, como é que ele responde e tals. Eu fiz só uma uma versão base, tem que alimentar ele com mais informações. que ele tá respondendo meio padrão com as frases frases padrães. Ja. Vou reativar aqui o painel da meta que ficava lá no aqui no painel do sistema.
+
+
+00:15:14
+
+Brazika Brasil: Vou ativar o painel da meta para mostrar o que que dá para fazer aqui, que dá para visualizar em relação à meta, em relação aos anúncios. Mentira azul caixinha azi. Mentiraum tá bem azi uma tomadinha aqui. Não tem quadro. Mas como você falou tudo, ela é WhatsApp, ela faz campanha, vai no WhatsApp, dá para trquear tudo, tudo tudo as campanha do jeito que essa parte com as campanha tudo vai traquear todos os clientes e a parte do WhatsApp vai fazer toda a parte do do CRM,
+
+
+00:17:09
+
+Brazika Brasil: Uhum. Да. Tem como, né, de fazer com agente com pencloud usar o lama para poder fazer isso aqui que eu faço com cloud essas coisas de de mexer com as campanhas, editar as campanha, dá fazer tipo uns agentes no Pencl, um agente de campanha específica. Eu converso com ele, faço as campanha, agente do do calendário integra. controle sobre todos os agentes ali, além do painel.
+
+
+00:18:29
+
+Brazika Brasil: Uhum. Ou dá para colocar os agentes ali no painel também. Eu vou integrar os agentes aqui, então, fazer tipo essa parte como se fosse a parte do open cloud, mas tipo que agentes. Aí você vai abrir aqui e vai ter tipo o chatzinho com os agentes, você conversa com eles, ele vai estar integrado em tudo e você consegue fazer tudo pelo painel sem depender de de outro painel. faz tudo por ele.
+
+
+00:19:07
+
+Brazika Brasil: É só fazendo, mas vai dar um divid do c****** aí rodar o cal aí a rodar o call na ia fazer open fazer só um um chat boot aqui dentro mesmo. Não é um chat boot, mas você bota qual is esse trem aí pegar onde mesmo? É no fly, né? base depois abrir fly stream talvez dá para fazer de fazer Tem como saber se a pessoa realmente adicionou como contato? Aqui não tem como saber se ela realmente adicionou como contato, mas o que vai checar aqui é se ela mandou mensagem pro outro número do grupo foi se ela respondeu a mensagem do alguma coisa é ela mandar mensagem
+
+
+00:20:57
+
+Brazika Brasil: também. K. Ele já separou os caras, as pessoas etiquetinha. Hum. Car é tipo as etiquetas separ as pessoas. É esse perílicar esse e é o que consegue ver browser. Ah, aqueles car vinho lá que f rand conseguiu fazer ele pegar aquelap aí se ele tiver pegado aí aí é é bem mais fácil não tava mapear os car Funcionou de ponta a ponta.
+
+
+00:22:58
+
+Brazika Brasil: Você aí vai dar para clonar a plataforma deles inteir capturando, tu vê ela tá entendendo para depois replicar. Pegar el browser rapidão. É pegar rapidinho também. A isso aí tem que tá fazendo toda hora. Colocar um Crow ali que ele tá cada tempo ali, ele rola e pega. Aí ele adicionou aqui agora a opção meta que eu tinha desabilitado, mas ainda eu vou ajustar, mas ela tem bastante informação aqui sobre as campanhas.
+
+
+00:24:34
+
+Brazika Brasil: em cima eu coloquei métrica geral, então total gasto tanto divid ações na página de venda e checkouts iniciados. Vendas não teve, infelizmente. Então aqui não vai ter nada para poder calcular. E aqui tem um funil, muitas impressões, cliques. Então é funil inteiro, porém sem vendas. Aqui é a parte das campanhas. Por enquanto só tem uma campanha ativa que eu fiz pelo cloud code, mas eu vou fazer a parte da integração com cloud, que é fazer os agentes.
+
+
+00:25:03
+
+Brazika Brasil: E daí vai ter cada agente específico, por exemplo, um agente específico da metaeds. Ele vai saber de tudo, vai poder gerenciar os anúncios, me atualizar. igual passo pelo cloud Code. Vai ter um também do Instagram do calendário que ele vai me atualizar também sobre os posts, sobre os hills, stories e vai conseguir eh postar também automaticamente se eu quiser colocar o conteúdo novo e tals. Então te mostrar a parte do eu consegui adicionar aqui essa a parte da meta.
+
+
+00:25:32
+
+Brazika Brasil: Eu coloquei o valor máximo aqui. Ele realmente tá puxando tudo, valor gasto, tanto de a de pessoas que entrou na página. Iniciei de checkout e aqui não tem nada porque não vendeu nada. Aqui tem todo o funil, tanto de pressões, 60K, 5K de cliques, todo o funil. Aí aqui mostra as campanhas. Por enquanto só tem uma ativa.
+
+
+00:25:57
+
+Brazika Brasil: Aí você consegue ver como é que aparece lá pro cliente no feed dele, exatamente como aparece lá para ele. E aqui embaixo você tem mais métricas desse anúncio, desse criativo que tá rodando. Total gasto desse criativo, impressões, alcance, cliques, CTR, custo por clique, checkouts, compras e ruas. Mas como não teve, não vai calcular aqui agora. E aqui embaixo tem mais que é das campanhas em geral, dessas que eu já fiz aí mostra também gasto, clique, CTR.
+
+
+00:26:35
+
+Brazika Brasil: Tá integrado também com o catálogo da da meta e tá integrado com o catálogo do Instagram shopping também. Então eu consigo, tipo, se eu atualizar algum produto no site, ele automaticamente atualiza lá no catálogo da meta, daí atualiza lá no Instagram shopping. É a parte do Instagram shopping que tem lá a parte do shopping, você consegue fazer a marcação, marcar o produto nas fotos também. Tá integrado aqui. Que mais?
+
+
+00:27:04
+
+Brazika Brasil: Em parte de configuração mostra eh as integrações e as API que tá conectado. Esse EF é o pagamento. Tem o link da documentação, resuminho aqui que é o get oficial aqui as taxas que eu vi colocar. Env que é a parte de envios que é a logística de envios. Meta que é a parte da dos anúncios e Instagram que é a parte dos posts e do RS. Aqui, ó, MetaS, anúncios e catálogos, Instagram, perfil, media, insites.
+
+
+00:27:34
+
+Brazika Brasil: Aqui embaixo algumas informações da loja. Aqui é detalhe visual do site. Tem essa outra parte aqui que ainda tá em implantação, mas é a parte de segurança que recentemente teve um site que clonou minha loja, clonou o site inteiro, checkout, tudo, e usou o domínio com com o nome. Daí eu consegui identificar e consegui derrubar o site dele. Aí eu fiz essa plataforma aqui que agora acompanha em tempo real.
+
+
+00:28:09
+
+Brazika Brasil: Se tiver caso outra pessoa que faça essa mesma coisa, ele já vai conseguir me mostrar aqui em tempo real. Esperar ele carregar os dados aqui. ativo. Proteção antiotlink. O site clone ele tava no ar, ele conseguiu derrubar aqui, ó. Brasil coachlet. Derrubado. Aqui embaixo ele vai mostrar se tiver outros domínio assim igual esse daqui, tipo surgir outro no Google, na indexação do Google, ele vai mostrar aqui para mim. Esse aqui não tá funcionando, mas ele puxa também todos os sites que eu uso, tipo, por exemplo, admin.brasica basica, brazica.com.br, b.brazica, Braa, todos os meus sites que tá conectado ao meu domínio. Fez de bola.
+
+
+A transcrição foi encerrada após 00:30:13
+
+Esta transcrição editável foi gerada por computador e pode conter erros. As pessoas também podem alterar o texto depois que ele for criado.

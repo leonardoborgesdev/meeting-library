@@ -1,0 +1,16 @@
+.git
+.gitignore
+library/videos
+library/audio
+library/media
+library/walkthroughs/*/frames
+data/*.log
+data/*.out
+data/.poll.lock
+data/brazika_call
+**/*.mp4
+**/*.mov
+**/*.mkv
+**/*.mp3
+**/*.m4a
+**/.DS_Store

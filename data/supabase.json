@@ -112,5 +112,17 @@
     "walkthrough": "https://zfngzbdebfjyqdmyjjif.supabase.co/storage/v1/object/public/meeting-library/jun_junior-whatsapp-2-0605/WALKTHROUGH.md",
     "speakers": "https://zfngzbdebfjyqdmyjjif.supabase.co/storage/v1/object/public/meeting-library/jun_junior-whatsapp-2-0605/speakers.txt",
     "transcript": "https://zfngzbdebfjyqdmyjjif.supabase.co/storage/v1/object/public/meeting-library/jun_junior-whatsapp-2-0605/transcript.txt"
+  },
+  "auto_2026-06-12_reuniao-mauricio-junior-vistoria-teste": {
+    "frames": "https://zfngzbdebfjyqdmyjjif.supabase.co/storage/v1/object/public/meeting-library/auto_2026-06-12_reuniao-mauricio-junior-vistoria-teste/frames",
+    "walkthrough": "https://zfngzbdebfjyqdmyjjif.supabase.co/storage/v1/object/public/meeting-library/auto_2026-06-12_reuniao-mauricio-junior-vistoria-teste/WALKTHROUGH.md",
+    "speakers": "https://zfngzbdebfjyqdmyjjif.supabase.co/storage/v1/object/public/meeting-library/auto_2026-06-12_reuniao-mauricio-junior-vistoria-teste/speakers.txt",
+    "transcript": "https://zfngzbdebfjyqdmyjjif.supabase.co/storage/v1/object/public/meeting-library/auto_2026-06-12_reuniao-mauricio-junior-vistoria-teste/transcript.txt"
+  },
+  "leo_brazika-apresentacao": {
+    "frames": "https://zfngzbdebfjyqdmyjjif.supabase.co/storage/v1/object/public/meeting-library/leo_brazika-apresentacao/frames",
+    "walkthrough": "https://zfngzbdebfjyqdmyjjif.supabase.co/storage/v1/object/public/meeting-library/leo_brazika-apresentacao/WALKTHROUGH.md",
+    "speakers": "https://zfngzbdebfjyqdmyjjif.supabase.co/storage/v1/object/public/meeting-library/leo_brazika-apresentacao/speakers.txt",
+    "transcript": "https://zfngzbdebfjyqdmyjjif.supabase.co/storage/v1/object/public/meeting-library/leo_brazika-apresentacao/transcript.txt"
   }
 }

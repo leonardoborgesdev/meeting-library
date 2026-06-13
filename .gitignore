@@ -20,3 +20,12 @@ library/media/
 library/walkthroughs/*/frames/
 data/run*.out
 data/server.log
+
+# runtime/secrets
+data/users.json
+data/sessions.json
+data/health.json
+data/notion_poll.log
+data/.backfill_day
+data/.notion.lock
+data/brazika_call/

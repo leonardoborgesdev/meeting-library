@@ -584,6 +584,83 @@
       "transcript": null,
       "video": null,
       "status": "plan"
+    },
+    {
+      "id": "auto_2026-06-12_reuniao-mauricio-junior-vistoria-teste",
+      "pessoa": "Mauricio",
+      "title": "Reuniao - Mauricio - Junior - Vistoria teste",
+      "date": "2026-06-12",
+      "projeto": "Vistoria (Confere)",
+      "assunto": [],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Mauricio"
+      ],
+      "driveVideoId": "1h4Dj9mAb6Zvm38DL5ihmZ5JSs0ku0X_b",
+      "sizeMB": 57,
+      "durationApprox": null,
+      "geminiOk": true,
+      "notes": null,
+      "transcript": "library/transcripts/auto_2026-06-12_reuniao-mauricio-junior-vistoria-teste.txt",
+      "video": "library/videos/auto_2026-06-12_reuniao-mauricio-junior-vistoria-teste.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/auto_2026-06-12_reuniao-mauricio-junior-vistoria-teste/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/auto_2026-06-12_reuniao-mauricio-junior-vistoria-teste/frames"
+    },
+    {
+      "id": "leo_brazika-apresentacao",
+      "pessoa": "Leonardo",
+      "title": "🛍 Brazika — Apresentação do Painel (Leo × Lucas)",
+      "date": "2026-06-12",
+      "projeto": "Brazika (loja + painel)",
+      "assunto": [
+        "painel",
+        "automação IG",
+        "WhatsApp bot",
+        "Meta Ads",
+        "checkout Efi+Envio",
+        "anti-clonagem",
+        "agentes IA"
+      ],
+      "participantes": [
+        "Lucas F. N. Alves",
+        "Leonardo (Brazika Brasil)"
+      ],
+      "driveVideoId": "1HbGlkWlZ1EJdTeBE_IYr5q_XuY3Rz-AX",
+      "sizeMB": 265,
+      "durationApprox": "30:13",
+      "geminiOk": true,
+      "notes": "library/notes/BRAZIKA_apresentacao.md",
+      "transcript": "library/transcripts/leo_brazika-apresentacao.txt",
+      "video": "library/videos/leo_brazika-apresentacao.mp4",
+      "status": "done",
+      "walkthrough": "library/walkthroughs/leo_brazika-apresentacao/WALKTHROUGH.md",
+      "frames_dir": "library/walkthroughs/leo_brazika-apresentacao/frames"
+    },
+    {
+      "id": "brazika_checklist",
+      "pessoa": "Leonardo",
+      "title": "📋 Brazika — Tasklist da apresentação",
+      "date": "2026-06-12",
+      "projeto": "Brazika (loja + painel)",
+      "assunto": [
+        "checklist",
+        "roadmap",
+        "tarefas",
+        "agentes IA"
+      ],
+      "participantes": [
+        "Leonardo (Brazika Brasil)"
+      ],
+      "type": "checklist",
+      "clkey": "brazika",
+      "notes": "library/notes/BRAZIKA_apresentacao.md",
+      "driveVideoId": null,
+      "durationApprox": null,
+      "geminiOk": true,
+      "transcript": null,
+      "video": null,
+      "status": "plan"
     }
   ]
 }

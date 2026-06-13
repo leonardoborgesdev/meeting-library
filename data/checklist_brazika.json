@@ -1,0 +1,130 @@
+{
+  "source": "Call Leo Brazika Presentation — 2026-06-12 14:54 (Leo apresenta o painel Brazika pro Lucas). Itens extraídos da transcrição + Anotações do Gemini (PT).",
+  "groups": [
+    {
+      "project": "✅ Já feito / demonstrado funcionando",
+      "tasks": [
+        {
+          "id": "bz01",
+          "text": "Site de vendas (loja) integrado ao painel, partindo do link da bio do Instagram — rastreamento completo de eventos e botões",
+          "done": true
+        },
+        {
+          "id": "bz02",
+          "text": "Feed de eventos em tempo real no painel: visualizou página, tempo de permanência, clique em produto, jornada do cliente",
+          "done": true
+        },
+        {
+          "id": "bz03",
+          "text": "Automação Instagram ATIVA: responde comentário no post + manda DM automática pra pessoa; captura o lead (cidade/intenção)",
+          "done": true
+        },
+        {
+          "id": "bz04",
+          "text": "Postagem automática Instagram 24/7 (Reels + Stories) com legenda e hashtag, online sem depender de local — 25 conteúdos já postados, 86 agendados",
+          "done": true
+        },
+        {
+          "id": "bz05",
+          "text": "Captura de e-mail → dispara cupom de desconto automático ao preencher",
+          "done": true
+        },
+        {
+          "id": "bz06",
+          "text": "Checkout integrado ao gateway Efi Bank: Pix + cartão de crédito (Pix real cai direto na conta)",
+          "done": true
+        },
+        {
+          "id": "bz07",
+          "text": "Logística Envio.com integrada: cotação real de frete + gera etiqueta de envio automática após o pagamento, sem entrar na plataforma",
+          "done": true
+        },
+        {
+          "id": "bz08",
+          "text": "Notificação pop de 'checkout iniciado' no painel + captura de contato/pagamento + atribuição da origem do tráfego (desde o link da bio)",
+          "done": true
+        },
+        {
+          "id": "bz09",
+          "text": "Qualificação de leads por etiquetas (separa contatos por interação, ex. quem respondeu mensagem de grupo)",
+          "done": true
+        },
+        {
+          "id": "bz10",
+          "text": "Catálogo Meta + Instagram Shopping integrados: atualizar produto no site reflete automático nos dois (marcação de produto nas fotos)",
+          "done": true
+        },
+        {
+          "id": "bz11",
+          "text": "Aba de Configurações lista as APIs conectadas: Efi (pagamento), Envio (logística), Meta (ads/catálogo), Instagram (perfil/media/insights) com docs e taxas",
+          "done": true
+        },
+        {
+          "id": "bz12",
+          "text": "Segurança anti-clonagem em tempo real: identificou e DERRUBOU o clone (brazikaoutlet), proteção anti-hotlink ativa, lista todos os domínios conectados",
+          "done": true
+        },
+        {
+          "id": "bz13",
+          "text": "Painel da Meta reativado: métricas gerais (gasto, cliques, origem do tráfego) + funil completo (impressões 60K, cliques 5K, checkouts) + ROAS por criativo + preview do anúncio no feed",
+          "done": true
+        }
+      ]
+    },
+    {
+      "project": "🔜 Pendências imediatas / ajustes",
+      "tasks": [
+        {
+          "id": "bz20",
+          "text": "Atualizar Bot WhatsApp: alimentar os scripts de resposta com mais informações (hoje responde muito padrão/robotizado) e reativar",
+          "done": false
+        },
+        {
+          "id": "bz21",
+          "text": "Manter painel da Meta reativado e ajustado (estava desabilitado; já mostra bastante info de campanhas)",
+          "done": true
+        },
+        {
+          "id": "bz22",
+          "text": "Corrigir storage das fotos no bot/stories (cupom puxa, mas foto do produto não estava sendo puxada do site)",
+          "done": false
+        },
+        {
+          "id": "bz23",
+          "text": "Scraper do browser dos concorrentes em cron (rolar e capturar de tempos em tempos) para depois clonar/replicar a plataforma de métricas deles",
+          "done": false
+        }
+      ]
+    },
+    {
+      "project": "🧭 Roadmap — Agentes de IA (Open Cloud / OpenClaw)",
+      "tasks": [
+        {
+          "id": "bz30",
+          "text": "Integrar agentes de IA dentro do próprio painel: um 'chatzinho' com os agentes, conversa e executa tudo sem depender de outro painel/Cloud Code",
+          "done": false
+        },
+        {
+          "id": "bz31",
+          "text": "Agente Meta Ads: sabe de tudo das campanhas, gerencia/edita anúncios e me atualiza (substitui editar pelo Cloud Code)",
+          "done": false
+        },
+        {
+          "id": "bz32",
+          "text": "Agente Instagram / Calendário: atualiza posts, Reels e Stories e posta automaticamente conteúdo novo",
+          "done": false
+        },
+        {
+          "id": "bz33",
+          "text": "Rodar os agentes no Fly (fly stream) usando Llama/Open Cloud em vez do Cloud Code",
+          "done": false
+        },
+        {
+          "id": "bz34",
+          "text": "Controle central sobre todos os agentes pelo painel (Meta Ads + calendário + WhatsApp/CRM num lugar só)",
+          "done": false
+        }
+      ]
+    }
+  ]
+}

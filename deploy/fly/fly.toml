@@ -1,0 +1,27 @@
+app = "automatrix-meeting-library"
+primary_region = "gru"
+
+[env]
+  HOST = "0.0.0.0"
+  PORT = "8009"
+  NOLOCAL = "1"
+  POLL_SINCE = "2025-01-01"
+  POLL_MAX_PER_RUN = "2"
+  POLL_DAILY_MAX = "6"
+  POLL_INTERVAL = "3600"
+  RCLONE_CONFIG = "/data/rclone.conf"
+
+[[mounts]]
+  source = "ml_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8009
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"
