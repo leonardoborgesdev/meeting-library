@@ -104,6 +104,42 @@ class H(http.server.SimpleHTTPRequestHandler):
             if found is None: return self._json({"ok": False, "msg": "item não encontrado"})
             json.dump(cl, open(fn, "w"), ensure_ascii=False, indent=2)
             return self._json({"ok": True, "done": found})
+        if u.path == "/api/chat":
+            b = self._read_body(); q = (b.get("q") or "").strip()
+            key = os.environ.get("GEMINI_API_KEY", "")
+            if not key: return self._json({"ok": False, "fallback": True})
+            if not q: return self._json({"ok": False, "error": "vazio"}, 400)
+            try:
+                import urllib.request as _u
+                calls = json.load(open("data/calls.json"))["calls"]
+                try: meta = json.load(open("data/meta.json"))
+                except Exception: meta = {}
+                lines = []
+                for c in calls:
+                    m = meta.get(c["id"], {})
+                    lines.append(" ┃ ".join([c["id"], c.get("date",""), c.get("pessoa",""),
+                        c.get("projeto",""), (c.get("title","") or "")[:70],
+                        ",".join(c.get("assunto",[])[:5]), c.get("type","video"),
+                        ("notion" if m.get("notion") else ""), ("github" if m.get("github") else ""),
+                        ("transcrita" if c.get("transcript") else "")]))
+                ctx = "\n".join(lines)
+                prompt = ("Você é o assistente da Meeting Library (catálogo de calls da Automatrix). "
+                    "Cada linha do catálogo: id ┃ data ┃ pessoa ┃ projeto ┃ título ┃ tópicos ┃ tipo ┃ notion ┃ github ┃ transcrita.\n\n"
+                    f"CATÁLOGO:\n{ctx}\n\nPERGUNTA DO USUÁRIO: {q}\n\n"
+                    "Responda em PT-BR, curto e direto. Use as datas/projetos/pessoas do catálogo. "
+                    "Liste os ids das calls realmente relevantes (no máximo 12). "
+                    'Responda APENAS JSON: {"answer":"texto curto e útil","ids":["id",...]}')
+                payload = json.dumps({"contents":[{"parts":[{"text":prompt}]}],
+                    "generationConfig":{"temperature":0.3,"responseMimeType":"application/json",
+                        "thinkingConfig":{"thinkingBudget":0}}}).encode()
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{os.environ.get('GEMINI_MODEL','gemini-2.5-flash')}:generateContent?key={key}"
+                req = _u.Request(url, data=payload, headers={"Content-Type":"application/json"}, method="POST")
+                with _u.urlopen(req, timeout=45) as r: gj = json.load(r)
+                txt = gj["candidates"][0]["content"]["parts"][0]["text"]
+                ans = json.loads(txt)
+                return self._json({"ok": True, "answer": ans.get("answer",""), "ids": ans.get("ids",[])})
+            except Exception as e:
+                return self._json({"ok": False, "fallback": True, "error": str(e)[:120]})
         if u.path == "/api/ingest":
             b = self._read_body(); card = b.get("card"); notes = b.get("notes", "")
             if not card or not card.get("id"): return self._json({"ok": False, "error": "card inválido"}, 400)

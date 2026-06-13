@@ -69,7 +69,16 @@ frames, sobe pro Supabase e se auto-corrige — sem intervenção.
 - `SUPABASE_URL` / `SUPABASE_KEY` — upload de frames/transcrição.
 - `RCLONE_CONF_B64` — base64 do `rclone.conf` (acesso ao Drive); restaurado em `/data/rclone.conf` no boot.
 - `NOTION_TOKEN` — integração do Notion (bot clawdy).
+- `GEMINI_API_KEY` / `GEMINI_MODEL` — IA do chat (Gemini 2.5-flash). ⚠️ `gemini-2.0-flash` foi descontinuado (404).
 - `AUTH_SALT` / `INVITE_CODE` — auth (defaults embutidos).
+
+### ⚙️ Independência do Mac (importante)
+**Em runtime, nada depende do Mac.** O app roda inteiro no Fly: `server.py` + 3 loops
+(Drive / healthcheck / Notion) dentro do container, com TODOS os segredos como secrets do Fly
+e o estado num volume. O token do rclone vive em `/data/rclone.conf` (auto-refresh), não no Mac.
+O Mac só é usado para **deploy** (`flyctl deploy` envia uma nova versão do código) — isso é
+desenvolvimento, não operação. Desligue o Mac e a Meeting Library continua puxando Drive+Notion,
+transcrevendo, monitorando e respondendo no chat normalmente.
 
 ### Variáveis (fly.toml)
 `HOST=0.0.0.0` · `PORT=8009` · `NOLOCAL=1` (apaga vídeo após processar) ·
@@ -165,6 +174,7 @@ título+projeto+tópicos) · tarefas (progresso de checklist) · tipo · status 
 | `/api/meta?id=` | POST | salva link Notion/GitHub do card |
 | `/api/check?item=&cl=` | POST | marca tarefa de checklist |
 | `/api/ingest` | POST | injeta um card (usado pela ingestão do Notion) |
+| `/api/chat` | POST | **assistente IA**: manda o catálogo + pergunta pro Gemini, devolve `{answer, ids}` |
 
 ### Frontend — `index.html` (single-file, sem build, design Studio OS)
 Sistema de design **Studio OS** (OKLCH navy/cobalt/gold, Inter, glass topbar, cards hairline,
@@ -173,7 +183,10 @@ pills de stage, scrim+blur). Réplica fiel do `youtube-os-studioos`. Componentes
 - **Filtros**: pessoa, projeto, **período (de/até)**, busca, chips de tipo/status, temas.
 - **Popup de detalhe**: preview (Drive iframe / player / áudio), transcrição com frames
   sincronizados (walkthrough), notas, checklist, índice lateral, campos Drive/Notion/GitHub.
-- **Chat de busca** (canto sup. direito): busca tudo e devolve links (call/Notion/GitHub).
+- **Chat assistente IA** (canto inferior direito): pergunta em linguagem natural → `/api/chat`
+  manda o catálogo pro **Gemini 2.5-flash** (server-side, chave nunca exposta) → resposta + os
+  cards relevantes com links. Cai pra busca local (stopwords + "hoje/ontem/recentes") se sem IA.
+- **Filtro de período (De/Até)** — vale inclusive no Calendário.
 - **Botões Métricas / Status** (popups) + **Sair**.
 
 ### Scripts (`scripts/`)
@@ -214,8 +227,10 @@ pills de stage, scrim+blur). Réplica fiel do `youtube-os-studioos`. Componentes
 6. **Monitor + auto-cura** — healthcheck, `/api/health`, botão Status, reprocesso de incompletas.
 7. **Login/registro** — proteção por cookie, conta `automatrix`.
 8. **Links Notion/GitHub** — por projeto (repos brazika) + ingestão das reuniões do Notion como cards.
-9. **Chat de busca, Métricas, filtro de período** — usabilidade.
-10. **Este repositório** — código + docs, privado, compartilhado com Morfeu333.
+9. **Métricas, filtro de período** — usabilidade.
+10. **Notion 100% automático** — `notion_poll.py` ingere reuniões antigas e futuras sozinho.
+11. **Chat assistente com IA (Gemini 2.5-flash)** — busca em linguagem natural com links.
+12. **Este repositório** — código + docs, privado, compartilhado com Morfeu333.
 
 ---
 

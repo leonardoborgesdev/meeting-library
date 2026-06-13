@@ -205,10 +205,10 @@ input::placeholder{color:var(--text-dim)}
 .hclose{margin-top:16px;width:100%;justify-content:center}
 
 /* Chat de busca (canto superior direito) */
-#chat-fab{position:fixed;top:68px;right:20px;z-index:120;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;font-size:20px;
-  background:var(--accent);color:#fff;box-shadow:0 6px 18px oklch(20% 0.030 250 / 0.25);transition:transform .15s,filter .15s}
-#chat-fab:hover{filter:brightness(1.06);transform:scale(1.05)}
-#chat-panel{position:fixed;top:64px;right:20px;z-index:121;width:min(400px,94vw);max-height:78vh;display:none;flex-direction:column;
+#chat-fab{position:fixed;bottom:24px;right:24px;z-index:120;height:46px;padding:0 18px;border-radius:9999px;border:none;cursor:pointer;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent);color:#fff;box-shadow:0 8px 22px oklch(20% 0.030 250 / 0.28);transition:transform .15s,filter .15s}
+#chat-fab:hover{filter:brightness(1.06);transform:translateY(-2px)}
+#chat-panel{position:fixed;bottom:24px;right:24px;z-index:121;width:min(410px,94vw);height:min(560px,80vh);display:none;flex-direction:column;
   background:var(--surface-1);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-3);overflow:hidden}
 #chat-panel.open{display:flex}
 .chat-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--border);font-weight:600;font-size:14px}
@@ -470,9 +470,9 @@ input::placeholder{color:var(--text-dim)}
   <div class="hpanel" id="metrics-body"></div>
 </div>
 
-<button id="chat-fab" onclick="toggleChat()" title="Buscar tudo">💬</button>
+<button id="chat-fab" onclick="toggleChat()" title="Buscar tudo">💬 Assistente</button>
 <div id="chat-panel">
-  <div class="chat-head"><span>🔎 Buscar tudo</span><button onclick="toggleChat()" class="chat-x">✕</button></div>
+  <div class="chat-head"><span>🔎 Assistente do acervo</span><button onclick="toggleChat()" class="chat-x">✕</button></div>
   <div class="chat-msgs" id="chat-msgs"></div>
   <div class="chat-in">
     <input id="chat-input" placeholder="ex.: calls do junior, projeto vistoria, ferramentas, quem participou…" onkeydown="if(event.key==='Enter')chatSend()">
@@ -721,7 +721,9 @@ async function logout(){try{await fetch('/api/logout',{method:'POST'});}catch(e)
 /* ───────── Chat de busca geral ───────── */
 let chatGreeted=false;
 function toggleChat(){const p=$('chat-panel');p.classList.toggle('open');
-  if(p.classList.contains('open')){if(!chatGreeted){chatGreeted=true;chatGreet();}$('chat-input').focus();}}
+  const open=p.classList.contains('open');
+  $('chat-fab').style.display=open?'none':'';
+  if(open){if(!chatGreeted){chatGreeted=true;chatGreet();}$('chat-input').focus();}}
 function chatGreet(){
   $('chat-msgs').innerHTML=`<div class="chat-a"><div class="lead">Oi! Busco qualquer coisa do acervo e te entrego os links (call, Notion, GitHub). Tente:</div>
     <div class="chip-row">
@@ -747,14 +749,22 @@ function chatResult(c){
     <div class="rm">${fmtDate(c.date)} · 👤 ${c.pessoa} · 📁 ${c.projeto}${(c.assunto||[]).length?' · '+(c.assunto||[]).slice(0,3).join(', '):''}</div>
     <div class="links">${chatLinks(c)}</div></div>`;
 }
-function chatSend(){
+async function chatSend(){
   const q=($('chat-input').value||'').trim();if(!q)return;
   const box=$('chat-msgs');
-  box.insertAdjacentHTML('beforeend',`<div class="chat-q">${q}</div>`);
+  box.insertAdjacentHTML('beforeend',`<div class="chat-q">${q.replace(/</g,'&lt;')}</div>`);
   $('chat-input').value='';
-  box.insertAdjacentHTML('beforeend','<div class="chat-a" id="chat-pending">…</div>');
-  const ans=chatAnswer(q);
-  $('chat-pending').outerHTML=`<div class="chat-a">${ans}</div>`;
+  box.insertAdjacentHTML('beforeend','<div class="chat-a" id="chat-pending">⏳ pensando…</div>');
+  box.scrollTop=box.scrollHeight;
+  let html;
+  try{
+    const d=await (await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({q})})).json();
+    if(d&&d.ok){
+      const cards=(d.ids||[]).map(id=>CALLS.find(c=>c.id===id)).filter(Boolean);
+      html=`<div class="lead">🤖 ${(d.answer||'').replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>`+cards.map(chatResult).join('');
+    } else html=chatAnswer(q);
+  }catch(e){ html=chatAnswer(q); }
+  const p=$('chat-pending'); if(p) p.outerHTML=`<div class="chat-a">${html}</div>`;
   box.scrollTop=box.scrollHeight;
 }
 function chatAnswer(q){
@@ -776,13 +786,29 @@ function chatAnswer(q){
     const tr=CALLS.filter(c=>c.transcript).length,nz=CALLS.filter(c=>c.type==='notion').length;
     const projs=new Set(CALLS.map(c=>c.projeto)).size;
     return `<div class="lead">📊 Acervo:</div><b>${CALLS.length}</b> cards · <b>${tr}</b> transcritas · <b>${nz}</b> do Notion · <b>${projs}</b> projetos.`;}
-  // busca livre (todas as palavras presentes)
-  const ws=ql.split(/\s+/);
+  // intenções de data
+  const dates=CALLS.map(c=>c.date).filter(Boolean).sort();
+  const recent=d=>CALLS.filter(c=>c.date===d).sort((a,b)=>(a.title>b.title?1:-1));
+  if(/\bhoje\b/.test(ql)){
+    let t='';try{t=new Date().toISOString().slice(0,10);}catch(e){}
+    let hits=recent(t);
+    if(!hits.length){const md=dates[dates.length-1];hits=recent(md);
+      return `<div class="lead">Sem calls com a data de hoje (${t||'?'}). Mais recentes (${md}):</div>`+hits.slice(0,8).map(chatResult).join('');}
+    return `<div class="lead">📅 Calls de hoje (${t}):</div>`+hits.map(chatResult).join('');}
+  if(/\bontem\b/.test(ql)){const u=[...new Set(dates)];const d=u[u.length-2]||u[u.length-1];
+    return `<div class="lead">📅 ${d}:</div>`+recent(d).map(chatResult).join('');}
+  if(/(mais recente|últimas?|ultimas?|novas?)/.test(ql)){
+    const hits=CALLS.slice().sort((a,b)=>a.date<b.date?1:-1).slice(0,8);
+    return `<div class="lead">🕐 Mais recentes:</div>`+hits.map(chatResult).join('');}
+  // busca livre — ignora palavras-vazias (call, de, com, hoje…)
+  const STOP=new Set(['call','calls','reuniao','reunião','reunioes','reuniões','meeting','meet','de','do','da','dos','das','com','e','a','o','as','os','em','no','na','nas','nos','pra','para','que','um','uma','sobre','the','of','tem','teve','foi','qual','quais','me','mostra','lista','ver','sobre']);
+  const ws=ql.split(/\s+/).filter(w=>w && !STOP.has(w));
+  if(!ws.length)return `<div class="lead">Digite um projeto, pessoa, assunto ou "hoje" / "mais recentes".</div>`;
   const hits=CALLS.filter(c=>{
     const hay=[c.title,c.projeto,c.pessoa,(c.assunto||[]).join(' '),(c.participantes||[]).join(' '),toolsOf(c).join(' ')].join(' ').toLowerCase();
     return ws.every(w=>hay.includes(w));
   }).sort((a,b)=>a.date<b.date?1:-1);
-  if(!hits.length)return `<div class="lead">Nada encontrado para "<b>${q}</b>". Tente um projeto, pessoa ou assunto.</div>`;
+  if(!hits.length)return `<div class="lead">Nada encontrado para "<b>${ws.join(' ')}</b>". Tente um projeto, pessoa ou assunto.</div>`;
   const show=hits.slice(0,10);
   return `<div class="lead">Achei <b>${hits.length}</b> resultado(s)${hits.length>10?' (mostrando 10)':''}:</div>`+show.map(chatResult).join('');
 }
