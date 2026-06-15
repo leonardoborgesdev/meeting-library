@@ -22,7 +22,8 @@ flyctl secrets set --app "$APP" --stage \
   ASSEMBLYAI_API_KEY="$ASSEMBLYAI_API_KEY" \
   SUPABASE_URL="$SUPABASE_URL" \
   SUPABASE_KEY="$SUPABASE_KEY" \
-  RCLONE_CONF_B64="$RCLONE_B64"
+  RCLONE_CONF_B64="$RCLONE_B64" \
+  ${TD_TOKEN:+TD_TOKEN="$TD_TOKEN"}
 
 echo "== deploy =="
 flyctl deploy . --app "$APP" --config deploy/fly/fly.toml --dockerfile deploy/fly/Dockerfile --ha=false

@@ -6,9 +6,9 @@ primary_region = "gru"
   PORT = "8009"
   NOLOCAL = "1"
   POLL_SINCE = "2025-01-01"
-  POLL_MAX_PER_RUN = "2"
-  POLL_DAILY_MAX = "6"
-  POLL_INTERVAL = "3600"
+  POLL_MAX_PER_RUN = "4"
+  POLL_DAILY_MAX = "24"
+  POLL_INTERVAL = "1800"
   RCLONE_CONFIG = "/data/rclone.conf"
 
 [[mounts]]

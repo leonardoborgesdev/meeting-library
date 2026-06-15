@@ -47,11 +47,32 @@ transcribe_aai(){ # $1=audio $2=prefix
 }
 
 FILTER="${1:-}"
-while IFS=$'\t' read -r ID FID DUR; do
+while IFS=$'\t' read -r ID FID DUR TYPE; do
   [ -z "$ID" ] && continue
   [ -n "$FILTER" ] && [ "$FILTER" != "$ID" ] && continue
   RAW="$VID/${ID}_raw.mp4"; CMP="$VID/${ID}.mp4"; MP3="$AUD/${ID}.mp3"; WAV="$AUD/${ID}.wav"
   WT="library/walkthroughs/${ID}/WALKTHROUGH.md"
+
+  # ── ÁUDIO-only (upload de áudio): transcreve + backup no drive, sem walkthrough ──
+  AUDSRC=""
+  for e in mp3 m4a wav ogg aac opus; do [ -s "$AUD/${ID}.${e}" ] && AUDSRC="$AUD/${ID}.${e}" && break; done
+  if [ "$TYPE" = "audio" ] || { [ -n "$AUDSRC" ] && [ ! -s "$RAW" ] && [ ! -s "$CMP" ]; }; then
+    [ -s "$TR/$ID.txt" ] && { log "✓ áudio $ID já transcrito — pulando"; continue; }
+    [ -z "$AUDSRC" ] && { log "  ⚠ $ID sem arquivo de áudio"; continue; }
+    log "=== $ID (áudio) ==="
+    ffmpeg -nostdin -loglevel error -y -i "$AUDSRC" -vn -ac 1 -ar 16000 -b:a 64k "$MP3" </dev/null
+    if [ -n "$AAI" ] && [ -s "$MP3" ]; then
+      log "  🗣 AssemblyAI..."; transcribe_aai "$MP3" "$TR/$ID" && log "  ✓ $TR/$ID.txt" || log "  ⚠ AAI falhou"
+    fi
+    [ -s "$TR/$ID.txt" ] && set_field "$ID" transcript "$TR/$ID.txt" && set_field "$ID" status "done"
+    set_field "$ID" audio "$AUDSRC"
+    if [ -f data/.supabase.env ] || [ -n "${SUPABASE_URL:-}" ]; then bash scripts/supabase_sync.sh "$ID" >>"$LOG" 2>&1 || true; fi
+    if [ -n "${TD_TOKEN:-}" ]; then
+      log "  ☁️  backup áudio pro Brazika Drive..."; python3 scripts/td_push.py "$ID" "$AUDSRC" >>"$LOG" 2>&1 || log "  ⚠ backup drive falhou"
+    fi
+    rm -f "$MP3"; log "  done $ID (áudio)"; continue
+  fi
+
   [ -s "$TR/$ID.txt" ] && [ -s "$CMP" ] && [ -s "$WT" ] && { log "✓ $ID já completo — pulando"; continue; }
   log "=== $ID (~$DUR) ==="
 
@@ -96,7 +117,14 @@ while IFS=$'\t' read -r ID FID DUR; do
   if [ -f data/.supabase.env ] || [ -n "${SUPABASE_URL:-}" ]; then
     bash scripts/supabase_sync.sh "$ID" >>"$LOG" 2>&1 || true
   fi
-  if [ "${NOLOCAL:-0}" = "1" ]; then
+  # 6b) Backup pro Brazika Drive (Teldrive, storage infinito) — antes do NOLOCAL
+  if [ -n "${TD_TOKEN:-}" ] && [ -s "$CMP" ]; then
+    log "  ☁️  backup pro Brazika Drive..."
+    python3 scripts/td_push.py "$ID" "$CMP" >>"$LOG" 2>&1 || log "  ⚠ backup drive falhou (segue)"
+  fi
+  # NOLOCAL só p/ cards do Drive (têm de onde repreviewar). Uploads (sem driveVideoId)
+  # ficam no volume p/ o preview funcionar (já têm backup no Brazika Drive).
+  if [ "${NOLOCAL:-0}" = "1" ] && [ -n "$FID" ]; then
     rm -f "$CMP"; rm -rf "library/walkthroughs/$ID/frames"
     set_field "$ID" video ""
     log "  🧹 NOLOCAL: vídeo via Drive, frames/transcrição no Supabase"
@@ -104,5 +132,5 @@ while IFS=$'\t' read -r ID FID DUR; do
 
   rm -f "$MP3" "$WAV"
   log "  done $ID"
-done < <(jq -r '.calls[] | [.id, .driveVideoId, (.durationApprox//"")] | @tsv' data/calls.json)
+done < <(jq -r '.calls[] | [.id, (.driveVideoId//""), (.durationApprox//""), (.type//"video")] | @tsv' data/calls.json)
 log "Pipeline finalizado."

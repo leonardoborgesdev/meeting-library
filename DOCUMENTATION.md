@@ -19,8 +19,11 @@ tudo num catálogo navegável:
   walkthrough no formato Morfeu333 (frames 1-a-cada-N-segundos sincronizados com a fala).
 - **Áudios** e **checklists/docs** (cards especiais).
 - **Reuniões do Notion** (Agency OS): ingeridas como cards com o conteúdo + link direto.
+- **Upload manual** (vídeo/áudio fora do Meet): botão "⬆ Enviar gravação" → cai no mesmo
+  pipeline (transcreve + walkthrough), com metadados opcionais auto-preenchidos por IA.
+- **Backup "infinito"** de toda a mídia no Brazika Drive (Teldrive, storage via Telegram).
 - **Views estilo Notion:** Galeria, Tabela (ordenável), Board (agrupável), Calendário, Volume.
-- **Chat de busca geral**, **monitor de saúde**, **login/registro**, **métricas**.
+- **Chat de busca geral**, **monitor de saúde**, **login/registro**, **métricas**, **configurações** (operador/relógio/tema claro-escuro).
 
 Tudo se alimenta sozinho: cron interno no Fly puxa o Drive e o Notion, transcreve, gera
 frames, sobe pro Supabase e se auto-corrige — sem intervenção.
@@ -42,11 +45,13 @@ frames, sobe pro Supabase e se auto-corrige — sem intervenção.
   bot clawdy ─────────►│                                                                               │
                       │   Volume "ml_data" (12GB) montado em /data ── calls.json, transcrições,        │
                       │     walkthroughs(.md), notes, users.json, sessions.json, *.log, health.json    │
-                      └───────────────┬──────────────────────────────────┬────────────────────────────┘
-                                      │ frames + transcrição + md         │ HTTPS
-                                      ▼                                   ▼
-                          Supabase Storage (brazika)            Cloudflare DNS (brazika.online)
-                          bucket público "meeting-library"      meet.brazika.online → Fly (cert LE)
+  Upload manual ───────►│   POST /api/upload (vídeo/áudio fora do Meet) → mesmo pipeline + autofill IA │
+  (Lucas, pelo app)     └──────────┬───────────────────┬───────────────────────┬───────────────────────┘
+                                   │ frames+transcr+md  │ HTTPS                 │ mídia (backup infinito)
+                                   ▼                    ▼                       ▼
+                       Supabase Storage (brazika)   Cloudflare DNS        Brazika Drive (Teldrive)
+                       bucket "meeting-library"     meet.brazika.online   drive.brazika.online
+                       (frames/txt, 50MB/arq)       → Fly (cert LE)       (Telegram, ilimitado)
 ```
 
 ### Componentes e por que cada um
@@ -69,7 +74,9 @@ frames, sobe pro Supabase e se auto-corrige — sem intervenção.
 - `SUPABASE_URL` / `SUPABASE_KEY` — upload de frames/transcrição.
 - `RCLONE_CONF_B64` — base64 do `rclone.conf` (acesso ao Drive); restaurado em `/data/rclone.conf` no boot.
 - `NOTION_TOKEN` — integração do Notion (bot clawdy).
-- `GEMINI_API_KEY` / `GEMINI_MODEL` — IA do chat (Gemini 2.5-flash). ⚠️ `gemini-2.0-flash` foi descontinuado (404).
+- `GEMINI_API_KEY` / `GEMINI_MODEL` — IA do chat + auto-preenchimento de upload (Gemini 2.5-flash). ⚠️ `gemini-2.0-flash` foi descontinuado (404).
+- `TD_TOKEN` — JWT de **1 ano** do Brazika Drive (Teldrive), cunhado da sessão; faz o backup da mídia rodar 100% online, sem `fly ssh`/Postgres em runtime.
+- `TD_BACKFILL` — `1` liga o backfill de backup dos cards já prontos (re-baixa do Drive e empurra pro Teldrive).
 - `AUTH_SALT` / `INVITE_CODE` — auth (defaults embutidos).
 
 ### ⚙️ Independência do Mac (importante)
@@ -81,9 +88,17 @@ desenvolvimento, não operação. Desligue o Mac e a Meeting Library continua pu
 transcrevendo, monitorando e respondendo no chat normalmente.
 
 ### Variáveis (fly.toml)
-`HOST=0.0.0.0` · `PORT=8009` · `NOLOCAL=1` (apaga vídeo após processar) ·
-`POLL_SINCE=2025-01-01` (backfill histórico) · `POLL_MAX_PER_RUN=2` · `POLL_DAILY_MAX=6`
-(cota diária — poucas por dia) · `POLL_INTERVAL=3600` · `HEALTH_INTERVAL=900` · `NOTION_INTERVAL=1800`.
+`HOST=0.0.0.0` · `PORT=8009` · `NOLOCAL=1` (apaga vídeo do Drive após processar; **uploads ficam**
+no volume p/ preview) · `POLL_SINCE=2025-01-01` (backfill histórico) · `POLL_MAX_PER_RUN=4` ·
+`POLL_DAILY_MAX=24` (cota diária) · `POLL_INTERVAL=1800` · `HEALTH_INTERVAL=900` · `NOTION_INTERVAL=1800`.
+
+### ☁️ Backup "infinito" — Brazika Drive (Teldrive)
+Toda mídia processada (calls do Drive, uploads, áudios) é empurrada pro **drive.brazika.online**
+(Teldrive = storage ilimitado via Telegram, projeto `brazika-drive`). Roda dentro do Fly com o
+secret `TD_TOKEN` (sem depender do Mac). `td_push.py` faz upload com chunking (1,8GB/parte, limite
+Telegram 2GB), grava o `fileId` no campo `teldrive` do card + em `data/teldrive.json`, na pasta
+`/meeting-library` do drive. **Calls novas e uploads** sobem inline (passo 6b, antes do NOLOCAL);
+**cards já prontos** sobem via backfill quando `TD_BACKFILL=1`.
 
 ---
 
@@ -95,12 +110,19 @@ transcrevendo, monitorando e respondendo no chat normalmente.
 3. Dreno (cota diária POLL_DAILY_MAX): pega as N mais novas pendentes
 4. process_calls.sh por call:
      rclone backend copyid → baixa o vídeo (transitório, /data/library/videos)
+       (upload manual já está em disco → pula o download)
      ffmpeg → extrai áudio (16kHz mono)
      AssemblyAI → .txt + .speakers.txt + .json (words)
      build_walkthrough.py → 55 frames + WALKTHROUGH.md (formato Morfeu)
      supabase_sync.sh → sobe frames + transcrição + md pro bucket
-     NOLOCAL=1 → apaga o vídeo e os frames locais (preview fica via Drive, frames via Supabase)
+     td_push.py → backup do vídeo no Brazika Drive (Teldrive) [passo 6b, se TD_TOKEN]
+     NOLOCAL=1 → apaga o vídeo do Drive e os frames locais (preview via Drive, frames via Supabase)
+       (uploads NÃO são apagados — não têm Drive p/ repreviewar; já têm backup no Teldrive)
 5. healthcheck.py confere se ficou completo; se não, o dreno reprocessa (auto-cura)
+
+   Upload manual (POST /api/upload) → cria card status "processing" → run_job "process"
+     = process_calls.sh + autofill.py (Gemini preenche os campos deixados em branco).
+   Áudio-only → branch leve: transcreve + backup no drive, sem walkthrough.
 ```
 
 **Auto-cura:** `poll_drive.needs_work()` reprocessa calls transcritas mas sem frames no
@@ -123,9 +145,14 @@ Não há SQL — o "banco" é **arquivo no volume** + **Supabase Storage**. Simp
     "date": "2026-06-10",
     "projeto": "Telemedicina (UBS)",
     "assunto": ["telemedicina", "UBS"],     // tópicos
+    "ferramentas": ["WhatsApp", "Gemini"],   // (upload/autofill; senão auto-derivadas no front)
     "participantes": ["Lucas F. N. Alves", "Mauricio", "Junior"],
     "type": "video",                          // video | audio | checklist | notion
-    "driveVideoId": "1789nxj4…",              // id no Drive (preview/print)
+    "source": "upload",                       // (presente só em uploads manuais)
+    "uploadedBy": "automatrix",               // (upload) operador que enviou
+    "autofilled": true,                       // (upload) campos preenchidos por IA
+    "teldrive": "019ecd7a-…",                 // id do arquivo no Brazika Drive (backup)
+    "driveVideoId": "1789nxj4…",              // id no Drive (preview/print; ausente em uploads)
     "sizeMB": 1584,
     "durationApprox": "138:15",
     "transcript": "library/transcripts/<id>.txt",
@@ -147,7 +174,8 @@ Não há SQL — o "banco" é **arquivo no volume** + **Supabase Storage**. Simp
 | `data/checklist*.json` | checklists (projetos / kinbox / brazika) com grupos+tarefas marcáveis |
 | `data/users.json` | `{user: sha256(user:pw:salt)}` — login |
 | `data/sessions.json` | `{token: user}` — sessões ativas |
-| `data/health.json` | último status do monitor (lido por /api/health) |
+| `data/health.json` | último status do monitor (lido por /api/health, inclui bloco `drive`) |
+| `data/teldrive.json` | `{arquivo: {fileId, size, call}}` — mapa do backup no Brazika Drive |
 | `data/.backfill_day` | `{date, count}` — cota diária do backfill |
 | `library/transcripts/<id>.txt / .speakers.txt / .json` | transcrição (texto / com speaker / words) |
 | `library/walkthroughs/<id>/WALKTHROUGH.md` | walkthrough Morfeu (frames + falas sincronizadas) |
@@ -174,6 +202,7 @@ título+projeto+tópicos) · tarefas (progresso de checklist) · tipo · status 
 | `/api/meta?id=` | POST | salva link Notion/GitHub do card |
 | `/api/check?item=&cl=` | POST | marca tarefa de checklist |
 | `/api/ingest` | POST | injeta um card (usado pela ingestão do Notion) |
+| `/api/upload?filename&tipo&title&pessoa&projeto&date&ferramentas` | POST | **upload manual**: streama o body cru em disco (chunks 1MB), cria card "processing", dispara pipeline+autofill |
 | `/api/chat` | POST | **assistente IA**: manda o catálogo + pergunta pro Gemini, devolve `{answer, ids}` |
 
 ### Frontend — `index.html` (single-file, sem build, design Studio OS)
@@ -187,13 +216,20 @@ pills de stage, scrim+blur). Réplica fiel do `youtube-os-studioos`. Componentes
   manda o catálogo pro **Gemini 2.5-flash** (server-side, chave nunca exposta) → resposta + os
   cards relevantes com links. Cai pra busca local (stopwords + "hoje/ontem/recentes") se sem IA.
 - **Filtro de período (De/Até)** — vale inclusive no Calendário.
-- **Botões Métricas / Status** (popups) + **Sair**.
+- **⬆ Enviar gravação** (topbar, primary): modal drag-drop (vídeo/áudio) + campos opcionais +
+  barra de progresso (XHR). Streama pro `/api/upload`; IA preenche o que ficou em branco.
+- **⚙ Configurações** (entre Atualizar e Sair): operador (`/api/me`), data/hora ao vivo,
+  e **toggle de tema ☀ Branco / 🌙 Preto** (persiste em localStorage; dark = override de
+  variáveis OKLCH em `html[data-theme="dark"]`).
+- **Botões Métricas / Status** (popups) + **Sair**. O Status mostra também o **backup no
+  Brazika Drive** (X/Y, %, pendentes, link).
 
 ### Scripts (`scripts/`)
-`server.py` · `process_calls.sh` (pipeline) · `build_walkthrough.py` (frames+md) ·
-`supabase_sync.sh` · `poll_drive.py` (catálogo+dreno Drive) · `notion_poll.py` (ingestão Notion) ·
-`healthcheck.py` (monitor) · `auto_summary.py` (resumo via Ollama, opcional) · `compress_pass.sh` ·
-`walkthrough_pass.sh` · `download_one.sh`.
+`server.py` · `process_calls.sh` (pipeline, ciente de áudio) · `build_walkthrough.py` (frames+md) ·
+`supabase_sync.sh` · `poll_drive.py` (catálogo+dreno Drive+backfill backup) · `notion_poll.py` (ingestão Notion) ·
+`healthcheck.py` (monitor + métrica do drive) · `td_push.py` (backup 1 arquivo no Teldrive) ·
+`backup_media_teldrive.py` (backup em massa, avulso) · `autofill.py` (IA preenche metadados do upload) ·
+`auto_summary.py` (resumo via Ollama, opcional) · `compress_pass.sh` · `walkthrough_pass.sh` · `download_one.sh`.
 
 ### Deploy (`deploy/fly/`)
 `Dockerfile` (python3.12 + ffmpeg + rclone + jq) · `fly.toml` · `entrypoint.sh` (loops) ·
@@ -231,6 +267,9 @@ pills de stage, scrim+blur). Réplica fiel do `youtube-os-studioos`. Componentes
 10. **Notion 100% automático** — `notion_poll.py` ingere reuniões antigas e futuras sozinho.
 11. **Chat assistente com IA (Gemini 2.5-flash)** — busca em linguagem natural com links.
 12. **Este repositório** — código + docs, privado, compartilhado com Morfeu333.
+13. **Upload manual + backup infinito + configurações** — Lucas envia gravações fora do Meet
+    (vídeo/áudio) com auto-preenchimento por IA; toda mídia faz backup no Brazika Drive
+    (Teldrive, ilimitado); métrica do drive no Status; botão Configurações (operador/relógio/tema).
 
 ---
 
@@ -247,11 +286,20 @@ flyctl ssh console --app automatrix-meeting-library -C "tail -20 /data/notion_po
 flyctl ssh console --app automatrix-meeting-library -C "cat /data/health.json"
 
 # Tunables (sem código): flyctl secrets / fly.toml [env]
-POLL_DAILY_MAX   # quantas calls do Drive por dia (default 6)
+POLL_DAILY_MAX   # quantas calls do Drive por dia (atual 24)
+POLL_INTERVAL    # de quanto em quanto tempo o poll roda (atual 1800s)
+TD_BACKFILL      # 1 = backfill de backup dos cards já prontos no Brazika Drive
 NOTION_INTERVAL  # frequência da ingestão do Notion (default 1800s)
 ```
+
+**Backup no Brazika Drive (Teldrive):** o `TD_TOKEN` é um JWT de 1 ano cunhado da sessão do
+Teldrive (helper lê `~/Desktop/brazika-drive/.secrets.local` + sessão no Postgres). Para renovar
+quando expirar: recunhe e `flyctl secrets set TD_TOKEN=… --app automatrix-meeting-library`.
+Upload precisa de bots no Teldrive (já configurados). Limite Telegram: 2GB/parte (chunking
+automático). `backup_media_teldrive.py` é um seed em massa avulso (não roda em runtime).
 
 **Pegadinhas conhecidas** (ver memória do projeto): nomes do Meet usam solidus fullwidth `／`
 na data; `read` com `IFS=$'\t'` colapsa tabs vazios; `[build].dockerfile` no fly.toml duplica
 caminho (usar flag `--dockerfile`); Supabase free 50MB/arquivo (vídeo não cabe); sem whisper
-no container (AssemblyAI é obrigatório).
+no container (AssemblyAI é obrigatório); Python 3.14 do Homebrew sem certs → `ssl.CERT_NONE`
+nos scripts que falam com o drive.

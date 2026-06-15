@@ -29,3 +29,5 @@ data/notion_poll.log
 data/.backfill_day
 data/.notion.lock
 data/brazika_call/
+
+__pycache__/

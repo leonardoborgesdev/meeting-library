@@ -34,6 +34,10 @@ def run_job(cid, action):
         if action == "transcribe":
             env["ASSEMBLYAI_API_KEY"] = AAI
             subprocess.run(["bash", "scripts/process_calls.sh", cid], env=env)
+        elif action == "process":   # upload manual: pipeline + auto-preenche por IA
+            env["ASSEMBLYAI_API_KEY"] = AAI
+            subprocess.run(["bash", "scripts/process_calls.sh", cid], env=env)
+            subprocess.run(["python3", "scripts/autofill.py", cid], env=env)
         elif action == "download":
             subprocess.run(["bash", "scripts/download_one.sh", cid], env=env)
     finally:
@@ -164,6 +168,48 @@ class H(http.server.SimpleHTTPRequestHandler):
                 if k in body: meta[cid][k] = body[k]
             json.dump(meta, open("data/meta.json", "w"), ensure_ascii=False, indent=2)
             return self._json({"ok": True, "meta": meta[cid]})
+        if u.path == "/api/upload":
+            import re as _re, time as _t
+            filename = (q.get("filename") or ["upload"])[0]
+            tipo = (q.get("tipo") or ["video"])[0]
+            tipo = "audio" if tipo == "audio" else "video"
+            title = (q.get("title") or [""])[0].strip()
+            base = title or os.path.splitext(filename)[0]
+            sl = _re.sub(r"[^a-z0-9]+", "-", base.lower()).strip("-")[:48] or "gravacao"
+            date = (q.get("date") or [_t.strftime("%Y-%m-%d")])[0]
+            cid = f"up_{date}_{sl}_{secrets.token_hex(3)}"
+            ext = (os.path.splitext(filename)[1].lower().lstrip(".") or ("mp3" if tipo == "audio" else "mp4"))
+            if tipo == "audio":
+                os.makedirs("library/audio", exist_ok=True); dest = f"library/audio/{cid}.{ext}"
+            else:
+                os.makedirs("library/videos", exist_ok=True); dest = f"library/videos/{cid}_raw.mp4"
+            n = int(self.headers.get("Content-Length", 0) or 0)
+            if n <= 0: return self._json({"ok": False, "error": "arquivo vazio"}, 400)
+            tmp = dest + ".part"; remaining = n
+            try:
+                with open(tmp, "wb") as fh:
+                    while remaining > 0:
+                        chunk = self.rfile.read(min(1 << 20, remaining))
+                        if not chunk: break
+                        fh.write(chunk); remaining -= len(chunk)
+                os.replace(tmp, dest)
+            except Exception as e:
+                try: os.remove(tmp)
+                except Exception: pass
+                return self._json({"ok": False, "error": f"upload falhou: {str(e)[:120]}"}, 500)
+            ferr = [t.strip() for t in (q.get("ferramentas") or [""])[0].split(",") if t.strip()]
+            card = {"id": cid, "pessoa": (q.get("pessoa") or [""])[0].strip(), "title": base,
+                    "date": date, "projeto": (q.get("projeto") or [""])[0].strip(),
+                    "assunto": [], "ferramentas": ferr, "participantes": [], "type": tipo,
+                    "sizeMB": round(n / 1048576), "uploadedBy": self._user(), "source": "upload",
+                    "status": "processing", "transcript": None, "video": None}
+            data = json.load(open("data/calls.json"))
+            data["calls"] = [c for c in data["calls"] if c.get("id") != cid] + [card]
+            json.dump(data, open("data/calls.json", "w"), ensure_ascii=False, indent=2)
+            if not AAI:
+                return self._json({"ok": True, "id": cid, "warn": "salvo, mas sem ASSEMBLYAI_API_KEY p/ transcrever"})
+            threading.Thread(target=run_job, args=(cid, "process"), daemon=True).start()
+            return self._json({"ok": True, "id": cid})
         if u.path in ("/api/transcribe", "/api/download") and cid:
             if cid in RUNNING:
                 return self._json({"ok": False, "msg": "já em andamento"})

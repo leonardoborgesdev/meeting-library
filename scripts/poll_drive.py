@@ -93,11 +93,18 @@ def main():
         log(f"+ catalogadas {len(added)} gravação(ões)")
 
     # fila = cards de vídeo que precisam de trabalho: sem transcrição OU transcritos mas
-    # sem frames no Supabase (interrompidos) → process_calls.sh re-baixa e completa (auto-cura)
+    # sem frames no Supabase (interrompidos) → process_calls.sh re-baixa e completa (auto-cura).
+    # Também: se TD_TOKEN, cards prontos ainda sem backup no Brazika Drive entram na fila
+    # (re-baixa do Drive e empurra pro storage infinito).
+    # backfill de backup no drive: só quando TD_BACKFILL=1 (evita re-baixar históricos
+    # enquanto um seed externo sobe a mídia; calls novas já fazem backup inline no passo 6b)
+    td_backfill = bool(os.environ.get("TD_TOKEN")) and os.environ.get("TD_BACKFILL") == "1"
     def needs_work(c):
         if c.get("type","video") != "video" or not c.get("driveVideoId"): return False
         if not c.get("transcript"): return True
-        return not bool(sb.get(c["id"], {}).get("frames"))
+        if not bool(sb.get(c["id"], {}).get("frames")): return True
+        if td_backfill and not c.get("teldrive"): return True   # falta backup no drive
+        return False
     pending = [c for c in data["calls"] if needs_work(c)]
     pending.sort(key=lambda c: c.get("date",""), reverse=True)   # mais novas primeiro (call do dia tem prioridade)
 

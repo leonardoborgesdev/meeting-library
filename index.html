@@ -41,6 +41,30 @@
   --shadow-2:0 4px 8px oklch(20% 0.030 250 / 0.06),0 2px 4px oklch(20% 0.030 250 / 0.04),0 0 0 1px oklch(0% 0 0 / 0.02);
   --shadow-3:0 12px 32px oklch(20% 0.030 250 / 0.10),0 4px 12px oklch(20% 0.030 250 / 0.06),0 0 0 1px oklch(0% 0 0 / 0.03);
 }
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:oklch(16% 0.012 250);
+  --surface-1:oklch(21% 0.014 250);
+  --surface-2:oklch(25% 0.016 250);
+  --surface-3:oklch(29% 0.018 250);
+  --border:oklch(100% 0 0 / 0.10);
+  --border-strong:oklch(100% 0 0 / 0.20);
+  --text:oklch(96% 0.006 250);
+  --text-muted:oklch(72% 0.014 250);
+  --text-dim:oklch(58% 0.012 250);
+  --accent:oklch(70% 0.150 258);
+  --accent-fg:oklch(16% 0.020 258);
+  --accent-soft:oklch(34% 0.060 258);
+  --gold:oklch(80% 0.140 88);
+  --gold-fg:oklch(20% 0.060 88);
+  --st-idea-bg:oklch(28% 0.010 250);   --st-script-bg:oklch(30% 0.050 290);
+  --st-edit-bg:oklch(30% 0.050 230);   --st-review-bg:oklch(32% 0.060 25);
+  --st-sched-bg:oklch(32% 0.060 88);   --st-posted-bg:oklch(30% 0.050 150);
+  --shadow-1:0 1px 2px oklch(0% 0 0 / 0.4);
+  --shadow-2:0 4px 10px oklch(0% 0 0 / 0.45),0 0 0 1px oklch(100% 0 0 / 0.04);
+  --shadow-3:0 14px 40px oklch(0% 0 0 / 0.55),0 0 0 1px oklch(100% 0 0 / 0.05);
+}
+html[data-theme="dark"] .topbar{background:oklch(21% 0.014 250 / 0.84)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Inter',ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   font-size:14.5px;line-height:1.45;font-weight:400;font-feature-settings:'cv11','ss01';-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
@@ -356,7 +380,9 @@ input::placeholder{color:var(--text-dim)}
       <span class="btn sm disabled" id="count-badge">…</span>
       <button class="btn" onclick="openMetrics()" title="Métricas do acervo">📊 Métricas</button>
       <button class="btn" id="health-btn" onclick="openHealth()" title="Ver status do sistema"><span class="hdot" id="health-dot"></span> Status</button>
+      <button class="btn primary" onclick="openUpload()" title="Enviar uma nova gravação (vídeo ou áudio)">⬆ Enviar gravação</button>
       <button class="btn" onclick="refresh()" title="Recarregar status">↻ Atualizar</button>
+      <button class="btn" onclick="openSettings()" title="Configurações">⚙ Configurações</button>
       <button class="btn sm" id="logout-btn" onclick="logout()" title="Sair">⎋ Sair</button>
     </div>
   </div>
@@ -474,6 +500,60 @@ input::placeholder{color:var(--text-dim)}
 </div>
 <div class="hwrap" id="metricsModal" onclick="if(event.target===this)closeMetrics()">
   <div class="hpanel" id="metrics-body"></div>
+</div>
+<style>
+.seg-toggle{display:inline-flex;border:1px solid var(--border-strong);border-radius:9999px;overflow:hidden}
+.seg-b{padding:5px 12px;font-size:12px;background:var(--surface-1);color:var(--text-muted);border:none;cursor:pointer}
+.seg-b.on{background:var(--accent);color:var(--accent-fg);font-weight:600}
+#upload-body{max-width:520px}
+.up-drop{border:1.5px dashed var(--border-strong,#c8cdd6);border-radius:12px;padding:22px 16px;text-align:center;cursor:pointer;margin:14px 0;background:var(--surface-2,#f6f7f9);transition:.15s}
+.up-drop:hover,.up-drop.drag{border-color:#7c5cff;background:oklch(96% 0.03 290 / .5)}
+.up-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0}
+.up-grid label{display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--muted,#667);font-weight:500}
+.up-grid label.up-wide{grid-column:1 / -1}
+.up-grid input{padding:7px 10px;border:1px solid var(--border,#dde1e7);border-radius:8px;font-size:13px;color:var(--ink,#111)}
+.up-grid input:focus{outline:none;border-color:#7c5cff}
+.up-prog{align-items:center;gap:8px;margin:8px 0}
+.up-prog-bar{flex:1;height:8px;background:var(--surface-2,#eee);border-radius:9999px;overflow:hidden}
+.up-prog-bar i{display:block;height:100%;width:0;background:#7c5cff;transition:width .2s}
+.up-prog span{font-size:11.5px;color:var(--muted,#667);min-width:64px;text-align:right}
+</style>
+<div class="hwrap" id="settingsModal" onclick="if(event.target===this)closeSettings()">
+  <div class="hpanel" id="settings-body">
+    <h3>⚙ Configurações</h3>
+    <div class="hrow"><span class="k">Operador</span><b id="set-user">—</b></div>
+    <div class="hrow"><span class="k">Data e hora</span><b id="set-clock">—</b></div>
+    <div class="hrow" style="align-items:center"><span class="k">Tema do site</span>
+      <span class="seg-toggle">
+        <button id="th-light" class="seg-b" onclick="setTheme('light')">☀ Branco</button>
+        <button id="th-dark"  class="seg-b" onclick="setTheme('dark')">🌙 Preto</button>
+      </span>
+    </div>
+    <button class="btn hclose" onclick="closeSettings()">Fechar</button>
+  </div>
+</div>
+<div class="hwrap" id="uploadModal" onclick="if(event.target===this)closeUpload()">
+  <div class="hpanel" id="upload-body">
+    <h3>⬆ Enviar gravação</h3>
+    <div class="hsub">Vídeo ou áudio que não passou pelo Meet. Transcreve, gera walkthrough e faz backup no Brazika Drive — tudo automático. Os campos são <b>opcionais</b>: deixe em branco e a IA preenche pela transcrição.</div>
+    <div id="up-drop" class="up-drop" onclick="document.getElementById('up-file').click()">
+      <input type="file" id="up-file" accept="video/*,audio/*" style="display:none" onchange="upPick(this.files[0])">
+      <div id="up-drop-txt">📎 Arraste o arquivo aqui ou <b>clique para escolher</b><br><span class="muted" style="font-size:11.5px">vídeo (.mp4/.mov/.webm) ou áudio (.mp3/.m4a/.wav)</span></div>
+    </div>
+    <div class="up-grid">
+      <label>Título <input id="up-title" placeholder="ex.: Call Mauricio — Vistoria"></label>
+      <label>Pessoa <input id="up-pessoa" placeholder="ex.: Lucas / Leonardo"></label>
+      <label>Projeto <input id="up-projeto" placeholder="ex.: Vistoria (Confere)"></label>
+      <label>Data <input id="up-date" type="date"></label>
+      <label class="up-wide">Ferramentas (vírgula) <input id="up-ferramentas" placeholder="ex.: WhatsApp, Gemini, Supabase"></label>
+    </div>
+    <div class="up-prog" id="up-prog" style="display:none"><div class="up-prog-bar"><i id="up-prog-i"></i></div><span id="up-prog-txt"></span></div>
+    <div id="up-msg" class="muted" style="font-size:12px;min-height:16px"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn primary" id="up-send" onclick="upSend()" disabled>Enviar e processar</button>
+      <button class="btn" onclick="closeUpload()">Cancelar</button>
+    </div>
+  </div>
 </div>
 
 <button id="chat-fab" onclick="toggleChat()" title="Buscar tudo">💬 Assistente</button>
@@ -706,11 +786,72 @@ function renderHealth(){
     <div class="hrow"><span class="k">Erros AssemblyAI</span><b>${h.aai_errors??0}</b></div>
     <div class="hrow"><span class="k">Última atividade</span><b>${h.mins_idle!=null?h.mins_idle+' min atrás':'—'}</b></div>
     <div class="hrow"><span class="k">Disco do volume</span><b>${h.disk_pct!=null?h.disk_pct+'%':'—'}</b></div>
+    ${h.drive?`<div class="hrow"><span class="k">☁️ Backup no Brazika Drive</span><b>${h.drive.enabled?`${h.drive.backed_up} / ${h.drive.total} (${h.drive.pct}%)`:'desligado'}</b></div>
+    ${h.drive.enabled&&h.drive.pct!=null?`<div class="hbar2"><i style="width:${h.drive.pct}%;background:#7c5cff"></i></div>`:''}
+    ${h.drive.enabled?`<div class="hrow"><span class="k">⤷ Pendentes de backup</span><b>${h.drive.pending}</b> <a href="${h.drive.url}" target="_blank" style="margin-left:8px;font-size:11px">abrir drive ↗</a></div>`:''}`:''}
     ${(h.problems&&h.problems.length)?`<div class="hprob">⚠️ ${h.problems.join('<br>⚠️ ')}</div>`:'<div class="hok">✅ Nenhum problema detectado.</div>'}
     <button class="btn hclose" onclick="closeHealth()">Fechar</button>`;
 }
 function openHealth(){renderHealth();$('healthModal').classList.add('active');}
 function closeHealth(){$('healthModal').classList.remove('active');}
+
+// ── Upload de gravação ──
+let UPFILE=null;
+function openUpload(){$('uploadModal').classList.add('active'); if(!$('up-date').value)$('up-date').value=new Date().toISOString().slice(0,10);}
+function closeUpload(){$('uploadModal').classList.remove('active');}
+function upPick(f){
+  UPFILE=f||null;
+  if(!f){$('up-send').disabled=true;return;}
+  const mb=(f.size/1048576).toFixed(0);
+  const isAud=/^audio\//.test(f.type)||/\.(mp3|m4a|wav|ogg|aac|opus)$/i.test(f.name);
+  $('up-drop-txt').innerHTML=`${isAud?'🎙':'🎬'} <b>${f.name}</b> · ${mb} MB<br><span class="muted" style="font-size:11.5px">clique p/ trocar</span>`;
+  if(!$('up-title').value)$('up-title').value=f.name.replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ');
+  $('up-send').disabled=false;
+}
+const _ud=$('up-drop');
+if(_ud){['dragover','dragenter'].forEach(e=>_ud.addEventListener(e,ev=>{ev.preventDefault();_ud.classList.add('drag');}));
+['dragleave','drop'].forEach(e=>_ud.addEventListener(e,ev=>{ev.preventDefault();_ud.classList.remove('drag');}));
+_ud.addEventListener('drop',ev=>{const f=ev.dataTransfer.files[0];if(f)upPick(f);});}
+function upSend(){
+  if(!UPFILE)return;
+  const isAud=/^audio\//.test(UPFILE.type)||/\.(mp3|m4a|wav|ogg|aac|opus)$/i.test(UPFILE.name);
+  const qs=new URLSearchParams({filename:UPFILE.name,tipo:isAud?'audio':'video',
+    title:$('up-title').value||'',pessoa:$('up-pessoa').value||'',projeto:$('up-projeto').value||'',
+    date:$('up-date').value||'',ferramentas:$('up-ferramentas').value||''}).toString();
+  const xhr=new XMLHttpRequest();
+  xhr.open('POST','/api/upload?'+qs);
+  $('up-prog').style.display='flex';$('up-send').disabled=true;$('up-msg').textContent='';
+  xhr.upload.onprogress=e=>{if(e.lengthComputable){const p=Math.round(e.loaded/e.total*100);$('up-prog-i').style.width=p+'%';$('up-prog-txt').textContent=p+'%';}};
+  xhr.onload=()=>{let d={};try{d=JSON.parse(xhr.responseText);}catch(_){}
+    if(d.ok){$('up-prog-txt').textContent='enviado ✓';
+      $('up-msg').innerHTML='✅ Enviado! Transcrevendo + walkthrough + backup no drive… acompanhe pelo card (status “processing”).'+(d.warn?'<br>⚠️ '+d.warn:'');
+      setTimeout(()=>{closeUpload();$('up-prog').style.display='none';$('up-prog-i').style.width='0';UPFILE=null;$('up-file').value='';$('up-title').value='';$('up-pessoa').value='';$('up-projeto').value='';$('up-ferramentas').value='';$('up-drop-txt').innerHTML='📎 Arraste o arquivo aqui ou <b>clique para escolher</b>';refresh();},1800);
+    }else{$('up-msg').textContent='❌ '+(d.error||'falha no upload');$('up-send').disabled=false;}};
+  xhr.onerror=()=>{$('up-msg').textContent='❌ erro de rede no upload';$('up-send').disabled=false;};
+  xhr.send(UPFILE);
+}
+
+// ── Configurações: operador, relógio, tema ──
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  try{localStorage.setItem('ml-theme',t);}catch(e){}
+  const d=$('th-dark'),l=$('th-light');
+  if(d&&l){d.classList.toggle('on',t==='dark');l.classList.toggle('on',t!=='dark');}
+}
+(function(){try{setTheme(localStorage.getItem('ml-theme')||'light');}catch(e){setTheme('light');}})();
+let CLOCK_T=null;
+function tickClock(){
+  const n=new Date();
+  const el=$('set-clock'); if(el)el.textContent=n.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})+' · '+n.toLocaleTimeString('pt-BR');
+}
+async function openSettings(){
+  setTheme(document.documentElement.getAttribute('data-theme')||'light');
+  let u='—';try{u=(await (await fetch('/api/me')).json()).user||'—';}catch(e){}
+  $('set-user').textContent=u;
+  tickClock(); CLOCK_T=setInterval(tickClock,1000);
+  $('settingsModal').classList.add('active');
+}
+function closeSettings(){$('settingsModal').classList.remove('active');if(CLOCK_T){clearInterval(CLOCK_T);CLOCK_T=null;}}
 function renderMetrics(){
   const tot=CALLS.length, gb=(CALLS.reduce((a,c)=>a+(c.sizeMB||0),0)/1024).toFixed(1);
   const vid=CALLS.filter(c=>(c.type||'video')==='video');
