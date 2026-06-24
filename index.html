@@ -378,12 +378,16 @@ input::placeholder{color:var(--text-dim)}
     </div>
     <div class="top-actions">
       <span class="btn sm disabled" id="count-badge">…</span>
-      <button class="btn" onclick="openMetrics()" title="Métricas do acervo">📊 Métricas</button>
-      <button class="btn" id="health-btn" onclick="openHealth()" title="Ver status do sistema"><span class="hdot" id="health-dot"></span> Status</button>
+      <span class="top-sep"></span>
+      <button class="btn gold" onclick="openPresentations()" title="Gerar vídeos de apresentação das aplicações">🎬 Apresentações</button>
       <button class="btn primary" onclick="openUpload()" title="Enviar uma nova gravação (vídeo ou áudio)">⬆ Enviar gravação</button>
-      <button class="btn" onclick="refresh()" title="Recarregar status">↻ Atualizar</button>
-      <button class="btn" onclick="openSettings()" title="Configurações">⚙ Configurações</button>
-      <button class="btn sm" id="logout-btn" onclick="logout()" title="Sair">⎋ Sair</button>
+      <button class="btn" onclick="window.open('http://187.77.24.132:8060/?k=brz-vexa-2026','vexa','width=900,height=800')" title="Controle do bot Vexa ao vivo (entra em calls, transcreve, responde por voz)">🤖 Vexa</button>
+      <span class="top-sep"></span>
+      <button class="btn sm" onclick="refresh()" title="Recarregar status">↻</button>
+      <button class="btn sm" onclick="openMetrics()" title="Métricas do acervo">📊</button>
+      <button class="btn sm" id="health-btn" onclick="openHealth()" title="Ver status do sistema"><span class="hdot" id="health-dot"></span> Status</button>
+      <button class="btn sm" onclick="openSettings()" title="Configurações">⚙</button>
+      <button class="btn sm" id="logout-btn" onclick="logout()" title="Sair">⎋</button>
     </div>
   </div>
 </header>
@@ -517,6 +521,36 @@ input::placeholder{color:var(--text-dim)}
 .up-prog-bar{flex:1;height:8px;background:var(--surface-2,#eee);border-radius:9999px;overflow:hidden}
 .up-prog-bar i{display:block;height:100%;width:0;background:#7c5cff;transition:width .2s}
 .up-prog span{font-size:11.5px;color:var(--muted,#667);min-width:64px;text-align:right}
+/* topbar separador */
+.top-sep{width:1px;height:20px;background:var(--border-strong);margin:0 2px;display:inline-block}
+/* Apresentações — galeria */
+.pres-panel{max-width:1080px;width:94vw;max-height:86vh;display:flex;flex-direction:column}
+.pres-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.pres-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;overflow-y:auto;padding:2px}
+.pcard{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--surface-1);box-shadow:0 1px 2px oklch(20% 0.03 250/.05);transition:.15s;cursor:pointer}
+.pcard:hover{border-color:var(--border-strong);box-shadow:0 8px 24px oklch(20% 0.03 250/.10);transform:translateY(-2px)}
+.pcard .thumb{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,var(--accent),var(--gold));display:grid;place-items:center;overflow:hidden}
+.pcard .thumb.v{aspect-ratio:9/16;max-height:240px;margin:0 auto}
+.pcard .thumb img{width:100%;height:100%;object-fit:cover}
+.pcard .play{position:absolute;width:46px;height:46px;border-radius:9999px;background:oklch(58% 0.19 258/.92);display:grid;place-items:center;color:#fff;font-size:18px;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.pcard .pbody{padding:11px 13px}
+.pcard .pt{font-size:13.5px;font-weight:700;color:var(--text);line-height:1.2}
+.pcard .pm{font-size:10.5px;color:var(--text-dim);margin-top:3px;word-break:break-all}
+.pcard .pbadges{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.pbadge{font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:9999px;background:var(--surface-3);color:var(--text-muted)}
+.pbadge.st-done{background:oklch(96% 0.04 150);color:oklch(45% 0.13 150)}
+.pbadge.st-queued{background:oklch(96% 0.05 88);color:oklch(45% 0.14 88)}
+.pbadge.st-generating{background:oklch(96% 0.04 230);color:oklch(45% 0.14 230)}
+.pbadge.st-error{background:oklch(96% 0.05 25);color:oklch(50% 0.18 25)}
+.pres-empty{grid-column:1/-1;text-align:center;color:var(--text-dim);padding:40px;font-size:13px}
+/* Criar apresentação */
+.pc-seg-row{display:flex;align-items:center;justify-content:space-between;margin:14px 0 10px}
+.pc-lab{font-size:11px;font-weight:600;color:var(--text-muted)}
+.pc-input{width:100%;box-sizing:border-box;padding:9px 12px;border:1px solid var(--border);border-radius:9px;font-size:13px;color:var(--text);background:var(--surface-1)}
+.pc-input:focus{outline:none;border-color:var(--accent)}
+.pc-select{padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:12.5px;color:var(--text);background:var(--surface-1)}
+.pc-opts{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;align-items:center}
+.pc-opt{display:flex;flex-direction:column;gap:5px}
 </style>
 <div class="hwrap" id="settingsModal" onclick="if(event.target===this)closeSettings()">
   <div class="hpanel" id="settings-body">
@@ -552,6 +586,69 @@ input::placeholder{color:var(--text-dim)}
     <div style="display:flex;gap:8px;margin-top:12px">
       <button class="btn primary" id="up-send" onclick="upSend()" disabled>Enviar e processar</button>
       <button class="btn" onclick="closeUpload()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="hwrap" id="presModal" onclick="if(event.target===this)closePresentations()">
+  <div class="hpanel pres-panel">
+    <div class="pres-head">
+      <div>
+        <h3 style="margin:0">🎬 Apresentações</h3>
+        <div class="hsub" style="margin:3px 0 0">Vídeos explicativos das aplicações — gerados a partir do repositório (estilo Meeting Library: UI recriada, narrado, com a stack).</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0">
+        <button class="btn primary" onclick="openPresCreate()">＋ Gerar novo</button>
+        <button class="btn sm" onclick="closePresentations()">✕</button>
+      </div>
+    </div>
+    <div id="pres-grid" class="pres-grid"></div>
+  </div>
+</div>
+<div class="hwrap" id="presCreateModal" onclick="if(event.target===this)closePresCreate()">
+  <div class="hpanel" id="prescreate-body" style="max-width:560px">
+    <h3>🎬 Nova apresentação</h3>
+    <div class="hsub">Cole o link do repositório no GitHub (ou envie um <b>.zip</b>). Um agente lê o código e gera um vídeo explicativo no padrão Meeting Library — recriando a UI, narrado, com a stack.</div>
+    <div class="pc-seg-row">
+      <span class="pc-lab">Fonte do código</span>
+      <span class="seg-toggle">
+        <button class="seg-b on" id="pc-src-gh" onclick="presSrc('github')">🐙 Link GitHub</button>
+        <button class="seg-b" id="pc-src-zip" onclick="presSrc('zip')">📦 Arquivo .zip</button>
+      </span>
+    </div>
+    <div id="pc-gh-wrap"><input id="pc-repo" class="pc-input" placeholder="https://github.com/usuario/repositorio" oninput="presAutoTitle()"></div>
+    <div id="pc-zip-wrap" style="display:none">
+      <div id="pc-drop" class="up-drop" onclick="document.getElementById('pc-file').click()">
+        <input type="file" id="pc-file" accept=".zip,application/zip" style="display:none" onchange="presPick(this.files[0])">
+        <div id="pc-drop-txt">📦 Arraste o <b>.zip</b> do repositório ou <b>clique para escolher</b></div>
+      </div>
+    </div>
+    <div class="up-grid" style="margin-top:12px">
+      <label>Título <input id="pc-title" placeholder="ex.: Meeting Library"></label>
+      <label>Tipo do vídeo
+        <select id="pc-tipo" class="pc-select">
+          <option value="aplicacao">Aplicação</option>
+          <option value="projeto">Projeto</option>
+          <option value="apresentacao">Apresentação</option>
+        </select>
+      </label>
+    </div>
+    <label style="display:block;margin-top:12px;font-size:11px;font-weight:600;color:var(--text-muted)">Instruções (opcional) — detalhe o que você quer no vídeo
+      <textarea id="pc-extra" class="pc-input" rows="3" style="margin-top:5px;resize:vertical;font-family:inherit;line-height:1.4" placeholder="ex.: foque no fluxo de pagamento e na segurança; tom mais comercial; destaque a integração com WhatsApp; cite os números de conversão…"></textarea>
+    </label>
+    <div class="pc-opts">
+      <div class="pc-opt"><span class="pc-lab">Formato</span>
+        <span class="seg-toggle"><button class="seg-b on" id="pc-fmt-h" onclick="presFmt('16:9')">▭ 16:9</button><button class="seg-b" id="pc-fmt-v" onclick="presFmt('9:16')">▯ 9:16</button></span></div>
+      <div class="pc-opt"><span class="pc-lab">Idioma</span>
+        <span class="seg-toggle"><button class="seg-b on" id="pc-lang-pt" onclick="presLang('pt')">🇧🇷 PT</button><button class="seg-b" id="pc-lang-en" onclick="presLang('en')">🇺🇸 EN</button></span></div>
+      <div class="pc-opt"><span class="pc-lab">Voz da narração</span>
+        <select id="pc-voice" class="pc-select"></select></div>
+    </div>
+    <div class="up-prog" id="pc-prog" style="display:none"><div class="up-prog-bar"><i id="pc-prog-i"></i></div><span id="pc-prog-txt"></span></div>
+    <div id="pc-msg" class="muted" style="font-size:12px;min-height:16px;margin-top:8px"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn primary" id="pc-send" onclick="presSubmit()">Gerar apresentação</button>
+      <button class="btn" onclick="closePresCreate()">Cancelar</button>
     </div>
   </div>
 </div>
@@ -831,6 +928,94 @@ function upSend(){
   xhr.send(UPFILE);
 }
 
+// ── Apresentações (gerador de vídeos das aplicações) ──
+let PRES=[], PRESFILE=null, PC={src:'github',format:'16:9',lang:'pt'};
+const VOICES={
+  pt:[['Eric (BR · recomendada)','Eric'],['Sarah','Sarah'],['Daniel','Daniel'],['Antônio','Antonio']],
+  en:[['Daniel','Daniel'],['Sarah','Sarah'],['Eric','Eric'],['George','George']]
+};
+function fmtDateTime(s){try{const d=new Date(s);return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}catch(e){return s||'';}}
+function presBadgeSt(s){const m={done:'✓ pronto',queued:'⏳ na fila',generating:'⚙ gerando…',error:'⚠ erro'};return `<span class="pbadge st-${s}">${m[s]||s}</span>`;}
+function presCardHTML(p){
+  const v=p.format==='9:16';
+  const thumb=p.thumb?`<img src="${p.thumb}" alt="">`:`<span style="font-size:30px">🎬</span>`;
+  const playable=p.status==='done'&&p.video;
+  return `<div class="pcard" onclick='presOpen(${JSON.stringify(p.id)})'>
+    <div class="thumb${v?' v':''}">${thumb}${playable?'<div class="play">▶</div>':''}</div>
+    <div class="pbody">
+      <div class="pt">${p.title||'—'}</div>
+      <div class="pm">${p.repo||(p.source==='zip'?'📦 .zip enviado':'—')}</div>
+      <div class="pbadges">
+        ${presBadgeSt(p.status)}
+        <span class="pbadge">${p.format||'16:9'}</span>
+        <span class="pbadge">${(p.lang||'pt').toUpperCase()}</span>
+        <span class="pbadge">${{aplicacao:'Aplicação',projeto:'Projeto',apresentacao:'Apresentação'}[p.tipo]||p.tipo||''}</span>
+        ${p.durationApprox?`<span class="pbadge">${p.durationApprox}</span>`:''}
+      </div>
+      <div class="pm" style="margin-top:7px">🎙 ${p.voice||'Eric'} · ${fmtDateTime(p.createdAt)}${p.createdBy?(' · '+p.createdBy):''}</div>
+    </div></div>`;
+}
+function renderPres(){
+  const g=$('pres-grid');
+  if(!PRES.length){g.innerHTML='<div class="pres-empty">Nenhuma apresentação ainda. Clique em <b>＋ Gerar novo</b> e cole o link de um repositório.</div>';return;}
+  g.innerHTML=PRES.slice().sort((a,b)=>(a.createdAt<b.createdAt?1:-1)).map(presCardHTML).join('');
+}
+async function loadPres(){try{const d=await (await fetch('/api/presentations?_='+Date.now())).json();PRES=d.presentations||[];renderPres();}catch(e){PRES=[];renderPres();}}
+function openPresentations(){$('presModal').classList.add('active');loadPres();}
+function closePresentations(){$('presModal').classList.remove('active');}
+function presOpen(id){const p=PRES.find(x=>x.id===id);if(!p)return;
+  if(p.status==='done'&&p.video){window.open(p.video,'_blank');return;}
+  alert(p.status==='error'?('Falhou: '+(p.error||'erro desconhecido')):'Esta apresentação ainda está '+(p.status==='generating'?'sendo gerada':'na fila')+'. Volte em alguns minutos.');}
+// ligação apresentação ↔ call (por projeto)
+function presForCall(c){if(!c)return null;return PRES.find(p=>p.status==='done'&&p.video&&p.projeto&&c.projeto&&p.projeto===c.projeto)||null;}
+function presBtnHTML(c){const p=presForCall(c);if(!p)return '';
+  return `<button class="btn gold" onclick="verApresentacao('${(c.projeto||'').replace(/'/g,"\\'")}')" title="Vídeo de apresentação do projeto">🎬 Ver apresentação</button>`;}
+function verApresentacao(projeto){const p=PRES.find(x=>x.status==='done'&&x.projeto===projeto);if(p&&p.video)window.open(p.video,'_blank');}
+// criar
+function presVoices(){const sel=$('pc-voice');sel.innerHTML=VOICES[PC.lang].map(([l,v])=>`<option value="${v}">${l}</option>`).join('');}
+function openPresCreate(){PC={src:'github',format:'16:9',lang:'pt'};PRESFILE=null;
+  $('pc-repo').value='';$('pc-title').value='';$('pc-extra').value='';$('pc-msg').textContent='';$('pc-prog').style.display='none';$('pc-prog-i').style.width='0';
+  $('pc-drop-txt').innerHTML='📦 Arraste o <b>.zip</b> do repositório ou <b>clique para escolher</b>';
+  presSrc('github');presFmt('16:9');presLang('pt');$('pc-send').disabled=false;
+  $('presCreateModal').classList.add('active');}
+function closePresCreate(){$('presCreateModal').classList.remove('active');}
+function presSrc(s){PC.src=s;$('pc-src-gh').classList.toggle('on',s==='github');$('pc-src-zip').classList.toggle('on',s==='zip');
+  $('pc-gh-wrap').style.display=s==='github'?'':'none';$('pc-zip-wrap').style.display=s==='zip'?'':'none';}
+function presFmt(f){PC.format=f;$('pc-fmt-h').classList.toggle('on',f==='16:9');$('pc-fmt-v').classList.toggle('on',f==='9:16');}
+function presLang(l){PC.lang=l;$('pc-lang-pt').classList.toggle('on',l==='pt');$('pc-lang-en').classList.toggle('on',l==='en');presVoices();}
+function presAutoTitle(){if(!$('pc-title').value){const m=($('pc-repo').value||'').replace(/\/+$/,'').split('/').pop();if(m)$('pc-title').value=m.replace(/[-_]+/g,' ');}}
+function presPick(f){PRESFILE=f||null;if(!f){return;}const mb=(f.size/1048576).toFixed(1);
+  $('pc-drop-txt').innerHTML=`📦 <b>${f.name}</b> · ${mb} MB<br><span class="muted" style="font-size:11.5px">clique p/ trocar</span>`;
+  if(!$('pc-title').value)$('pc-title').value=f.name.replace(/\.zip$/i,'').replace(/[-_]+/g,' ');}
+(function(){const d=$('pc-drop');if(!d)return;
+  ['dragover','dragenter'].forEach(e=>d.addEventListener(e,ev=>{ev.preventDefault();d.classList.add('drag');}));
+  ['dragleave','drop'].forEach(e=>d.addEventListener(e,ev=>{ev.preventDefault();d.classList.remove('drag');}));
+  d.addEventListener('drop',ev=>{const f=ev.dataTransfer.files[0];if(f)presPick(f);});})();
+function presSubmit(){
+  const repo=($('pc-repo').value||'').trim();
+  if(PC.src==='github'&&!/^https?:\/\//.test(repo)){$('pc-msg').textContent='❌ cole um link do GitHub válido';return;}
+  if(PC.src==='zip'&&!PRESFILE){$('pc-msg').textContent='❌ escolha o arquivo .zip';return;}
+  const qs=new URLSearchParams({src:PC.src,repo:repo,title:$('pc-title').value||'',
+    tipo:$('pc-tipo').value,format:PC.format,lang:PC.lang,voice:$('pc-voice').value,
+    extra:($('pc-extra').value||'').slice(0,2000)}).toString();
+  $('pc-send').disabled=true;$('pc-msg').textContent='';
+  const done=d=>{
+    if(d&&d.ok){$('pc-msg').innerHTML='✅ Na fila! O agente vai ler o repositório e gerar o vídeo. Acompanhe na galeria.';
+      setTimeout(()=>{closePresCreate();loadPres();},1600);}
+    else{$('pc-msg').textContent='❌ '+((d&&d.error)||'falha');$('pc-send').disabled=false;}
+  };
+  if(PC.src==='zip'){
+    const xhr=new XMLHttpRequest();xhr.open('POST','/api/presentations/new?'+qs);
+    $('pc-prog').style.display='flex';
+    xhr.upload.onprogress=e=>{if(e.lengthComputable){const p=Math.round(e.loaded/e.total*100);$('pc-prog-i').style.width=p+'%';$('pc-prog-txt').textContent=p+'%';}};
+    xhr.onload=()=>{let d={};try{d=JSON.parse(xhr.responseText);}catch(_){}done(d);};
+    xhr.onerror=()=>{$('pc-msg').textContent='❌ erro de rede';$('pc-send').disabled=false;};
+    xhr.send(PRESFILE);
+  }else{
+    fetch('/api/presentations/new?'+qs,{method:'POST'}).then(r=>r.json()).then(done).catch(()=>{$('pc-msg').textContent='❌ servidor offline';$('pc-send').disabled=false;});
+  }
+}
+
 // ── Configurações: operador, relógio, tema ──
 function setTheme(t){
   document.documentElement.setAttribute('data-theme',t);
@@ -1001,10 +1186,10 @@ async function doTranscribe(id){const r=await api('/api/transcribe?id='+id);if(!
 async function doDownload(id){const r=await api('/api/download?id='+id);if(!r.ok){alert(r.msg||'falhou');return;}RUNNING[id]='download';render();if(openId===id)renderActions(CALLS.find(c=>c.id===id));}
 
 function renderActions(c){
-  const run=RUNNING[c.id];
-  if(c.type==='checklist'){$('m-actions').innerHTML='';return;}
-  if(c.type==='audio'){$('m-actions').innerHTML='<span class="btn disabled">🎙 áudio · transcrito ✓</span>';return;}
-  $('m-actions').innerHTML=`
+  const run=RUNNING[c.id];const pb=presBtnHTML(c);
+  if(c.type==='checklist'){$('m-actions').innerHTML=pb;return;}
+  if(c.type==='audio'){$('m-actions').innerHTML=pb+'<span class="btn disabled">🎙 áudio · transcrito ✓</span>';return;}
+  $('m-actions').innerHTML=pb+`
     ${c.driveVideoId?`<a class="btn" href="https://drive.google.com/file/d/${c.driveVideoId}/view" target="_blank">Drive ↗</a>`:''}
     ${c.transcript?`<span class="btn disabled">🗣 transcrita ✓</span>`:
        run==='transcribe'?`<span class="btn disabled">⏳ transcrevendo…</span>`:
@@ -1083,7 +1268,7 @@ function openNotion(c){
   $('m-title').textContent=c.title;
   $('m-sub').innerHTML=`<span class="who-inline">${c.pessoa}</span> &nbsp;${fmtDate(c.date)} · 📁 ${c.projeto}<br>👥 ${(c.participantes||[]).join(' · ')}`;
   $('m-videowrap').innerHTML=url?`<a class="btn primary" href="${url}" target="_blank" style="width:100%;justify-content:center">📝 Abrir no Notion ↗</a>`:'<p class="muted">Sem link do Notion.</p>';
-  $('m-actions').innerHTML='';$('m-info').innerHTML='';$('m-index').innerHTML='';
+  $('m-actions').innerHTML=presBtnHTML(c);$('m-info').innerHTML='';$('m-index').innerHTML='';
   $('tab-tr').style.display='';$('tab-tr').textContent='📄 Conteúdo';$('tab-nt').style.display='none';
   $('pane-tr').style.display='';$('pane-nt').style.display='none';
   $('pane-tr').innerHTML='<p class="muted">carregando…</p>';
@@ -1105,7 +1290,7 @@ function openChecklist(c){
   let total=0,done=0;groups.forEach(g=>g.tasks.forEach(t=>{total++;if(t.done)done++;}));
   $('m-title').textContent=c.title;
   $('m-sub').innerHTML=`✅ ${done}/${total} concluídas · fonte: ${cl.source||'—'}`;
-  $('m-videowrap').innerHTML='';$('m-actions').innerHTML='';$('m-info').innerHTML='';
+  $('m-videowrap').innerHTML='';$('m-actions').innerHTML=presBtnHTML(c);$('m-info').innerHTML='';
   $('m-index').innerHTML=groups.map((g,i)=>`<a onclick="document.getElementById('grp${i}').scrollIntoView({behavior:'smooth'})"><b>${g.tasks.filter(t=>t.done).length}/${g.tasks.length}</b>${g.project.replace(/^[^A-Za-zÀ-ú]*\d*\.?\s*/,'').slice(0,30)}</a>`).join('');
   $('tab-tr').style.display='';$('tab-tr').textContent='✅ Checklist';
   $('pane-tr').style.display='';
@@ -1128,7 +1313,7 @@ async function toggleCheck(id,el,key){
   try{await fetch('/api/check?item='+id+'&cl='+key,{method:'POST'});}catch(e){}
 }
 function closeDetail(){if(curVideo&&curVideo.pause)curVideo.pause();openId=null;$('overlay').classList.remove('active');}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDetail();closeHealth();closeMetrics();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDetail();closeHealth();closeMetrics();closePresCreate();closePresentations();}});
 
 function toggleSec(id,el){const b=$(id);const open=b.style.display==='none';b.style.display=open?'':'none';el.classList.toggle('open',open);}
 function buildInsights(){
@@ -1143,6 +1328,7 @@ function buildInsights(){
 }
 async function refresh(){
   try{
+    try{const pd=await (await fetch('/api/presentations?_='+Date.now())).json();PRES=pd.presentations||[];if($('presModal').classList.contains('active'))renderPres();}catch(_){}
     const d=await (await fetch('/api/status')).json();
     CALLS=d.calls;RUNNING=d.running||{};META=d.meta||{};SB=d.supabase||{};CL=d.checklist||{};CLS=d.checklists||{};render();
     if(openId){const c=CALLS.find(x=>x.id===openId);if(c){renderActions(c);
@@ -1151,6 +1337,7 @@ async function refresh(){
     }}
   }catch(e){}
 }
+fetch('/api/presentations').then(r=>r.json()).then(d=>{PRES=d.presentations||[];}).catch(()=>{});
 fetch('/api/status').then(r=>r.json()).then(d=>{CALLS=d.calls;RUNNING=d.running||{};META=d.meta||{};SB=d.supabase||{};CL=d.checklist||{};CLS=d.checklists||{};buildInsights();initView();render();loadHealth();setInterval(refresh,5000);setInterval(loadHealth,60000);})
   .catch(e=>{$('grid').innerHTML='<p style="color:oklch(55% 0.180 25)">Rode o servidor: <code>ASSEMBLYAI_API_KEY=… python3 scripts/server.py</code></p>';});
 </script>
