@@ -1213,7 +1213,7 @@ async function openDetail(id){
   renderInfo(c);
   await renderWalkthrough(c);
   $('pane-nt').innerHTML='<p class="muted">carregando…</p>';
-  if(c.notes){try{const r=await fetch(c.notes+'?_='+Date.now());$('pane-nt').innerHTML='<div class="notes-md">'+mdToHtml(await r.text())+'</div>';}catch(e){$('pane-nt').innerHTML='<p class="muted">Sem notas.</p>';}}
+  if(c.notes){try{const r=await fetch(c.notes+'?_='+Date.now());let t=await r.text();const i=t.search(/##\s*📝\s*Transcri/);if(i>=0)t=t.slice(0,i);$('pane-nt').innerHTML='<div class="notes-md">'+mdToHtml(t)+'</div>';}catch(e){$('pane-nt').innerHTML='<p class="muted">Sem notas.</p>';}}
   else $('pane-nt').innerHTML='<p class="muted">Sem notas ingeridas para esta call.</p>';
   showTab('tr');$('overlay').classList.add('active');
 }
@@ -1239,9 +1239,11 @@ async function saveMeta(id,field){
 }
 async function renderWalkthrough(c){
   $('m-index').innerHTML='';
-  // Cap pré-call (áudio com notes, sem walkthrough/frames reais): renderiza as NOTES (entendimento+transcrição)
-  if(c.type==='audio' && c.notes){
-    try{ let md=await (await fetch(c.notes+'?_='+Date.now())).text(); $('pane-tr').innerHTML='<div class="wt">'+wtToHtml(md,'')+'</div>'; return; }catch(e){}
+  // Cap pré-call (audio/video com notes): aba Transcrição mostra SÓ a fala (parte após "## 📝 Transcrição")
+  if((c.type==='audio'||c.type==='video') && c.notes){
+    try{ let md=await (await fetch(c.notes+'?_='+Date.now())).text();
+      const i=md.search(/##\s*📝\s*Transcri/); const tr=(i>=0?md.slice(i):md);
+      $('pane-tr').innerHTML='<div class="notes-md">'+mdToHtml(tr)+'</div>'; return; }catch(e){}
   }
   const sb=SB[c.id];
   const wtUrl = sb ? sb.walkthrough : c.walkthrough;
