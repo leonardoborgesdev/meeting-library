@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # server.py — serve a Meeting Library E executa baixar/transcrever sob demanda.
 # Uso:  ASSEMBLYAI_API_KEY=xxxx python3 scripts/server.py   (porta 8009)
-import http.server, socketserver, subprocess, os, json, urllib.parse, threading, hashlib, secrets
+import http.server, socketserver, subprocess, os, json, urllib.parse, threading, hashlib, secrets, re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 AAI = os.environ.get("ASSEMBLYAI_API_KEY", "")
@@ -27,6 +27,29 @@ def save_sess(s):
     except Exception: pass
 load_users()  # garante a conta padrão no boot
 
+# ── apresentações (gerador de vídeos das aplicações) ──
+PRES_F = "data/presentations.json"
+def load_pres():
+    try: return json.load(open(PRES_F))
+    except Exception: return {"presentations": []}
+def save_pres(d):
+    os.makedirs("data", exist_ok=True)
+    json.dump(d, open(PRES_F, "w"), ensure_ascii=False, indent=2)
+
+def remap_supabase_urls(value, base_url):
+    base = (base_url or "").rstrip("/")
+    if not base:
+        return value
+    def walk(item):
+        if isinstance(item, dict):
+            return {k: walk(v) for k, v in item.items()}
+        if isinstance(item, list):
+            return [walk(v) for v in item]
+        if isinstance(item, str) and "supabase.co" in item:
+            return re.sub(r"https://[^/]+\.supabase\.co", base, item)
+        return item
+    return walk(value)
+
 def run_job(cid, action):
     RUNNING[cid] = action
     try:
@@ -40,14 +63,23 @@ def run_job(cid, action):
             subprocess.run(["python3", "scripts/autofill.py", cid], env=env)
         elif action == "download":
             subprocess.run(["bash", "scripts/download_one.sh", cid], env=env)
+        elif action == "generate_presentation":  # cid = pid da apresentação
+            subprocess.run(["python3", "scripts/gen_presentation.py", cid], env=env)
     finally:
         RUNNING.pop(cid, None)
+
+# gerador local habilitado? (Mac dev). No Fly (1GB, sem Node/Chromium) fica desligado.
+GEN_LOCAL = os.environ.get("GEN_LOCAL", "") == "1"
+# token do worker de render (Fly dedicado). Worker autentica com header X-Worker-Token.
+WORKER_TOKEN = os.environ.get("WORKER_TOKEN", "")
+TD_API = "https://drive.brazika.online/api"
 
 class H(http.server.SimpleHTTPRequestHandler):
     def _json(self, obj, code=200):
         b = json.dumps(obj).encode()
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
         self.send_header("Content-Length", str(len(b)))
         self.end_headers(); self.wfile.write(b)
     def _read_body(self):
@@ -91,6 +123,47 @@ class H(http.server.SimpleHTTPRequestHandler):
         if u.path == "/api/logout":
             t = self._token(); s = load_sess(); s.pop(t, None); save_sess(s)
             return self._set_cookie({"ok": True}, clear=True)
+        # ── worker de render: recebe o mp4 pronto e grava no volume ──
+        if u.path == "/api/presentations/upload_result":
+            if not WORKER_TOKEN or self.headers.get("X-Worker-Token") != WORKER_TOKEN:
+                return self._json({"ok": False, "error": "worker auth"}, 401)
+            pid = (q.get("id") or [None])[0]
+            kind = (q.get("kind") or ["mp4"])[0]
+            if not pid: return self._json({"ok": False, "error": "sem id"}, 400)
+            os.makedirs("library/presentations", exist_ok=True)
+            ext = "jpg" if kind == "thumb" else "mp4"
+            dest = f"library/presentations/{pid}.{ext}"
+            n = int(self.headers.get("Content-Length", 0) or 0)
+            tmp = dest + ".part"; remaining = n
+            try:
+                with open(tmp, "wb") as fh:
+                    while remaining > 0:
+                        chunk = self.rfile.read(min(1 << 20, remaining))
+                        if not chunk: break
+                        fh.write(chunk); remaining -= len(chunk)
+                os.replace(tmp, dest)
+            except Exception as e:
+                return self._json({"ok": False, "error": str(e)[:120]}, 500)
+            return self._json({"ok": True, "path": dest})
+        # ── worker de render (autentica por token, não por cookie) ──
+        if u.path in ("/api/presentations/claim", "/api/presentations/complete"):
+            if not WORKER_TOKEN or self.headers.get("X-Worker-Token") != WORKER_TOKEN:
+                return self._json({"ok": False, "error": "worker auth"}, 401)
+            d = load_pres()
+            if u.path == "/api/presentations/claim":
+                for p in d["presentations"]:
+                    if p.get("status") == "queued":
+                        p["status"] = "generating"; save_pres(d)
+                        return self._json({"ok": True, "job": p})
+                return self._json({"ok": True, "job": None})
+            # complete
+            b = self._read_body(); pid = b.get("id")
+            for p in d["presentations"]:
+                if p["id"] == pid:
+                    for k in ("status", "teldrive", "video", "thumb", "durationApprox", "error"):
+                        if k in b: p[k] = b[k]
+            save_pres(d)
+            return self._json({"ok": True})
         # ── daqui pra baixo exige login ──
         if not self._user(): return self._json({"ok": False, "error": "auth"}, 401)
         if u.path == "/api/check":
@@ -218,6 +291,51 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return self._json({"ok": False, "msg": "sem ASSEMBLYAI_API_KEY no servidor"})
             threading.Thread(target=run_job, args=(cid, act), daemon=True).start()
             return self._json({"ok": True, "action": act})
+        if u.path == "/api/presentations/new":
+            import re as _re, time as _t
+            src = (q.get("src") or ["github"])[0]
+            repo = (q.get("repo") or [""])[0].strip()
+            title = (q.get("title") or [""])[0].strip()
+            tipo = (q.get("tipo") or ["aplicacao"])[0]
+            fmt = (q.get("format") or ["16:9"])[0]
+            lang = (q.get("lang") or ["pt"])[0]
+            voice = (q.get("voice") or ["Eric"])[0]
+            if src == "github" and not _re.match(r"^https?://", repo):
+                return self._json({"ok": False, "error": "informe um link do GitHub válido"}, 400)
+            base = title or (repo.rstrip("/").split("/")[-1] if repo else "apresentacao")
+            sl = _re.sub(r"[^a-z0-9]+", "-", base.lower()).strip("-")[:48] or "apresentacao"
+            date = _t.strftime("%Y-%m-%d")
+            pid = f"pres_{date}_{sl}_{secrets.token_hex(3)}"
+            zip_path = None
+            if src == "zip":
+                os.makedirs("library/presentations/src", exist_ok=True)
+                zip_path = f"library/presentations/src/{pid}.zip"
+                n = int(self.headers.get("Content-Length", 0) or 0)
+                if n <= 0: return self._json({"ok": False, "error": "envie o arquivo .zip"}, 400)
+                tmp = zip_path + ".part"; remaining = n
+                try:
+                    with open(tmp, "wb") as fh:
+                        while remaining > 0:
+                            chunk = self.rfile.read(min(1 << 20, remaining))
+                            if not chunk: break
+                            fh.write(chunk); remaining -= len(chunk)
+                    os.replace(tmp, zip_path)
+                except Exception as e:
+                    try: os.remove(tmp)
+                    except Exception: pass
+                    return self._json({"ok": False, "error": f"upload falhou: {str(e)[:120]}"}, 500)
+            instructions = (q.get("extra") or [""])[0].strip()
+            entry = {"id": pid, "title": base, "repo": repo, "source": src, "zip": zip_path,
+                     "tipo": tipo, "format": fmt, "lang": lang, "voice": voice, "instructions": instructions,
+                     "status": "queued", "createdBy": self._user(), "createdAt": _t.strftime("%Y-%m-%dT%H:%M:%S"),
+                     "video": None, "thumb": None, "error": None}
+            d = load_pres()
+            d["presentations"] = [p for p in d["presentations"] if p.get("id") != pid] + [entry]
+            save_pres(d)
+            if GEN_LOCAL:  # Mac: dispara o agente + render localmente
+                threading.Thread(target=run_job, args=(pid, "generate_presentation"), daemon=True).start()
+                return self._json({"ok": True, "id": pid, "generating": True})
+            return self._json({"ok": True, "id": pid, "queued": True})  # Fly: fica na fila p/ worker dedicado
         self._json({"ok": False}, 404)
     def do_GET(self):
         path = urllib.parse.urlparse(self.path).path
@@ -230,6 +348,29 @@ class H(http.server.SimpleHTTPRequestHandler):
                 self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8")
                 self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return
             except Exception: return self._json({"error": "login.html ausente"}, 500)
+        # ── worker de render: baixa o .zip do repo (autentica por token, não cookie) ──
+        if path == "/api/presentations/zip":
+            if not WORKER_TOKEN or self.headers.get("X-Worker-Token") != WORKER_TOKEN:
+                return self._json({"ok": False, "error": "worker auth"}, 401)
+            q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+            pid = (q.get("id") or [None])[0]
+            if not pid: return self._json({"ok": False, "error": "sem id"}, 400)
+            zip_path = f"library/presentations/src/{pid}.zip"
+            if not os.path.exists(zip_path):
+                return self._json({"ok": False, "error": "zip não encontrado"}, 404)
+            try:
+                n = os.path.getsize(zip_path)
+                self.send_response(200)
+                self.send_header("Content-Type", "application/zip")
+                self.send_header("Content-Length", str(n))
+                self.end_headers()
+                with open(zip_path, "rb") as fh:
+                    while True:
+                        chunk = fh.read(1 << 16)
+                        if not chunk: break
+                        self.wfile.write(chunk)
+            except Exception: pass
+            return
         # tudo o resto exige login
         if not self._user():
             if path.startswith("/api/"): return self._json({"ok": False, "error": "auth"}, 401)
@@ -237,6 +378,41 @@ class H(http.server.SimpleHTTPRequestHandler):
         if self.path.startswith("/api/health"):
             try: return self._json(json.load(open("data/health.json")))
             except Exception: return self._json({"status": "unknown", "problems": ["healthcheck ainda não rodou"]})
+        if self.path.startswith("/api/presentations/video"):
+            import urllib.request as _u
+            q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+            pid = (q.get("id") or [None])[0]
+            ent = next((p for p in load_pres()["presentations"] if p["id"] == pid), None)
+            if not ent: return self._json({"ok": False, "error": "não encontrado"}, 404)
+            # vídeo local (Mac dev) → serve do disco
+            if ent.get("video") and os.path.exists(ent["video"]):
+                self.path = "/" + ent["video"]; return super().do_GET()
+            fid = ent.get("teldrive")
+            tok = os.environ.get("TD_TOKEN", "")
+            if not fid or not tok: return self._json({"ok": False, "error": "sem vídeo"}, 404)
+            url = f"{TD_API}/files/{fid}/stream"
+            req = _u.Request(url, headers={"Cookie": f"access_token={tok}"})
+            rng = self.headers.get("Range")
+            if rng: req.add_header("Range", rng)
+            try:
+                r = _u.urlopen(req, timeout=60)
+            except Exception as e:
+                return self._json({"ok": False, "error": f"teldrive: {str(e)[:100]}"}, 502)
+            self.send_response(r.status if r.status in (200, 206) else 200)
+            for h in ("Content-Type", "Content-Length", "Content-Range", "Accept-Ranges"):
+                v = r.headers.get(h)
+                if v: self.send_header(h, v)
+            self.send_header("Content-Type", r.headers.get("Content-Type", "video/mp4"))
+            self.end_headers()
+            try:
+                while True:
+                    chunk = r.read(1 << 16)
+                    if not chunk: break
+                    self.wfile.write(chunk)
+            except Exception: pass
+            return
+        if self.path.startswith("/api/presentations"):
+            return self._json(load_pres())
         if self.path.startswith("/api/status"):
             try:
                 with open("data/calls.json") as f: data = json.load(f)
@@ -244,6 +420,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                 except Exception: meta = {}
                 try: sb = json.load(open("data/supabase.json"))
                 except Exception: sb = {}
+                sb = remap_supabase_urls(sb, os.environ.get("SUPABASE_URL", ""))
                 cls = {}
                 for k, fn in CHECKLISTS.items():
                     try: cls[k] = json.load(open(fn))

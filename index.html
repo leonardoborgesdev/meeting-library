@@ -1336,7 +1336,7 @@ function buildInsights(){
 async function refresh(){
   try{
     try{const pd=await (await fetch('/api/presentations?_='+Date.now())).json();PRES=pd.presentations||[];if($('presModal').classList.contains('active'))renderPres();}catch(_){}
-    const d=await (await fetch('/api/status')).json();
+    const d=await (await fetch('/api/status?_='+Date.now())).json();
     CALLS=d.calls;RUNNING=d.running||{};META=d.meta||{};SB=d.supabase||{};CL=d.checklist||{};CLS=d.checklists||{};render();
     if(openId){const c=CALLS.find(x=>x.id===openId);if(c){renderActions(c);
       const t=$('pane-tr').textContent;
@@ -1345,7 +1345,7 @@ async function refresh(){
   }catch(e){}
 }
 fetch('/api/presentations').then(r=>r.json()).then(d=>{PRES=d.presentations||[];}).catch(()=>{});
-fetch('/api/status').then(r=>r.json()).then(d=>{CALLS=d.calls;RUNNING=d.running||{};META=d.meta||{};SB=d.supabase||{};CL=d.checklist||{};CLS=d.checklists||{};buildInsights();initView();render();loadHealth();setInterval(refresh,5000);setInterval(loadHealth,60000);})
+fetch('/api/status?_='+Date.now()).then(r=>r.json()).then(d=>{CALLS=d.calls;RUNNING=d.running||{};META=d.meta||{};SB=d.supabase||{};CL=d.checklist||{};CLS=d.checklists||{};buildInsights();initView();render();loadHealth();setInterval(refresh,5000);setInterval(loadHealth,60000);})
   .catch(e=>{$('grid').innerHTML='<p style="color:oklch(55% 0.180 25)">Rode o servidor: <code>ASSEMBLYAI_API_KEY=… python3 scripts/server.py</code></p>';});
 </script>
 </body>
