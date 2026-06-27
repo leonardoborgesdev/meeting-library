@@ -1219,9 +1219,10 @@ async function openDetail(id){
 }
 function renderInfo(c){
   const m=META[c.id]||{};
-  const drive=`https://drive.google.com/file/d/${c.driveVideoId}/view`;
-  $('m-info').innerHTML=`<div class="info">
-    <div class="row"><div class="k">📁 Drive (caminho)</div><div class="v"><a href="${drive}" target="_blank">${drive}</a></div></div>
+  const driveRow = c.driveVideoId
+    ? `<div class="row"><div class="k">📁 Drive (caminho)</div><div class="v"><a href="https://drive.google.com/file/d/${c.driveVideoId}/view" target="_blank">abrir no Drive</a></div></div>`
+    : (c.capVideo ? `<div class="row"><div class="k">🎥 Gravação (Cap)</div><div class="v"><a href="${c.capVideo}" target="_blank">${c.capVideo}</a></div></div>` : '');
+  $('m-info').innerHTML=`<div class="info">${driveRow}
     <div class="row"><div class="k">💻 Local</div><div class="v">${c.video?('~/Desktop/meeting-library/'+c.video):'<span class="muted">não baixado</span>'}</div></div>
     <div class="row"><div class="k">🔗 Notion (cole o link)</div>
       <input class="in" id="in-notion" placeholder="https://notion.so/…" value="${m.notion||''}">
@@ -1238,6 +1239,10 @@ async function saveMeta(id,field){
 }
 async function renderWalkthrough(c){
   $('m-index').innerHTML='';
+  // Cap pré-call (áudio com notes, sem walkthrough/frames reais): renderiza as NOTES (entendimento+transcrição)
+  if(c.type==='audio' && c.notes){
+    try{ let md=await (await fetch(c.notes+'?_='+Date.now())).text(); $('pane-tr').innerHTML='<div class="wt">'+wtToHtml(md,'')+'</div>'; return; }catch(e){}
+  }
   const sb=SB[c.id];
   const wtUrl = sb ? sb.walkthrough : c.walkthrough;
   const framesBase = sb ? sb.frames : 'library/walkthroughs/'+c.id+'/frames';
