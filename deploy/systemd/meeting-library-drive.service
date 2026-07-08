@@ -1,0 +1,9 @@
+[Unit]
+Description=Meeting Library — puxa calls do Google Drive (poll_drive)
+After=network-online.target meeting-library.service
+[Service]
+Environment=HOME=/root
+Type=oneshot
+WorkingDirectory=/opt/meeting-library
+ExecStart=/opt/meeting-library/scripts/poll_drive_run.sh
+TimeoutStartSec=3600

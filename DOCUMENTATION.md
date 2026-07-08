@@ -4,7 +4,7 @@
 > transcreve, gera walkthrough com frames, ingere reuniões do Notion, e serve tudo numa
 > interface estilo Notion — **100% online, sem depender de nenhuma máquina local**.
 
-**Produção:** https://meet.brazika.online (login `automatrix` / `958462`)
+**Produção:** https://meet.automatrixapps99x.win (login `automatrix` / `958462`)
 **Fallback:** https://automatrix-meeting-library.fly.dev
 
 ---
@@ -50,7 +50,7 @@ frames, sobe pro Supabase e se auto-corrige — sem intervenção.
                                    │ frames+transcr+md  │ HTTPS                 │ mídia (backup infinito)
                                    ▼                    ▼                       ▼
                        Supabase Storage (brazika)   Cloudflare DNS        Brazika Drive (Teldrive)
-                       bucket "meeting-library"     meet.brazika.online   drive.brazika.online
+                       bucket "meeting-library"     meet.automatrixapps99x.win   drive.brazika.online
                        (frames/txt, 50MB/arq)       → Fly (cert LE)       (Telegram, ilimitado)
 ```
 
@@ -66,7 +66,7 @@ frames, sobe pro Supabase e se auto-corrige — sem intervenção.
 | **Frames/vídeo** | ffmpeg (`fps=1/N`, `scale=640`) | Extrai ~55 frames/call + áudio 16kHz mono | `interval=ceil(dur/55)` capa em 55 frames mesmo num vídeo de 7h → cabe no Supabase. |
 | **Storage de frames/transcrição** | Supabase Storage (projeto brazika, bucket público `meeting-library`) | Serve frames + .txt + WALKTHROUGH.md publicamente | Free tier 1GB → 55 frames/call × 112 ≈ 280MB. Vídeo NÃO cabe (50MB/arquivo). |
 | **Notion** | API v3 (bot `clawdy`, workspace "Espaço de trabalho de Herberth Morfeu Herzich") | Ingere reuniões do Agency OS como cards | Lá tem briefings, kickoffs, análises por reunião e os áudios gravados no Notion. |
-| **DNS/TLS** | Cloudflare (zona `brazika.online`) + cert Let's Encrypt do Fly | `meet.brazika.online` (registros DNS-only → Fly emite o cert) | Subdomínio bonito com HTTPS. |
+| **DNS/TLS** | Cloudflare (zona `automatrix-ai.com`) + cert Let's Encrypt do Fly | `meet.automatrixapps99x.win` (registros DNS-only → Fly emite o cert) | Subdomínio bonito com HTTPS. |
 | **Auth** | Cookie de sessão (server.py) | Login/registro, conta padrão `automatrix`/`958462` | Protege o acervo (calls do Lucas) na URL pública. |
 
 ### Secrets (Fly) — nada commitado
@@ -258,7 +258,7 @@ pills de stage, scrim+blur). Réplica fiel do `youtube-os-studioos`. Componentes
 2. **Cards especiais** — áudios, checklists (projetos/kinbox/brazika) com tarefas marcáveis.
 3. **Redesign Studio OS** — tema light navy/cobalt/gold + **views Notion** (Galeria/Tabela/Board/
    Calendário/Volume), ferramentas auto-derivadas.
-4. **Online no Fly** — modo `NOLOCAL`, volume, secrets, auto-pull do Drive, `meet.brazika.online`.
+4. **Online no Fly** — modo `NOLOCAL`, volume, secrets, auto-pull do Drive, `meet.automatrixapps99x.win`.
 5. **Backfill histórico** — catálogo das 112 gravações (dez/25→jun/26), dreno com **cota diária**.
 6. **Monitor + auto-cura** — healthcheck, `/api/health`, botão Status, reprocesso de incompletas.
 7. **Login/registro** — proteção por cookie, conta `automatrix`.

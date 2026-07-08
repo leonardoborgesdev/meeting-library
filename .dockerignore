@@ -14,3 +14,11 @@ data/brazika_call
 **/*.mp3
 **/*.m4a
 **/.DS_Store
+**/node_modules
+presentation-template/renders-tmp
+presentation-template/stills
+renders-tmp
+stills
+*.part
+!library/presentations
+!library/presentations/*.mp4

@@ -19,9 +19,23 @@ def notify(text):
         urllib.request.urlopen(f"https://api.telegram.org/bot{tok}/sendMessage", data=data, timeout=15)
     except Exception: pass
 
+def remap_supabase_urls(value, base_url):
+    base = (base_url or "").rstrip("/")
+    if not base:
+        return value
+    def walk(item):
+        if isinstance(item, dict):
+            return {k: walk(v) for k, v in item.items()}
+        if isinstance(item, list):
+            return [walk(v) for v in item]
+        if isinstance(item, str) and "supabase.co" in item:
+            return re.sub(r"https://[^/]+\.supabase\.co", base, item)
+        return item
+    return walk(value)
+
 def main():
     calls = jload("data/calls.json", {"calls": []})["calls"]
-    sb    = jload("data/supabase.json", {})
+    sb    = remap_supabase_urls(jload("data/supabase.json", {}), os.environ.get("SUPABASE_URL", ""))
     prev  = jload("data/health.json", {})
 
     vids   = [c for c in calls if c.get("type", "video") == "video" and c.get("driveVideoId")]
@@ -134,11 +148,11 @@ def main():
     last_daily  = prev.get("daily_push_date")
     if status == "warn" and last_status != "warn":
         notify("⚠️ Meeting Library: " + "; ".join(problems) +
-               f"\n{len(done)}/{len(vids)} ok · fila {len(pend)} · meet.brazika.online")
+               f"\n{len(done)}/{len(vids)} ok · fila {len(pend)} · meet.automatrix-ai.com")
     elif status == "ok" and last_status == "warn":
         notify("✅ Meeting Library normalizou. " + line)
     if last_daily != today and datetime.datetime.now().hour >= 20:
-        notify(f"📊 Meeting Library (resumo do dia)\n{line}\nmeet.brazika.online")
+        notify(f"📊 Meeting Library (resumo do dia)\n{line}\nmeet.automatrix-ai.com")
         health["daily_push_date"] = today
         json.dump(health, open("data/health.json", "w"), ensure_ascii=False, indent=2)
 

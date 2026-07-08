@@ -102,7 +102,7 @@ def main():
     def needs_work(c):
         if c.get("type","video") != "video" or not c.get("driveVideoId"): return False
         if not c.get("transcript"): return True
-        if not bool(sb.get(c["id"], {}).get("frames")): return True
+        if os.environ.get("SUPABASE_URL") and not bool(sb.get(c["id"], {}).get("frames")): return True
         if td_backfill and not c.get("teldrive"): return True   # falta backup no drive
         return False
     pending = [c for c in data["calls"] if needs_work(c)]
