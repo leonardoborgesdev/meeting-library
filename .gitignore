@@ -1,0 +1,25 @@
+# ===== SEGREDOS — NUNCA commitar =====
+*.env
+.env
+.env.*
+!*.env.example
+groq_keys.txt
+autojoin_seen.json
+
+# ===== DADOS das calls (o que MUDA por instância) =====
+library/
+data/
+recordings/
+*.mp4
+*.webm
+*.mp3
+*.wav
+
+# ===== build / lixo =====
+node_modules/
+__pycache__/
+*.pyc
+*.log
+*.bak
+*.bak2
+*.bak.*
