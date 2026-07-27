@@ -1,7 +1,0 @@
-[Unit]
-Description=poll_drive a cada 30min
-[Timer]
-OnBootSec=90
-OnUnitActiveSec=420
-[Install]
-WantedBy=timers.target

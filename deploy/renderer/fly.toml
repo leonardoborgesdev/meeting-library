@@ -1,0 +1,16 @@
+app = "meeting-library-renderer"
+primary_region = "gru"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  MAIN_APP = "https://meet.automatrix-ai.com"
+  RENDER_POLL = "20"
+  GEN_MODE = "api"
+
+# worker puro (sem http service): 1 máquina sempre ligada fazendo poll da fila.
+# o comando vem do ENTRYPOINT do Dockerfile (python3 scripts/render_worker.py)
+[[vm]]
+  size = "performance-2x"
+  memory = "8192"
