@@ -77,9 +77,9 @@ WORKER_TOKEN = os.environ.get("WORKER_TOKEN", "")
 
 class H(http.server.SimpleHTTPRequestHandler):
     def _json(self, obj, code=200):
-        b = json.dumps(obj).encode()
+        b = json.dumps(obj, ensure_ascii=False).encode("utf-8")
         self.send_response(code)
-        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
         self.send_header("Content-Length", str(len(b)))
         self.end_headers(); self.wfile.write(b)

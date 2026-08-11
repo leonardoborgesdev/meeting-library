@@ -2,6 +2,10 @@
 
 **Self-hosted meeting intelligence — record, transcribe, summarize, sync.**
 
+![Panel](docs/screenshots/panel.png)
+
+<sub>Screenshots use seeded demo data — no real calls, people, or clients.</sub>
+
 ## Why this exists
 
 Most meeting-notes SaaS tools charge a per-seat monthly fee to do something fairly
