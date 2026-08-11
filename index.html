@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meeting Library — Automatrix</title>
+<title>Meeting Library</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -373,7 +373,7 @@ input::placeholder{color:var(--text-dim)}
       <span class="brand-mark">▶</span>
       <div>
         <div class="t">Meeting Library</div>
-        <div class="s">Automatrix · catálogo de calls · preview direto · transcrição sob demanda</div>
+        <div class="s">catálogo de calls · preview direto · transcrição sob demanda</div>
       </div>
     </div>
     <div class="top-actions">
@@ -569,15 +569,15 @@ input::placeholder{color:var(--text-dim)}
 <div class="hwrap" id="uploadModal" onclick="if(event.target===this)closeUpload()">
   <div class="hpanel" id="upload-body">
     <h3>⬆ Enviar gravação</h3>
-    <div class="hsub">Vídeo ou áudio que não passou pelo Meet. Transcreve, gera walkthrough e faz backup no Brazika Drive — tudo automático. Os campos são <b>opcionais</b>: deixe em branco e a IA preenche pela transcrição.</div>
+    <div class="hsub">Vídeo ou áudio que não passou pelo Meet. Transcreve e gera walkthrough automaticamente. Os campos são <b>opcionais</b>: deixe em branco e a IA preenche pela transcrição.</div>
     <div id="up-drop" class="up-drop" onclick="document.getElementById('up-file').click()">
       <input type="file" id="up-file" accept="video/*,audio/*" style="display:none" onchange="upPick(this.files[0])">
       <div id="up-drop-txt">📎 Arraste o arquivo aqui ou <b>clique para escolher</b><br><span class="muted" style="font-size:11.5px">vídeo (.mp4/.mov/.webm) ou áudio (.mp3/.m4a/.wav)</span></div>
     </div>
     <div class="up-grid">
-      <label>Título <input id="up-title" placeholder="ex.: Call Mauricio — Vistoria"></label>
-      <label>Pessoa <input id="up-pessoa" placeholder="ex.: Lucas / Leonardo"></label>
-      <label>Projeto <input id="up-projeto" placeholder="ex.: Vistoria (Confere)"></label>
+      <label>Título <input id="up-title" placeholder="ex.: Call de onboarding"></label>
+      <label>Pessoa <input id="up-pessoa" placeholder="ex.: nome do participante"></label>
+      <label>Projeto <input id="up-projeto" placeholder="ex.: nome do projeto/cliente"></label>
       <label>Data <input id="up-date" type="date"></label>
       <label class="up-wide">Ferramentas (vírgula) <input id="up-ferramentas" placeholder="ex.: WhatsApp, Gemini, Supabase"></label>
     </div>
@@ -665,7 +665,7 @@ input::placeholder{color:var(--text-dim)}
 
 <script>
 let CALLS=[], RUNNING={}, META={}, SB={}, CL={}, CLS={}, F={pessoa:'all',projeto:'all',st:'all',tipo:'all',de:'',ate:'',kind:'all',ferramenta:''}, openId=null, HEALTH=null;
-function callKind(c){return /onboarding|interno|planejamento|lead system|treinamento|^automatrix$/i.test((c.projeto||'').trim())?'equipe':'cliente';}
+function callKind(c){return /onboarding|interno|planejamento|lead system|treinamento/i.test((c.projeto||'').trim())?'equipe':'cliente';}
 const $=id=>document.getElementById(id);
 function fmtDate(d){const[y,m,day]=d.split('-');const M=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];return `${+day} ${M[+m-1]} ${y}`;}
 function mmss(s){s=Math.floor(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
@@ -883,9 +883,6 @@ function renderHealth(){
     <div class="hrow"><span class="k">Erros AssemblyAI</span><b>${h.aai_errors??0}</b></div>
     <div class="hrow"><span class="k">Última atividade</span><b>${h.mins_idle!=null?h.mins_idle+' min atrás':'—'}</b></div>
     <div class="hrow"><span class="k">Disco do volume</span><b>${h.disk_pct!=null?h.disk_pct+'%':'—'}</b></div>
-    ${h.drive?`<div class="hrow"><span class="k">☁️ Backup no Brazika Drive</span><b>${h.drive.enabled?`${h.drive.backed_up} / ${h.drive.total} (${h.drive.pct}%)`:'desligado'}</b></div>
-    ${h.drive.enabled&&h.drive.pct!=null?`<div class="hbar2"><i style="width:${h.drive.pct}%;background:#7c5cff"></i></div>`:''}
-    ${h.drive.enabled?`<div class="hrow"><span class="k">⤷ Pendentes de backup</span><b>${h.drive.pending}</b> <a href="${h.drive.url}" target="_blank" style="margin-left:8px;font-size:11px">abrir drive ↗</a></div>`:''}`:''}
     ${(h.problems&&h.problems.length)?`<div class="hprob">⚠️ ${h.problems.join('<br>⚠️ ')}</div>`:'<div class="hok">✅ Nenhum problema detectado.</div>'}
     <button class="btn hclose" onclick="closeHealth()">Fechar</button>`;
 }

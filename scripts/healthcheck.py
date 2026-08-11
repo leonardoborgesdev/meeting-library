@@ -79,24 +79,6 @@ def main():
         disk_pct = int(out[-1].split()[4].rstrip("%"))
     except Exception: pass
 
-    # Brazika Drive (Teldrive) — backup de mídia no storage infinito
-    tdmap = jload("data/teldrive.json", {})
-    drive_on = bool(os.environ.get("TD_TOKEN"))
-    backed = [c for c in vids if c.get("teldrive")]
-    aud_cards = [c for c in calls if c.get("type") == "audio"]
-    backed_aud = [c for c in aud_cards if c.get("teldrive")]
-    drive_total = len(vids) + len(aud_cards)
-    drive_done = len(backed) + len(backed_aud)
-    drive = {
-        "enabled": drive_on,
-        "backed_up": drive_done,
-        "total": drive_total,
-        "pending": max(0, drive_total - drive_done),
-        "files": len(tdmap),
-        "pct": round(drive_done / drive_total * 100) if drive_total else 0,
-        "url": "https://drive.brazika.online",
-    }
-
     # progresso: comparou done com a checagem anterior
     prev_done = prev.get("done", 0)
     progressed = len(done) > prev_done
@@ -132,14 +114,12 @@ def main():
         "mins_idle": mins_idle,
         "disk_pct": disk_pct,
         "progressed_since_last": progressed,
-        "drive": drive,
         "problems": problems,
     }
     json.dump(health, open("data/health.json", "w"), ensure_ascii=False, indent=2)
     line = (f"[{health['checked_at']}] {status.upper()} · {len(done)}/{len(vids)} ({pct}%) "
             f"· fila {len(pend)} · hoje {today_count}/{daily_max} · idle {mins_idle}min "
-            f"· incompletas {len(incomplete)} · aai_err {aai_err} · disco {disk_pct}%"
-            + (f" · drive {drive_done}/{drive_total}" if drive_on else ""))
+            f"· incompletas {len(incomplete)} · aai_err {aai_err} · disco {disk_pct}%")
     open("data/health.log", "a").write(line + "\n")
     print(line)
 
@@ -148,11 +128,11 @@ def main():
     last_daily  = prev.get("daily_push_date")
     if status == "warn" and last_status != "warn":
         notify("⚠️ Meeting Library: " + "; ".join(problems) +
-               f"\n{len(done)}/{len(vids)} ok · fila {len(pend)} · meet.automatrix-ai.com")
+               f"\n{len(done)}/{len(vids)} ok · fila {len(pend)}")
     elif status == "ok" and last_status == "warn":
         notify("✅ Meeting Library normalizou. " + line)
     if last_daily != today and datetime.datetime.now().hour >= 20:
-        notify(f"📊 Meeting Library (resumo do dia)\n{line}\nmeet.automatrix-ai.com")
+        notify(f"📊 Meeting Library (resumo do dia)\n{line}")
         health["daily_push_date"] = today
         json.dump(health, open("data/health.json", "w"), ensure_ascii=False, indent=2)
 

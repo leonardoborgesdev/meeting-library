@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# process_calls.sh — pipeline das calls (Leonardo · Nicolli · Lucas)
+# process_calls.sh — pipeline de processamento das calls
 # Ordem: baixa (rclone) -> extrai áudio -> TRANSCREVE -> comprime (hardware).
 # Transcrição: AssemblyAI (pt-BR + quem-fala) se ASSEMBLYAI_API_KEY; senão whisper.
 # Compressão: h264_videotoolbox (hardware do Mac, rápido).
@@ -67,9 +67,6 @@ while IFS=$'\t' read -r ID FID DUR TYPE; do
     [ -s "$TR/$ID.txt" ] && set_field "$ID" transcript "$TR/$ID.txt" && set_field "$ID" status "done"
     set_field "$ID" audio "$AUDSRC"
     if [ -f data/.supabase.env ] || [ -n "${SUPABASE_URL:-}" ]; then bash scripts/supabase_sync.sh "$ID" >>"$LOG" 2>&1 || true; fi
-    if [ -n "${TD_TOKEN:-}" ]; then
-      log "  ☁️  backup áudio pro Brazika Drive..."; python3 scripts/td_push.py "$ID" "$AUDSRC" >>"$LOG" 2>&1 || log "  ⚠ backup drive falhou"
-    fi
     rm -f "$MP3"; log "  done $ID (áudio)"; continue
   fi
 
@@ -113,17 +110,12 @@ while IFS=$'\t' read -r ID FID DUR TYPE; do
     python3 scripts/build_walkthrough.py "$ID" >>"$LOG" 2>&1
   fi
 
-  # 6) Supabase sync (se creds) + opcional limpeza local (Xeon: NOLOCAL=1)
+  # 6) Supabase sync (se creds) + opcional limpeza local (NOLOCAL=1)
   if [ -f data/.supabase.env ] || [ -n "${SUPABASE_URL:-}" ]; then
     bash scripts/supabase_sync.sh "$ID" >>"$LOG" 2>&1 || true
   fi
-  # 6b) Backup pro Brazika Drive (Teldrive, storage infinito) — antes do NOLOCAL
-  if [ -n "${TD_TOKEN:-}" ] && [ -s "$CMP" ]; then
-    log "  ☁️  backup pro Brazika Drive..."
-    python3 scripts/td_push.py "$ID" "$CMP" >>"$LOG" 2>&1 || log "  ⚠ backup drive falhou (segue)"
-  fi
   # NOLOCAL só p/ cards do Drive (têm de onde repreviewar). Uploads (sem driveVideoId)
-  # ficam no volume p/ o preview funcionar (já têm backup no Brazika Drive).
+  # ficam no volume p/ o preview continuar funcionando.
   if [ "${NOLOCAL:-0}" = "1" ] && [ -n "$FID" ]; then
     rm -f "$CMP"; rm -rf "library/walkthroughs/$ID/frames"
     set_field "$ID" video ""

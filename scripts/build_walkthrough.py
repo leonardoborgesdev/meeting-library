@@ -70,7 +70,7 @@ def main(cid):
 
     dd=c["date"].split("-"); date_h=f"{int(dd[2])} {MES[int(dd[1])-1]} {dd[0]}"
     dur_h=f"{int(dur//60)} min {int(dur%60)}s"
-    quem=" · ".join(c.get("participantes",[]) or ["Lucas F. N. Alves"])
+    quem=" · ".join(c.get("participantes",[]) or ["—"])
     topicos=" · ".join(c.get("assunto",[]) or [])
     vrel="../../videos/"+os.path.basename(video)
 

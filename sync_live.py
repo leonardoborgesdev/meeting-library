@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-# Sync data/ + library/ from the LIVE Fly app (source of truth) into /opt/meeting-library
+# Sync data/ + library/ from your LIVE deployment (source of truth) into a local copy.
+# Usage: SYNC_BASE_URL=https://your-domain SYNC_USER=... SYNC_PW=... python3 sync_live.py
 import json, os, sys, urllib.request, http.cookiejar, ssl, re
 
-BASE = "https://meet.automatrix-ai.com"
-ROOT = "/opt/meeting-library"
-USER, PW = "automatrix", "958462"
+BASE = os.environ.get("SYNC_BASE_URL", "http://localhost:8009")
+ROOT = os.environ.get("SYNC_LOCAL_ROOT", "/opt/meeting-library")
+USER, PW = os.environ.get("SYNC_USER", ""), os.environ.get("SYNC_PW", "")
 
 cj = http.cookiejar.CookieJar()
 opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
@@ -60,8 +61,7 @@ login()
 
 # 1) data/*.json (explicit list)
 data_files = ["calls.json","meta.json","supabase.json","presentations.json",
-              "users.json","sessions.json","checklist.json","checklist_kinbox.json",
-              "checklist_brazika.json","teldrive.json","health.json"]
+              "users.json","sessions.json","checklist.json","health.json"]
 print("=== data/ ===")
 for fn in data_files:
     fetch_to(f"/data/{fn}", os.path.join(ROOT, "data", fn))

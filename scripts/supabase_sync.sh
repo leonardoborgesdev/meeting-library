@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # supabase_sync.sh <call_id> — sobe frames + transcrições + WALKTHROUGH.md de UMA call
-# pro bucket 'meeting-library' do Supabase brazika (free tier: 50MB/arquivo → só small).
+# pro bucket 'meeting-library' do seu projeto Supabase (free tier: 50MB/arquivo → só small).
 # Lê creds de SUPABASE_URL / SUPABASE_KEY (ou de /tmp/.ml_sburl /tmp/.ml_sbkey).
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"; cd "$ROOT"

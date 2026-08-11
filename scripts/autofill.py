@@ -21,8 +21,8 @@ def main():
     txt = open(tr, encoding="utf-8", errors="ignore").read()[:18000]
 
     need = {
-        "pessoa":   not card.get("pessoa") or card.get("pessoa") in ("", "Automatrix"),
-        "projeto":  not card.get("projeto") or card.get("projeto") in ("", "Automatrix"),
+        "pessoa":   not card.get("pessoa"),
+        "projeto":  not card.get("projeto"),
         "assunto":  not card.get("assunto"),
         "ferramentas": not card.get("ferramentas"),
         "participantes": not card.get("participantes"),
@@ -31,12 +31,9 @@ def main():
     if not any(need.values()): print("[autofill] nada em branco — ok"); return
 
     prompt = (
-        "Você organiza um catálogo de calls/reuniões da Automatrix. A partir da TRANSCRIÇÃO abaixo, "
-        "extraia metadados objetivos. Projetos típicos: Chris Lamm / MortgageOne, Vistoria (Confere), "
-        "Telemedicina (UBS), SDR WhatsApp / GVG, Automatrix Lead System, SDR imobiliária (Plá), "
-        "HVN — Edição com IA, Brazika (loja + painel), Onboarding / Interno. "
-        "Ferramentas possíveis: AssemblyAI, Drive, Supabase, Meta Ads, WhatsApp, Instagram, Efí, "
-        "Envioecom, Gemini, Playwright, Kinbox, n8n, Fly, Agentes IA, Notion, GitHub, Vercel, Cloudflare.\n\n"
+        "Você organiza um catálogo de calls/reuniões de uma equipe. A partir da TRANSCRIÇÃO abaixo, "
+        "extraia metadados objetivos: quem é a pessoa principal, o nome do projeto/cliente da call, "
+        "um título curto, os tópicos discutidos, as ferramentas/apps citadas e os participantes.\n\n"
         f"TRANSCRIÇÃO:\n{txt}\n\n"
         'Responda APENAS JSON: {"pessoa":"nome principal","projeto":"um dos projetos","title":"título curto",'
         '"assunto":["tópico",...max5],"ferramentas":["ferramenta",...],"participantes":["nome",...]}')

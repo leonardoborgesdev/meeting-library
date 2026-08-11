@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-"""render_worker.py — worker de render no Fly dedicado (meeting-library-renderer).
-Faz POLL de jobs 'queued' na main app, gera o vídeo (Gemini API + Remotion), sobe no
-Brazika Drive (Teldrive) e marca 'done'. 100% online, sem Mac.
-Env: MAIN_APP (url da main app), WORKER_TOKEN, GEMINI_API_KEY, ELEVENLABS_API_KEY, TD_TOKEN.
+"""render_worker.py — worker de render de apresentações (pode rodar em host separado do app
+principal, poupando o servidor principal do trabalho pesado de renderização).
+Faz POLL de jobs 'queued' na main app, gera o vídeo (Gemini API + Remotion) e envia o
+resultado de volta pra main app via upload HTTP. Roda de forma independente (headless).
+Env: MAIN_APP (url da main app), WORKER_TOKEN, GEMINI_API_KEY, ELEVENLABS_API_KEY.
 """
 import os, sys, json, time, shutil, tempfile, urllib.request
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gen_presentation as g
 
-MAIN = os.environ.get("MAIN_APP", "https://meet.automatrix-ai.com").rstrip("/")
+MAIN = os.environ.get("MAIN_APP", "http://localhost:8009").rstrip("/")
 TOKEN = os.environ.get("WORKER_TOKEN", "")
 POLL = int(os.environ.get("RENDER_POLL", "20"))
 TEMPLATE = os.path.join(g.ROOT, "presentation-template")

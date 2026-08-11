@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# notion_poll.py — varre o Notion (Agency OS do Lucas) e ingere AUTOMATICAMENTE como cards
+# notion_poll.py — varre o seu workspace do Notion e ingere AUTOMATICAMENTE como cards
 # toda página com cara de reunião/call/gravação (antigas e novas), com o conteúdo + link direto.
 # Roda no container (loop do entrypoint). Idempotente: dedup por URL do Notion.
 #   NOTION_TOKEN=ntn_… python3 scripts/notion_poll.py
@@ -29,9 +29,9 @@ MEET_RE = re.compile(r"\b(call\b|reuni[ãa]o|meeting|recording|kickoff|onboardin
                      r"an[áa]lise.*reuni|transcri[çc][ãa]o da reuni|daily)\b", re.I)
 TASK_RE = re.compile(r"^(criar|configurar|confirmar|receber|implementar|acessar|instalar|comprimir|marcar|"
                      r"transcrever|clonar|melhorar|revisar|enviar|preencher|adicionar|task)\b", re.I)
-PEOPLE = ["Nicolli","Leonardo","Leonam","Saulo","Mauricio","Junior","Júnior","Camila","Henrique","Chris",
-          "Gustavo","Nadeer","Cinthia","Kale","Ted","Thiago","Vladia","Vládia","Heaven","Marcelo","Kirsten",
-          "Mark","Tami","Abdul","Phil","Ani","Leo","Lucas"]
+# PEOPLE: nomes usados para identificar de quem é a call. Preencha via env (CALL_PEOPLE=a,b,c)
+# com os nomes da sua equipe/clientes.
+PEOPLE = os.environ.get("CALL_PEOPLE", "").split(",") if os.environ.get("CALL_PEOPLE") else []
 def slug(s):
     s = unicodedata.normalize("NFKD", s).encode("ascii","ignore").decode()
     return re.sub(r"[^a-zA-Z0-9]+","-", s).strip("-").lower()[:55]
@@ -45,12 +45,9 @@ def date_of(p):
     return (p.get("created_time") or "")[:10]
 def derive(name):
     low = name.lower()
-    pessoa = next((x for x in PEOPLE if x.lower() in low), "Automatrix")
-    proj = ("Chris Lamm / MortgageOne" if any(k in low for k in ("chris","mortgage","lamm","ted","kirsten","mark","tami","abdul","phil")) else
-            "SDR WhatsApp / GVG" if any(k in low for k in ("saulo","gvg","vlád","vladia")) else
-            "SDR imobiliária (Plá)" if any(k in low for k in ("junior","júnior","kinbox","salesforce")) else
-            "Onboarding / Interno" if any(k in low for k in ("onboarding","worldpackers","scraper","banco de víde","recrutacis","kale")) else
-            "Heaven Platform" if "heaven" in low else "Automatrix")
+    pessoa = next((x for x in PEOPLE if x.lower() in low), "")
+    # personalize essa heurística com os nomes reais dos seus projetos/clientes
+    proj = "Onboarding / Interno" if any(k in low for k in ("onboarding","interno")) else ""
     return pessoa, proj
 def rich(b):
     t = b.get("type"); v = b.get(t, {})
@@ -103,7 +100,7 @@ def main():
         notes = f"library/notes/{cid}.md"
         os.makedirs("library/notes", exist_ok=True); open(notes, "w").write(body_md)
         data["calls"].append({"id":cid,"pessoa":pessoa,"title":"🎙 "+name,"date":date,"projeto":proj,
-            "assunto":["áudio Notion"],"participantes":["Lucas F. N. Alves"]+([pessoa] if pessoa!="Automatrix" else []),
+            "assunto":["áudio Notion"],"participantes":[pessoa] if pessoa else [],
             "type":"audio","audio":None,"notion":url,"github":None,"driveVideoId":None,"sizeMB":None,
             "durationApprox":None,"geminiOk":True,"notes":notes,"transcript":None,"video":None,"status":"transcribed"})
         added.append((cid, url)); have.add(url); have_ids.add(cid)

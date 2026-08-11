@@ -9,7 +9,7 @@
 import os, sys, json, re, subprocess, unicodedata, datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
-FOLDER = "1TDBW8XhTJPJ6cavHd3JkhVEut3vgDw22"   # pasta "Meet Recordings" (lucas@automatrix-ia.com)
+FOLDER = os.environ.get("GDRIVE_FOLDER_ID", "")   # id da pasta "Meet Recordings" no seu Drive
 LOCK = "data/.poll.lock"
 
 # lock simples (tolera lock obsoleto após restart da máquina)
@@ -24,9 +24,9 @@ open(LOCK, "w").write(str(os.getpid()))
 
 def log(m): print(m); open("data/poll.log","a").write(m+"\n")
 
-PEOPLE = ["Nicolli","Nikolli","Leonardo","Leonam","Saulo","Mauricio","Maurício","Junior","Júnior",
-          "Camila","Henrique","Chris","Gustavo","Nadeer","Cíntia","Cinthia","Cintia","HVN","Kale",
-          "Ted","Thiago","Vladia","Vládia","Lucas"]
+# PEOPLE: nomes usados para identificar de quem é a call a partir do nome do arquivo do Meet.
+# Preencha com os nomes da sua equipe/clientes (ex.: os que aparecem nos títulos das gravações).
+PEOPLE = os.environ.get("CALL_PEOPLE", "").split(",") if os.environ.get("CALL_PEOPLE") else []
 def slug(s):
     s = unicodedata.normalize("NFKD", s).encode("ascii","ignore").decode()
     s = re.sub(r"[^a-zA-Z0-9]+","-", s).strip("-").lower()
@@ -40,18 +40,10 @@ def derive(name, modtime=None):
     base = re.sub(r"\s*-\s*\d{4}/\d{2}/\d{2}.*$","", name).strip()  # tira data + "- Recording"
     base = re.sub(r"\s*-\s*Recording.*$","", base).strip()         # tira "- Recording" se sobrou
     base = base.strip(" -") or "Gravação"
-    pessoa = next((p for p in PEOPLE if p.lower() in name.lower()), "Automatrix")
+    pessoa = next((p for p in PEOPLE if p.lower() in name.lower()), "")
     low = name.lower()
-    proj = ("Chris Lamm / MortgageOne" if "chris" in low or "mortgage" in low or "lamm" in low else
-            "Vistoria (Confere)" if "vistoria" in low else
-            "Telemedicina (UBS)" if "telemedic" in low else
-            "SDR WhatsApp / GVG" if "saulo" in low or "gvg" in low or "vladia" in low or "vládia" in low else
-            "Automatrix Lead System" if "aquisic" in low or "aquisiç" in low else
-            "SDR imobiliária (Plá)" if "junior" in low or "júnior" in low or "kinbox" in low else
-            "HVN — Edição com IA" if low.startswith("hvn") else
-            "Onboarding / Interno" if "onboarding" in low or "interna" in low else
-            "Brazika (loja + painel)" if "brazika" in low else
-            "Automatrix")
+    # personalize essa heurística com os nomes reais dos seus projetos/clientes
+    proj = "Onboarding / Interno" if "onboarding" in low or "interna" in low else ""
     return date, base, pessoa, proj
 
 def catalog(data, files, since):
@@ -69,7 +61,7 @@ def catalog(data, files, since):
         cid = "auto_" + date + "_" + slug(base)
         if cid in ids: continue
         data["calls"].append({"id":cid,"pessoa":pessoa,"title":base,"date":date,"projeto":proj,
-            "assunto":[],"participantes":["Lucas F. N. Alves"]+([pessoa] if pessoa!="Automatrix" else []),
+            "assunto":[],"participantes":[pessoa] if pessoa else [],
             "driveVideoId":fid,"sizeMB":round(int(f.get("Size",0))/1048576) or None,
             "durationApprox":None,"geminiOk":True,"notes":None,"transcript":None,"video":None,"status":"catalog"})
         added.append(cid); seen.add(fid); ids.add(cid)
@@ -94,16 +86,10 @@ def main():
 
     # fila = cards de vídeo que precisam de trabalho: sem transcrição OU transcritos mas
     # sem frames no Supabase (interrompidos) → process_calls.sh re-baixa e completa (auto-cura).
-    # Também: se TD_TOKEN, cards prontos ainda sem backup no Brazika Drive entram na fila
-    # (re-baixa do Drive e empurra pro storage infinito).
-    # backfill de backup no drive: só quando TD_BACKFILL=1 (evita re-baixar históricos
-    # enquanto um seed externo sobe a mídia; calls novas já fazem backup inline no passo 6b)
-    td_backfill = bool(os.environ.get("TD_TOKEN")) and os.environ.get("TD_BACKFILL") == "1"
     def needs_work(c):
         if c.get("type","video") != "video" or not c.get("driveVideoId"): return False
         if not c.get("transcript"): return True
         if os.environ.get("SUPABASE_URL") and not bool(sb.get(c["id"], {}).get("frames")): return True
-        if td_backfill and not c.get("teldrive"): return True   # falta backup no drive
         return False
     pending = [c for c in data["calls"] if needs_work(c)]
     pending.sort(key=lambda c: c.get("date",""), reverse=True)   # mais novas primeiro (call do dia tem prioridade)

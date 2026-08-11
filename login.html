@@ -42,14 +42,14 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 <body>
 <div class="card">
   <div class="brand"><span class="mark">▶</span><span class="t">Meeting Library</span></div>
-  <div class="sub">Catálogo de calls da Automatrix · acesso restrito</div>
+  <div class="sub">Catálogo de calls · acesso restrito</div>
   <div class="tabs">
     <button class="tab active" id="t-login" onclick="mode('login')">Entrar</button>
     <button class="tab" id="t-reg" onclick="mode('reg')">Registrar</button>
   </div>
   <form id="form" onsubmit="return submitForm(event)">
     <label>Usuário</label>
-    <input id="user" autocomplete="username" placeholder="automatrix" autofocus>
+    <input id="user" autocomplete="username" placeholder="usuário" autofocus>
     <label>Senha</label>
     <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••">
     <div id="reg-extra" style="display:none">
@@ -59,7 +59,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
     <button class="btn" id="submit" type="submit">Entrar</button>
     <div class="msg" id="msg"></div>
   </form>
-  <div class="foot">Automatrix · Meeting Library</div>
+  <div class="foot">Meeting Library</div>
 </div>
 <script>
 let M='login';

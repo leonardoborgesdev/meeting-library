@@ -6,18 +6,19 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 AAI = os.environ.get("ASSEMBLYAI_API_KEY", "")
 RUNNING = {}   # call_id -> "transcribe" | "download"
-CHECKLISTS = {"projetos": "data/checklist.json", "kinbox": "data/checklist_kinbox.json",
-              "brazika": "data/checklist_brazika.json"}
+CHECKLISTS = {"projetos": "data/checklist.json"}
 
 # ── auth (login/registro) ──
-AUTH_SALT   = os.environ.get("AUTH_SALT", "ml-2026-automatrix")
-INVITE_CODE = os.environ.get("INVITE_CODE", "958462")
+AUTH_SALT   = os.environ.get("AUTH_SALT", "change-me-in-prod")
+INVITE_CODE = os.environ.get("INVITE_CODE", "change-me")
 USERS_F = "data/users.json"; SESS_F = "data/sessions.json"
 def _hash(u, p): return hashlib.sha256(f"{u}:{p}:{AUTH_SALT}".encode()).hexdigest()
 def load_users():
     try: return json.load(open(USERS_F))
     except Exception:
-        u = {"automatrix": _hash("automatrix", "958462")}   # conta padrão
+        default_user = os.environ.get("DEFAULT_USER", "admin")
+        default_pw = os.environ.get("DEFAULT_PW", "changeme")
+        u = {default_user: _hash(default_user, default_pw)}   # conta padrão
         json.dump(u, open(USERS_F, "w")); return u
 def load_sess():
     try: return json.load(open(SESS_F))
@@ -68,11 +69,11 @@ def run_job(cid, action):
     finally:
         RUNNING.pop(cid, None)
 
-# gerador local habilitado? (Mac dev). No Fly (1GB, sem Node/Chromium) fica desligado.
+# gerador local habilitado? (dev, com Node/Chromium disponíveis). Sem isso, fica desligado
+# e as apresentações ficam na fila para um worker de render dedicado processar.
 GEN_LOCAL = os.environ.get("GEN_LOCAL", "") == "1"
-# token do worker de render (Fly dedicado). Worker autentica com header X-Worker-Token.
+# token do worker de render remoto. Worker autentica com header X-Worker-Token.
 WORKER_TOKEN = os.environ.get("WORKER_TOKEN", "")
-TD_API = "https://drive.brazika.online/api"
 
 class H(http.server.SimpleHTTPRequestHandler):
     def _json(self, obj, code=200):
@@ -160,7 +161,7 @@ class H(http.server.SimpleHTTPRequestHandler):
             b = self._read_body(); pid = b.get("id")
             for p in d["presentations"]:
                 if p["id"] == pid:
-                    for k in ("status", "teldrive", "video", "thumb", "durationApprox", "error"):
+                    for k in ("status", "video", "thumb", "durationApprox", "error"):
                         if k in b: p[k] = b[k]
             save_pres(d)
             return self._json({"ok": True})
@@ -200,7 +201,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                         ("notion" if m.get("notion") else ""), ("github" if m.get("github") else ""),
                         ("transcrita" if c.get("transcript") else "")]))
                 ctx = "\n".join(lines)
-                prompt = ("Você é o assistente da Meeting Library (catálogo de calls da Automatrix). "
+                prompt = ("Você é o assistente da Meeting Library (catálogo de calls da equipe). "
                     "Cada linha do catálogo: id ┃ data ┃ pessoa ┃ projeto ┃ título ┃ tópicos ┃ tipo ┃ notion ┃ github ┃ transcrita.\n\n"
                     f"CATÁLOGO:\n{ctx}\n\nPERGUNTA DO USUÁRIO: {q}\n\n"
                     "Responda em PT-BR, curto e direto. Use as datas/projetos/pessoas do catálogo. "
@@ -379,38 +380,14 @@ class H(http.server.SimpleHTTPRequestHandler):
             try: return self._json(json.load(open("data/health.json")))
             except Exception: return self._json({"status": "unknown", "problems": ["healthcheck ainda não rodou"]})
         if self.path.startswith("/api/presentations/video"):
-            import urllib.request as _u
             q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             pid = (q.get("id") or [None])[0]
             ent = next((p for p in load_pres()["presentations"] if p["id"] == pid), None)
             if not ent: return self._json({"ok": False, "error": "não encontrado"}, 404)
-            # vídeo local (Mac dev) → serve do disco
+            # vídeo local → serve do disco (o render worker grava aqui via /upload_result)
             if ent.get("video") and os.path.exists(ent["video"]):
                 self.path = "/" + ent["video"]; return super().do_GET()
-            fid = ent.get("teldrive")
-            tok = os.environ.get("TD_TOKEN", "")
-            if not fid or not tok: return self._json({"ok": False, "error": "sem vídeo"}, 404)
-            url = f"{TD_API}/files/{fid}/stream"
-            req = _u.Request(url, headers={"Cookie": f"access_token={tok}"})
-            rng = self.headers.get("Range")
-            if rng: req.add_header("Range", rng)
-            try:
-                r = _u.urlopen(req, timeout=60)
-            except Exception as e:
-                return self._json({"ok": False, "error": f"teldrive: {str(e)[:100]}"}, 502)
-            self.send_response(r.status if r.status in (200, 206) else 200)
-            for h in ("Content-Type", "Content-Length", "Content-Range", "Accept-Ranges"):
-                v = r.headers.get(h)
-                if v: self.send_header(h, v)
-            self.send_header("Content-Type", r.headers.get("Content-Type", "video/mp4"))
-            self.end_headers()
-            try:
-                while True:
-                    chunk = r.read(1 << 16)
-                    if not chunk: break
-                    self.wfile.write(chunk)
-            except Exception: pass
-            return
+            return self._json({"ok": False, "error": "sem vídeo"}, 404)
         if self.path.startswith("/api/presentations"):
             return self._json(load_pres())
         if self.path.startswith("/api/status"):
