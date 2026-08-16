@@ -1,5 +1,7 @@
 # Meeting Library
 
+[![License: MIT](https://img.shields.io/github/license/leonardoborgesdev/meeting-library)](LICENSE) [![Top language](https://img.shields.io/github/languages/top/leonardoborgesdev/meeting-library)](#)
+
 **Self-hosted meeting intelligence — record, transcribe, summarize, sync.**
 
 ![Panel](docs/screenshots/panel.png)
